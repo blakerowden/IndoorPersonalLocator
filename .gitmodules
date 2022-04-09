@@ -1,0 +1,3 @@
+[submodule "WeatherStationIoT"]
+	path = WeatherStationIoT
+	url = git@github.com:blakerowden/WeatherStationIoT.git
