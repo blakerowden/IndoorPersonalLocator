@@ -1,1 +1,1 @@
-Mobile and Base Node Code
+Static and Mobile Node Code
