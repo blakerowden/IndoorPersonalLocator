@@ -1,104 +1,131 @@
 """
-
+Prac 2a - Desktop Application
+.py file 1/1
+CSSE4011 - Advanced Embedded Systems
+Semester 1, 2022
 """
-from ctypes import sizeof
+
+__author__ = "Blake Rowden s4427634"
+
 import time
 import serial
-import re
 import json
-import paho.mqtt.client as mqtt
+import tkinter as tk
 from threading import Thread
 from queue import *
 
-SHORTSLEEP = 1
-BAUDRATE = 115200
+# GUI Classes =================================================================
 
+class MainApplication(tk.Frame):
+    """
+    Main application class.
+    """
+    def __init__(self, master=None):
+        super().__init__(master)
+        self._master = master
+        self._master.title("Prac 2a - Desktop Application")
+        self._master.geometry("1000x1000")
+        self._master.configure(bg="white")
+        self.pack()
+        self.create_widgets()
 
-def publish(client, topic, message):
-    client.publish(topic, message)
+    def create_widgets(self):
+        """
+        Create the widgets for the application.
+        """
+        self.hi_there = tk.Button(self)
+        self.hi_there["text"] = "Hello World\n(click me)"
+        self.hi_there["command"] = self.say_hi
+        self.hi_there.pack(side="top")
 
+        self.quit = tk.Button(self, text="QUIT", fg="red",
+                              command=self.master.destroy)
+        self.quit.pack(side="bottom")
 
-def on_log(client, userdata, level, buf):
-    print("log: " + buf)
+    def say_hi(self):
+        """
+        Print a message to the console.
+        """
+        print("hi there, everyone!")
 
+# Serial Interface ============================================================
 
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print("connected OK")
-    else:
-        print("Bad connection returned code =", rc)
-
-
-def on_disconnect(client, userdata, rc):
-    if rc != 0:
-        print("Unexpected disconnection.")
-
-
-def on_message(client, userdata, message):
-    print(message.payload)
-
-
-def get_input(ahu):
-    while(ahu.is_open):
-        write_data = input('>')
-        ahu.write(write_data.encode('utf-8') + bytes([13, 10]))
-        ahu.flush()
-        time.sleep(2)
-
-
-def run_terminal(ahu, out_q):
-    while(ahu.is_open):
-        line = ahu.read(0xFFFF).decode('utf-8')[:-2].strip()
+def serial_interface(out_q):
+    """
+    Thread for the serial interfacing.
+    """
+    ser = serial.Serial(
+        port='/dev/ttyACM0',
+        baudrate=115200,
+        parity=serial.PARITY_NONE,
+        stopbits=serial.STOPBITS_ONE,
+        bytesize=serial.EIGHTBITS,
+        timeout=1
+    )
+    ser.is_open = True
+    
+    while(ser.is_open):
+        line = serial_read_line(ser)
         if line:
-            print(f'{line}')
             out_q.put(line)
+    ser.close()
 
-    ahu.close()
+def serial_read_line(ser):
+    """
+    Read a line from the serial port.
+    """
+    while(ser.is_open):
+        line = ser.read(0xFFFF).decode('utf-8')[:-2].strip()
+        if line:
+            return line
 
+# Data Processing =============================================================
 
-def mqtt_publish(ahu, client, in_q):
-    while(client.is_connected):
-        while not in_q.empty():
-            line = in_q.get()
-            strip = re.search('{(.*?)}', line)
-            if strip is not None:
-                parse_JSON = "{ " + strip.group(1) + " }"
-                data = json.loads(parse_JSON)
-                for i in data:
-                    publish(client, topic=i, message=data[i])
+def data_processing(in_q, out_q):
+    """
+    Process the raw JSON data.
+    """
+    while True:
+        try:
+            in_q.get(timeout=1)
+            out_q.put(json.loads(in_q.get()))
+        except Empty:
+            pass
 
+# GUI Interface ===============================================================
+
+def gui_interface(in_q):
+    """
+    GUI interface for the application.
+    """
+    root = tk.Tk()
+    app = MainApplication(master=root)
+
+    root.mainloop()
+
+# Insertion Point =============================================================
 
 def main():
+    """
+    Main function for the application.
+    """
+    j_data = Queue()    # Queue for JSON data
+    k_data = Queue()    # Queue for (k)lean data
 
-    # Create a client for MQTT
-    client = mqtt.Client()
-    client.on_connect = on_connect
-    client.on_disconnect = on_disconnect
-    client.on_message = on_message
-    client.on_log = on_log
-    port = input('Port Number:')
-    client.connect('localhost', port=int(port))
-    print(f"Connecting to Broker 'localhost' on port {port}")
-    time.sleep(SHORTSLEEP)
+    # Create thread to read from the serial port
+    thread_serial = Thread(target=serial_interface, args=(j_data,))
+    thread_serial.start()
 
-    # Create a serial port object called ser for the serial port connection
-    ser = serial.Serial('/dev/ttyACM0', BAUDRATE, timeout=1)
-    print(f"Connecting to Serial Port {ser.name}...")
-    time.sleep(SHORTSLEEP)
+    # Create thread to process the data
+    thread_data = Thread(target=data_processing, args=(j_data, k_data))
+    thread_data.start()
 
-    # Create threads to read/write from the serial port and publish to MQTT
-    j_data = Queue()
-    thread_input = Thread(target=get_input, args=(ser,))
-    thread_output = Thread(target=run_terminal, args=(ser, j_data,))
-    thread_publish = Thread(target=mqtt_publish, args=(ser, client, j_data,))
-
-    thread_input.start()
-    thread_output.start()
-    thread_publish.start()
+    # Create thread to run the GUI
+    thread_gui = Thread(target=gui_interface, args=(k_data,))
+    thread_gui.start()
 
     Thread.join
 
 
 if __name__ == "__main__":
-
     main()
