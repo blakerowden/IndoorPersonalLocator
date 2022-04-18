@@ -1,6 +1,9 @@
 /**
  * @file main.c
  * @brief 
+ *  Based on the SCU
+ *  Mobile: Built to run on the Thingy:52
+ *  Static: Built to run on the Argon (Connects to Ultrasonic ranges)
  * @version 0.1
  * @date 2022-04-13
  * 

@@ -1,6 +1,8 @@
 /**
  * @file main.c
  * @brief Main.c file for the base node.
+ *  Based on the AHU
+ *  Built to run on the NRF52840 USB Dongle.
  * @version 0.1
  * @date 2022-04-13
  * 
