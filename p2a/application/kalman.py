@@ -38,7 +38,7 @@ class Kalman:
             self.cov = (1-self.K)*self.cov_est 
             
 if __name__ == "__main__":		
-    print "***** 1d ***********"
+    print ("***** 1d ***********")
     ndim = 1
     nsteps = 50
     k = Kalman(numpy.array([0]), numpy.eye(ndim),0.01, 1e-5) #this assumes initial value not known
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     for t in range(nsteps):
         k.update(obs[:,t])
         xhat[t]=k.x_hat        
-    print "Constant value estimate after 50 iterations: %f" % xhat[-1]
+    print ("Constant value estimate after 50 iterations: %f" % xhat[-1])
 
     pylab.figure()
     pylab.plot(obs[0],'k+',label='noisy measurements')
