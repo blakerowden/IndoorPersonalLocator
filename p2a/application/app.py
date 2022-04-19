@@ -69,13 +69,11 @@ class MainApplication(tk.Frame):
             try:
                 pos = self.in_q.get(block = False)
             except Empty:
-                logging.debug("No data in queue")
                 pos = None
             if pos is not None:
-                logging.debug("Got data from queue")
                 self._mobile.target_x = pos[0]
                 self._mobile.target_y = pos[1]
-                
+                logging.debug(f"Received new position x:{pos[0]} y:{pos[1]}")
             if self._stop:
                 break
             # Update the GUI
@@ -184,7 +182,19 @@ def serial_interface(out_q, stop):
         while True:
             time.sleep(LONG_SLEEP)
             logging.debug("Sending dummy JSON data...")
-            x = json.dumps({"x": random.randint(0, 1000), "y": random.randint(0, 1000)})
+            dummy_JSON_dict = {
+                "US1" :random.randint(0, 4000), 
+                "US2" :random.randint(0, 4000), 
+                'delta' :random.randint(0, 1000), 
+                'heading' :random.randint(0, 360), 
+                'time' :time.time(), 
+                'beacon_1' :random.randint(0, 1000), 
+                'beacon_2' :random.randint(0, 1000), 
+                'beacon_3' :random.randint(0, 1000), 
+                'beacon_4' :random.randint(0, 1000)
+            }
+            x = json.dumps(dummy_JSON_dict)
+            logging.debug(f"Sending: {x}")
             out_q.put(x)
             if stop():
                 return
@@ -217,18 +227,16 @@ def data_processing(in_q, out_q, stop):
     
     while True:
         # Get the next message from the queue
-        logging.debug("Data processing: Waiting for data...")
         try:
             data_raw = in_q.get(block = False)
         except Empty:
             data_raw = None
         if data_raw is not None:
-            logging.debug("Processing Data...")
             data = json.loads(data_raw)
             for i in data:
-                print(f"{i}: {data[i]}")
+                logging.debug(f"{i}: {data[i]}")
             out_q.queue.clear()
-            out_q.put((data['x'], data['y']))    
+            out_q.put((data['beacon_1'], data['beacon_2']))    
         if stop():
             logging.info("Stoping Data Thread")
             break
@@ -253,7 +261,7 @@ def main():
     Main function for the application.
     """
     # Set logging level
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(level=logging.DEBUG)
     # Create a stop flag
     stop_flag = False
     comms_active = True
@@ -308,7 +316,9 @@ if __name__ == "__main__":
     Only run the main function if this file is run directly.
     """
     main()
+# JSON Data Object
 
+#{ ‘US1’ :value, ‘US2’ :value, ‘delta’ :value, ‘heading’ :value, ‘time’ :value, ‘beacon_name’ :value, ‘beacon_name’ :value, ‘beacon_name’ :value, ‘beacon_name’ :value, }
 
 #TO-DO:
 # - Take in ranging data from the serial port 
