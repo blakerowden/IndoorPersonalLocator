@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/modules/hal/st
+# Install script for directory: /home/blake/csse4011/zephyrproject/modules/hal/st
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -11,7 +11,7 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
 
-The C compiler identification is GNU, found in "/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/CMakeFiles/3.22.3/CompilerIdC/CMakeCCompilerId.o"
+The C compiler identification is GNU, found in "/home/blake/csse4011/CSSE4011-Trio/p2a/static_mobile_node/build/CMakeFiles/3.23.1/CompilerIdC/CMakeCCompilerId.o"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-g++ 
@@ -24,7 +24,7 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
 
-The CXX compiler identification is GNU, found in "/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/CMakeFiles/3.22.3/CompilerIdCXX/CMakeCXXCompilerId.o"
+The CXX compiler identification is GNU, found in "/home/blake/csse4011/CSSE4011-Trio/p2a/static_mobile_node/build/CMakeFiles/3.23.1/CompilerIdCXX/CMakeCXXCompilerId.o"
 
 Checking whether the ASM compiler is GNU using "--version" matched "(GNU assembler)|(GCC)|(Free Software Foundation)":
 arm-zephyr-eabi-gcc (crosstool-NG 1.24.0.378_e011758) 10.3.0

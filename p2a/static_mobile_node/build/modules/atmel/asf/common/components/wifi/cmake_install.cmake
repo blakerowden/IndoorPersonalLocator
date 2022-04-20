@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/modules/hal/atmel/asf/common/components/wifi
+# Install script for directory: /home/blake/csse4011/zephyrproject/modules/hal/atmel/asf/common/components/wifi
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

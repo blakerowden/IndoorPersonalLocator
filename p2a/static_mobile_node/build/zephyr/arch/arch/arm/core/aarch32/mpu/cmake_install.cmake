@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/arch/arm/core/aarch32/mpu
+# Install script for directory: /home/blake/csse4011/zephyrproject/zephyr/arch/arm/core/aarch32/mpu
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

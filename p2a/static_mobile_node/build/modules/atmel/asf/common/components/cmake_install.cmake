@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/modules/hal/atmel/asf/common/components
+# Install script for directory: /home/blake/csse4011/zephyrproject/modules/hal/atmel/asf/common/components
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/atmel/asf/common/components/wifi/cmake_install.cmake")
+  include("/home/blake/csse4011/CSSE4011-Trio/p2a/static_mobile_node/build/modules/atmel/asf/common/components/wifi/cmake_install.cmake")
 endif()
 

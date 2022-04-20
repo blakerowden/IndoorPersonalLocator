@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/pcie
+# Install script for directory: /home/blake/csse4011/zephyrproject/zephyr/drivers/pcie
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

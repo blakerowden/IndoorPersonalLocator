@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/interrupt_controller
+# Install script for directory: /home/blake/csse4011/zephyrproject/zephyr/drivers/interrupt_controller
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/boards
+# Install script for directory: /home/blake/csse4011/zephyrproject/zephyr/boards
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,6 +39,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/boards/arm/nrf52840dongle_nrf52840/cmake_install.cmake")
+  include("/home/blake/csse4011/CSSE4011-Trio/p2a/static_mobile_node/build/zephyr/boards/arm/thingy52_nrf52832/cmake_install.cmake")
 endif()
 

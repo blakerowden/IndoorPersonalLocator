@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/entropy
+# Install script for directory: /home/blake/csse4011/zephyrproject/zephyr/drivers/entropy
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

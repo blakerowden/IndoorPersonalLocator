@@ -1,83 +1,83 @@
-menu "CANopenNode (/home/boston/csse4011/zephyrproject/modules/lib/canopennode)"
+menu "CANopenNode (/home/blake/csse4011/zephyrproject/modules/lib/canopennode)"
 osource "$(ZEPHYR_CANOPENNODE_KCONFIG)"
 config ZEPHYR_CANOPENNODE_MODULE
 	bool
 	default y
 endmenu
-menu "hal_gigadevice (/home/boston/csse4011/zephyrproject/modules/hal/gigadevice)"
+menu "hal_gigadevice (/home/blake/csse4011/zephyrproject/modules/hal/gigadevice)"
 osource "$(ZEPHYR_HAL_GIGADEVICE_KCONFIG)"
 config ZEPHYR_HAL_GIGADEVICE_MODULE
 	bool
 	default y
 endmenu
-menu "hal_nordic (/home/boston/csse4011/zephyrproject/modules/hal/nordic)"
+menu "hal_nordic (/home/blake/csse4011/zephyrproject/modules/hal/nordic)"
 osource "$(ZEPHYR_HAL_NORDIC_KCONFIG)"
 config ZEPHYR_HAL_NORDIC_MODULE
 	bool
 	default y
 endmenu
-menu "hal_nxp (/home/boston/csse4011/zephyrproject/modules/hal/nxp)"
+menu "hal_nxp (/home/blake/csse4011/zephyrproject/modules/hal/nxp)"
 osource "$(ZEPHYR_HAL_NXP_KCONFIG)"
 config ZEPHYR_HAL_NXP_MODULE
 	bool
 	default y
 endmenu
-menu "hal_rpi_pico (/home/boston/csse4011/zephyrproject/modules/hal/rpi_pico)"
+menu "hal_rpi_pico (/home/blake/csse4011/zephyrproject/modules/hal/rpi_pico)"
 osource "$(ZEPHYR_HAL_RPI_PICO_KCONFIG)"
 config ZEPHYR_HAL_RPI_PICO_MODULE
 	bool
 	default y
 endmenu
-menu "loramac-node (/home/boston/csse4011/zephyrproject/modules/lib/loramac-node)"
+menu "loramac-node (/home/blake/csse4011/zephyrproject/modules/lib/loramac-node)"
 osource "$(ZEPHYR_LORAMAC_NODE_KCONFIG)"
 config ZEPHYR_LORAMAC_NODE_MODULE
 	bool
 	default y
 endmenu
-menu "lz4 (/home/boston/csse4011/zephyrproject/modules/lib/lz4)"
+menu "lz4 (/home/blake/csse4011/zephyrproject/modules/lib/lz4)"
 osource "$(ZEPHYR_LZ4_KCONFIG)"
 config ZEPHYR_LZ4_MODULE
 	bool
 	default y
 endmenu
-menu "mbedtls (/home/boston/csse4011/zephyrproject/modules/crypto/mbedtls)"
+menu "mbedtls (/home/blake/csse4011/zephyrproject/modules/crypto/mbedtls)"
 osource "$(ZEPHYR_MBEDTLS_KCONFIG)"
 config ZEPHYR_MBEDTLS_MODULE
 	bool
 	default y
 endmenu
-menu "nanopb (/home/boston/csse4011/zephyrproject/modules/lib/nanopb)"
+menu "nanopb (/home/blake/csse4011/zephyrproject/modules/lib/nanopb)"
 osource "$(ZEPHYR_NANOPB_KCONFIG)"
 config ZEPHYR_NANOPB_MODULE
 	bool
 	default y
 endmenu
-menu "sof (/home/boston/csse4011/zephyrproject/modules/audio/sof)"
-osource "/home/boston/csse4011/zephyrproject/modules/audio/sof/zephyr/Kconfig"
+menu "sof (/home/blake/csse4011/zephyrproject/modules/audio/sof)"
+osource "/home/blake/csse4011/zephyrproject/modules/audio/sof/zephyr/Kconfig"
 config ZEPHYR_SOF_MODULE
 	bool
 	default y
 endmenu
-menu "tflite-micro (/home/boston/csse4011/zephyrproject/modules/lib/tflite-micro)"
+menu "tflite-micro (/home/blake/csse4011/zephyrproject/modules/lib/tflite-micro)"
 osource "$(ZEPHYR_TFLITE_MICRO_KCONFIG)"
 config ZEPHYR_TFLITE_MICRO_MODULE
 	bool
 	default y
 endmenu
-menu "TraceRecorder (/home/boston/csse4011/zephyrproject/modules/debug/TraceRecorder)"
-osource "/home/boston/csse4011/zephyrproject/modules/debug/TraceRecorder/kernelports/Zephyr/Kconfig"
+menu "TraceRecorder (/home/blake/csse4011/zephyrproject/modules/debug/TraceRecorder)"
+osource "/home/blake/csse4011/zephyrproject/modules/debug/TraceRecorder/kernelports/Zephyr/Kconfig"
 config ZEPHYR_TRACERECORDER_MODULE
 	bool
 	default y
 endmenu
-menu "trusted-firmware-m (/home/boston/csse4011/zephyrproject/modules/tee/tf-m/trusted-firmware-m)"
+menu "trusted-firmware-m (/home/blake/csse4011/zephyrproject/modules/tee/tf-m/trusted-firmware-m)"
 osource "$(ZEPHYR_TRUSTED_FIRMWARE_M_KCONFIG)"
 config ZEPHYR_TRUSTED_FIRMWARE_M_MODULE
 	bool
 	default y
 endmenu
-menu "zscilib (/home/boston/csse4011/zephyrproject/modules/lib/zscilib)"
-osource "/home/boston/csse4011/zephyrproject/modules/lib/zscilib/Kconfig.zscilib"
+menu "zscilib (/home/blake/csse4011/zephyrproject/modules/lib/zscilib)"
+osource "/home/blake/csse4011/zephyrproject/modules/lib/zscilib/Kconfig.zscilib"
 config ZEPHYR_ZSCILIB_MODULE
 	bool
 	default y
