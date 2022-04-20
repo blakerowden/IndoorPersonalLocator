@@ -9,23 +9,7 @@
  *
  */
 
-#include <zephyr/types.h>
-#include <stddef.h>
-#include <errno.h>
-#include <zephyr.h>
-#include <sys/printk.h>
-#include <device.h>
-#include <devicetree.h>
-#include <logging/log.h>
-
-#include "led_driver.h"
-#include "shell_base.h"
-#include "shell_time.h"
-#include "shell_led.h"
-#include "shell_scu.h"
-#include "ble_base.h"
-#include "pb_driver.h"
-#include "ahu_data.h"
+#include "main.h"
 
 // Debug Settings ==============================================================
 #define DEBUG_BLE_LED 0
@@ -40,23 +24,22 @@ LOG_MODULE_REGISTER(log_main);
  *
  */
 void initialise(void) {
-
-        init_leds();
-        setup_pb();
-        begin_shell();
+    init_leds();
+    setup_pb();
+    begin_shell();
 }
 
-void main(void) {
-
-        initialise();
-}
+void main(void) { initialise(); }
 
 // Thread Defines ==============================================================
 
 // START BLE BASE entry thread : Delayed Start (Wait for USB to be ready)
-K_THREAD_DEFINE(ble_base, THREAD_BLE_BASE_STACK, thread_ble_base, NULL, NULL, NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
-K_THREAD_DEFINE(rx_data, THREAD_BLE_BASE_STACK, process_rx_data, NULL, NULL, NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
+K_THREAD_DEFINE(ble_base, THREAD_BLE_BASE_STACK, thread_ble_base, NULL, NULL,
+                NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
+K_THREAD_DEFINE(rx_data, THREAD_BLE_BASE_STACK, process_rx_data, NULL, NULL,
+                NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
 // Start BLE LED Thread
 #if DEBUG_BLE_LED
-K_THREAD_DEFINE(ble_led, THREAD_BLE_LED_STACK, thread_ble_led, NULL, NULL, NULL, THREAD_PRIORITY_BLE_LED, 0, 0);
+K_THREAD_DEFINE(ble_led, THREAD_BLE_LED_STACK, thread_ble_led, NULL, NULL, NULL,
+                THREAD_PRIORITY_BLE_LED, 0, 0);
 #endif

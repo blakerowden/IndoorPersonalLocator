@@ -11,9 +11,9 @@
 
 #include "main.h"
 
-#define MODE MODE_MOBILE // MODE_MOBILE or MODE_STATIC
+#define MODE MODE_MOBILE  // MODE_MOBILE or MODE_STATIC
 
-LOG_MODULE_REGISTER(log_main); // Logging Module
+LOG_MODULE_REGISTER(log_main);  // Logging Module
 
 // Threads =====================================================================
 #if MODE == MODE_MOBILE
