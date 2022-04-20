@@ -35,14 +35,7 @@ static struct gpio_callback button_cb_data;
 void button_pressed(const struct device *dev, struct gpio_callback *cb,
                     uint32_t pins)
 {
-  if (all_active)
-  {
-    cmd_all_off(NULL, 0, NULL);
-  }
-  else
-  {
-    cmd_all_on(NULL, 0, NULL);
-  }
+   printk("Button pressed\n");
 }
 
 void setup_pb(void)

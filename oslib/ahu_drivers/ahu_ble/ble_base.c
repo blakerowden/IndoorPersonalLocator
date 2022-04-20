@@ -261,6 +261,7 @@ void scu_write(void)
  */
 void thread_ble_base(void)
 {
+  k_msleep(10);
   int err;
 
   err = bt_enable(NULL);

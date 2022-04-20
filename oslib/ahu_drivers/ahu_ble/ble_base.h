@@ -14,7 +14,7 @@
 
 /* Debug Thread Stack size */
 #define THREAD_BLE_LED_STACK 512
-#define THREAD_BLE_BASE_STACK 4094
+#define THREAD_BLE_BASE_STACK 8192
 /* Debug Thread Priority */
 #define THREAD_PRIORITY_BLE_LED 10
 #define THREAD_PRIORITY_BLE_BASE -2
