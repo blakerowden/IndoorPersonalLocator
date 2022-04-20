@@ -39,26 +39,26 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/lib/libc/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/lib/libc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/lib/posix/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/lib/posix/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/lib/gui/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/lib/gui/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/lib/os/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/lib/os/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/lib/util/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/lib/util/cmake_install.cmake")
 endif()
 

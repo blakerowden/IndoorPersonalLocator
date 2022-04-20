@@ -19,7 +19,7 @@
 #include <logging/log.h>
 
 #include "shell_base.h"
-#include "ble_mobile.h"
+#include "mobile_ble.h"
 #include "ble_mobile_scan.h"
 
 // Debug Settings ==============================================================
@@ -49,5 +49,6 @@ void main(void)
 
 // START BLE BASE entry thread : Delayed Start (Wait for USB to be ready)
 
-//K_THREAD_DEFINE(ble_mobile, THREAD_BLE_MOBILE_STACK, thread_ble_mobile, NULL, NULL, NULL, THREAD_PRIORITY_BLE_MOBILE, 0, 0);
-K_THREAD_DEFINE(ble_mobile_scan, THREAD_BLE_SCAN_STACK, thread_ble_mobile_scan, NULL, NULL, NULL, THREAD_PRIORITY_BLE_SCAN, 0, 0);
+K_THREAD_DEFINE(ble_mobile, THREAD_BLE_CONNECT_STACK, thread_ble_connect, NULL, NULL, NULL, THREAD_PRIORITY_BLE_CONNECT_THREAD, 0, 0);
+K_THREAD_DEFINE(ble_mobile_discover, THREAD_BLE_CONNECT_STACK, thread_ble_discover, NULL, NULL, NULL, THREAD_PRIORITY_BLE_CONNECT_THREAD, 0, 0);
+K_THREAD_DEFINE(ble_mobile_scan, THREAD_BLE_SCAN_STACK, thread_ble_mobile_scan, NULL, NULL, NULL, THREAD_PRIORITY_BLE_SCAN, 100, 0);

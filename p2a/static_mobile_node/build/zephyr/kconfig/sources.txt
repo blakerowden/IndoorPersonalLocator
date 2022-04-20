@@ -1,4 +1,4 @@
-/home/boston/csse4011/prac2Test/prac2/mobile/build/Kconfig/Kconfig.modules
+/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/Kconfig/Kconfig.modules
 /home/boston/csse4011/zephyrproject/modules/audio/sof/Kconfig.sof
 /home/boston/csse4011/zephyrproject/modules/audio/sof/Kconfig.xtos-build
 /home/boston/csse4011/zephyrproject/modules/audio/sof/Kconfig.xtos-dbg

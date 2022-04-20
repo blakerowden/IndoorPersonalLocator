@@ -32,8 +32,8 @@
 #include <drivers/regulator.h>
 
 #include "scu_ble.h"
-#include "scu_sensors.h"
-#include "scu_io.h"
+//#include "scu_sensors.h"
+//#include "scu_io.h"
 
 #define CREATE_FLAG(flag) static atomic_t flag = (atomic_t) false
 #define SET_FLAG(flag) (void)atomic_set(&flag, (atomic_t) true)
@@ -61,154 +61,6 @@ struct return_packet
 
 K_MSGQ_DEFINE(tosend_msgq, sizeof(struct return_packet), 10, 4);
 K_MSGQ_DEFINE(command_msgq, sizeof(struct received_packet), 10, 4);
-K_MSGQ_DEFINE(hts_msgq, sizeof(uint8_t), 10, 4);
-K_MSGQ_DEFINE(lps_msgq, sizeof(uint8_t), 10, 4);
-K_MSGQ_DEFINE(ccs_msgq, sizeof(uint8_t), 10, 4);
-K_MSGQ_DEFINE(lis_msgq, sizeof(uint8_t), 10, 4);
-K_MSGQ_DEFINE(buz_msgq, sizeof(int), 10, 4);
-
-#define DEVICE_TEM 0x01
-#define DEVICE_HUM 0x02
-#define DEVICE_AIR 0x03
-#define DEVICE_VOC 0x04
-#define DEVICE_ACX 0x05
-#define DEVICE_ACY 0x06
-#define DEVICE_ACZ 0x07
-#define DEVICE_RGB 0x08
-#define DEVICE_BUZ 0x09
-#define DEVICE_PBN 0x0A
-#define DUTY 0x0B
-
-void process_hts221(uint8_t ht)
-{
-    struct return_packet packet;
-    packet.preamble = 0xAA;
-    packet.typelen = 0x25;
-    packet.id = ht;
-
-    packet.data = read_hts(ht);
-    if (k_msgq_put(&tosend_msgq, &packet, K_NO_WAIT) != 0)
-    {
-        k_msgq_purge(&tosend_msgq);
-    }
-}
-
-static void process_lps22hb(void)
-{
-
-    struct return_packet packet;
-    packet.preamble = 0xAA;
-    packet.typelen = 0x25;
-    packet.id = DEVICE_AIR;
-    packet.data = read_lps();
-
-    if (k_msgq_put(&tosend_msgq, &packet, K_NO_WAIT) != 0)
-    {
-        k_msgq_purge(&tosend_msgq);
-    }
-}
-
-static int process_ccs811()
-{
-
-    struct return_packet packet;
-    packet.preamble = 0xAA;
-    packet.typelen = 0x25;
-    packet.id = DEVICE_VOC;
-    packet.data = read_ccs();
-
-    if (k_msgq_put(&tosend_msgq, &packet, K_NO_WAIT) != 0)
-    {
-        k_msgq_purge(&tosend_msgq);
-    }
-}
-
-static void process_lis2dh(uint8_t axis)
-{
-
-    struct return_packet packet;
-    packet.preamble = 0xAA;
-    packet.typelen = 0x25;
-    packet.id = axis;
-    packet.data = read_lis(axis);
-
-    if (k_msgq_put(&tosend_msgq, &packet, K_NO_WAIT) != 0)
-    {
-        k_msgq_purge(&tosend_msgq);
-    }
-}
-
-void process_rgb(struct received_packet data)
-{
-
-    char rgb_data[3];
-    rgb_data[0] = data.data[0];
-    rgb_data[1] = data.data[1];
-    rgb_data[2] = data.data[2];
-
-    int ret = 0;
-    if (rgb_data[0])
-    {
-        ret = toggle_rgb(RGB_RED);
-    }
-    if (rgb_data[1])
-    {
-        printk("hi green");
-        ret = toggle_rgb(RGB_GREEN);
-    }
-    if (rgb_data[2])
-    {
-        ret = toggle_rgb(RGB_BLUE);
-    }
-
-    struct return_packet packet;
-    packet.preamble = 0xAA;
-    packet.typelen = 0x2B;
-    packet.id = DEVICE_RGB;
-    packet.data = (float)ret;
-
-    if (k_msgq_put(&tosend_msgq, &packet, K_NO_WAIT) != 0)
-    {
-        k_msgq_purge(&tosend_msgq);
-    }
-}
-
-void process_button(void)
-{
-    struct return_packet packet;
-    packet.preamble = 0xAA;
-    packet.typelen = 0x2B;
-    packet.id = DEVICE_PBN;
-    packet.data = (float)button_get();
-
-    if (k_msgq_put(&tosend_msgq, &packet, K_NO_WAIT) != 0)
-    {
-        k_msgq_purge(&tosend_msgq);
-    }
-}
-
-#ifndef CONFIG_CCS811_TRIGGER_NONE
-
-static void trigger_handler(const struct device *dev,
-                            const struct sensor_trigger *trig)
-{
-    int rc = process_ccs811(dev);
-
-    if (rc == 0)
-    {
-        printk("Triggered fetch got %d\n", rc);
-    }
-    else if (-EAGAIN == rc)
-    {
-        printk("Triggered fetch got stale data\n");
-    }
-    else
-    {
-        printk("Triggered fetch failed: %d\n", rc);
-    }
-}
-
-#endif /* !CONFIG_CCS811_TRIGGER_NONE */
 
 /* 1000 msec = 1 sec */
 #define BLE_DISC_SLEEP_MS 250
@@ -245,7 +97,6 @@ static const struct bt_data ad[] = {
 static struct bt_uuid *scu_svc_uuid = AHU_UUID;
 
 static atomic_t flag_discover_complete = (atomic_t) false;
-static atomic_t flag_gwrite_complete = (atomic_t) false;
 
 // Keeps Track of BLE connection within APP
 bool ble_connected = false;
@@ -530,7 +381,7 @@ static ssize_t receive_ahu(struct bt_conn *conn,
 
     if (k_msgq_put(&command_msgq, &data, K_NO_WAIT) != 0)
     {
-        k_msgq_purge(&lps_msgq);
+        k_msgq_purge(&command_msgq);
     }
     else
     {
@@ -549,46 +400,7 @@ void thread_get_message(void)
 
         if (k_msgq_get(&command_msgq, &data, K_FOREVER) == 0)
         {
-            if (data.preamble == 0xAA)
-            {
-                uint8_t device = data.id;
-
-                if (device == DEVICE_TEM || device == DEVICE_HUM)
-                {
-                    process_hts221(device);
-                }
-                else if (device == DEVICE_AIR)
-                {
-                    process_lps22hb();
-                }
-                else if (device == DEVICE_VOC)
-                {
-                    process_ccs811();
-                }
-                else if (device == DEVICE_ACX || device == DEVICE_ACY || device == DEVICE_ACZ)
-                {
-                    process_lis2dh(device);
-                }
-                else if (device == DEVICE_RGB)
-                {
-                    process_rgb(data);
-                }
-                else if (device == DEVICE_BUZ)
-                {
-                    int freq = 0;
-                    sscanf(data.data, "%d", &freq);
-                    printk("%d", freq);
-                    process_buzzer(freq);
-                }
-                else if (device == DEVICE_PBN)
-                {
-                    process_button();
-                }
-                else if (device == DUTY)
-                {
-                    gatt_write(ahu_handle, ahu_packet);
-                }
-            }
+            printk("got a thing");
         }
     }
 }

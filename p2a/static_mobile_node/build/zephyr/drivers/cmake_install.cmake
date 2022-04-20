@@ -39,56 +39,56 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/interrupt_controller/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/interrupt_controller/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/misc/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/misc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/pcie/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/pcie/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/disk/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/disk/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/usb/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/usb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/clock_control/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/clock_control/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/gpio/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/gpio/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/hwinfo/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/hwinfo/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/serial/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/serial/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/entropy/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/entropy/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/timer/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/timer/cmake_install.cmake")
 endif()
 
