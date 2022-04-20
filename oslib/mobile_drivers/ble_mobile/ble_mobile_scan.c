@@ -26,6 +26,7 @@
 
 #include "ble_mobile_scan.h"
 #include "log_driver.h"
+#include "hci_driver.h"
 #include "shell_scu.h"
 
 static void start_scan(void);
@@ -38,14 +39,10 @@ uint16_t corner_uuid[] = {0xd0, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91,
 /* Custom UUIDs For Mobile and it's GATT Attributes */
 #define UUID_BUFFER_SIZE 16
 
+int currentRSSI;
+
 // Logging Module
 LOG_MODULE_REGISTER(BLE_SCAN, INITIAL_BLE_LOG_LEVEL);
-
-struct data_item_t4
-{
-    uint8_t rssi;
-    uint8_t USData;
-} currentDevice;
 
 
 /**
@@ -75,19 +72,13 @@ static bool parse_device(struct bt_data *data, void *user_data)
 
     if (matchedCount == UUID_BUFFER_SIZE)
     {
-        LOG_INF("RSSI of Node is: %d", currentDevice.rssi);
-        // MOBILE UUID MATCHED
-
-        int err = bt_le_scan_stop();
-        k_msleep(10000);
-
-        if (err)
-        {
-            LOG_ERR("Stop LE scan failed (err %d)", err);
-            return true;
-        }
-        start_scan();
+        tx_buff[0] = currentRSSI;
         
+        k_msleep(60);
+        
+        bt_le_scan_stop();
+        start_scan();
+
         return false;
     }
   }
@@ -107,7 +98,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                          struct net_buf_simple *ad)
 {
 
-  currentDevice.rssi = rssi;
+  currentRSSI = rssi;
 
   if (default_conn)
   {
@@ -136,8 +127,6 @@ static void start_scan(void)
     LOG_ERR("Scanning failed to start (err %d)\n", err);
     return;
   }
-
-  LOG_INF("Scanning for next device...\n");
 }
 
 

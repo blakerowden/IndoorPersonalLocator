@@ -41,14 +41,9 @@ void initialise(void)
 
 void main(void)
 {
-
         initialise();
 }
 
-// Thread Defines ==============================================================
-
-// START BLE BASE entry thread : Delayed Start (Wait for USB to be ready)
-
-K_THREAD_DEFINE(ble_mobile, THREAD_BLE_CONNECT_STACK, thread_ble_connect, NULL, NULL, NULL, THREAD_PRIORITY_BLE_CONNECT_THREAD, 0, 0);
-K_THREAD_DEFINE(ble_mobile_discover, THREAD_BLE_CONNECT_STACK, thread_ble_discover, NULL, NULL, NULL, THREAD_PRIORITY_BLE_CONNECT_THREAD, 0, 0);
-K_THREAD_DEFINE(ble_mobile_scan, THREAD_BLE_SCAN_STACK, thread_ble_mobile_scan, NULL, NULL, NULL, THREAD_PRIORITY_BLE_SCAN, 100, 0);
+K_THREAD_DEFINE(ble_mobile, 8192, thread_ble_connect, NULL, NULL, NULL, 2, 0, 0);
+K_THREAD_DEFINE(ble_mobile_discover, 8192 ,  thread_ble_discover, NULL, NULL, NULL, 2, 500, 0);
+K_THREAD_DEFINE(ble_mobile_scan, 8192 , thread_ble_mobile_scan, NULL, NULL, NULL, 2, 500, 0);

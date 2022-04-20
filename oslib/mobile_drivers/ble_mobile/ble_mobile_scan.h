@@ -21,8 +21,6 @@
 #define BLE_DISC_SLEEP_MS 250
 #define BLE_CONN_SLEEP_MS 1000
 
-extern struct k_sem sem_data_arrived;
-
 /**
  * @brief Base thread to start the BLE stack
  *
