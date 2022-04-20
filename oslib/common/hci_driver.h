@@ -26,8 +26,7 @@
 #define RESPONSE 0x02
 
 // Stores the DID's for the different devices
-typedef enum
-{
+typedef enum {
     NO_DEV,
     HTS221_T,
     HTS221_H,
@@ -44,6 +43,29 @@ typedef enum
     ALL
 } device_id;
 
+// Stores the Index for the data access
+typedef enum {
+    US_1,
+    US_2,
+    US_3,
+    US_4,
+    delta,
+    head,
+    time,
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I,
+    J,
+    K,
+    L
+} data_access;
+
 //Stores the name and address of a static node
 typedef struct
 {
@@ -54,8 +76,8 @@ typedef struct
 
 extern static_node static_nodes[12];
 
-extern uint16_t tx_buff[17]; // Stores the data to be sent to the AHU
-extern uint16_t rx_buff[17]; // Stores the data received to the AHU
+extern uint16_t tx_buff[19]; // Stores the data to be sent to the AHU
+extern uint16_t rx_buff[19]; // Stores the data received to the AHU
 
 /**
  * @brief Clears the TX buffer
