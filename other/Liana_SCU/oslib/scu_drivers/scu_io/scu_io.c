@@ -33,87 +33,87 @@ static atomic_t flag_button = (atomic_t) false;
 
 void led_gpio_enable(void)
 {
-    gpio_pin_configure(device_get_binding(LEDR), PINR, GPIO_OUTPUT_ACTIVE | FLAGSR);
-    gpio_pin_configure(device_get_binding(LEDG), PING, GPIO_OUTPUT_ACTIVE | FLAGSG);
-    gpio_pin_configure(device_get_binding(LEDB), PINB, GPIO_OUTPUT_ACTIVE | FLAGSB);
-    gpio_pin_set(device_get_binding(LEDR), PINR, 0);
-    gpio_pin_set(device_get_binding(LEDG), PING, 0);
-    gpio_pin_set(device_get_binding(LEDB), PINB, 0);
+    //gpio_pin_configure(device_get_binding(LEDR), PINR, GPIO_OUTPUT_ACTIVE | FLAGSR);
+    //gpio_pin_configure(device_get_binding(LEDG), PING, GPIO_OUTPUT_ACTIVE | FLAGSG);
+    //gpio_pin_configure(device_get_binding(LEDB), PINB, GPIO_OUTPUT_ACTIVE | FLAGSB);
+    //gpio_pin_set(device_get_binding(LEDR), PINR, 0);
+    //gpio_pin_set(device_get_binding(LEDG), PING, 0);
+    //gpio_pin_set(device_get_binding(LEDB), PINB, 0);
 }
 
 int led_rgb_set(int rgb, int mode)
 {
-    int ret = 1;
-    if (rgb == RGB_RED)
-    {
-        if (gpio_pin_set(device_get_binding(LEDR), PINR, mode) == 0)
-        {
-            atomic_set(&flag_rgb_red, (atomic_t)mode);
-        }
-    }
-    else if (rgb == RGB_GREEN)
-    {
-        if (gpio_pin_set(device_get_binding(LEDG), PING, mode) == 0)
-        {
-            atomic_set(&flag_rgb_green, (atomic_t)mode);
-        }
-    }
-    else if (rgb == RGB_BLUE)
-    {
-        if (gpio_pin_set(device_get_binding(LEDB), PINB, mode) == 0)
-        {
-            atomic_set(&flag_rgb_blue, (atomic_t)mode);
-        }
-    }
-
-    return ret;
+    //int ret = 1;
+    //if (rgb == RGB_RED)
+    //{
+    //    if (gpio_pin_set(device_get_binding(LEDR), PINR, mode) == 0)
+    //    {
+    //        atomic_set(&flag_rgb_red, (atomic_t)mode);
+    //    }
+    //}
+    //else if (rgb == RGB_GREEN)
+    //{
+    //    if (gpio_pin_set(device_get_binding(LEDG), PING, mode) == 0)
+    //    {
+    //        atomic_set(&flag_rgb_green, (atomic_t)mode);
+    //    }
+    //}
+    //else if (rgb == RGB_BLUE)
+    //{
+    //    if (gpio_pin_set(device_get_binding(LEDB), PINB, mode) == 0)
+    //    {
+    //        atomic_set(&flag_rgb_blue, (atomic_t)mode);
+    //    }
+    //}
+//
+    //return ret;
 }
 
 int led_rgb_get(int rgb)
 {
-    if (rgb == RGB_RED)
-    {
-        return atomic_get(&flag_rgb_red);
-    }
-    else if (rgb == RGB_GREEN)
-    {
-        return atomic_get(&flag_rgb_green);
-    }
-    else if (rgb == RGB_BLUE)
-    {
-        return atomic_get(&flag_rgb_blue);
-    }
+    //if (rgb == RGB_RED)
+    //{
+    //    return atomic_get(&flag_rgb_red);
+    //}
+    //else if (rgb == RGB_GREEN)
+    //{
+    //    return atomic_get(&flag_rgb_green);
+    //}
+    //else if (rgb == RGB_BLUE)
+    //{
+    //    return atomic_get(&flag_rgb_blue);
+    //}
 }
 
 int toggle_rgb(int rgb)
 {
-    int ret = 0;
-    if (rgb == RGB_RED)
-    {
-        int val = led_rgb_get(RGB_RED);
-        if (led_rgb_set(rgb, !val) != 0)
-        {
-            ret = 1;
-        }
-    }
-    else if (rgb == RGB_GREEN)
-    {
-        int val = led_rgb_get(RGB_GREEN);
-        if (led_rgb_set(rgb, !val) != 0)
-        {
-            ret = 1;
-        }
-    }
-    else
-    {
-        int val = led_rgb_get(RGB_BLUE);
-        if (led_rgb_set(rgb, !val) != 0)
-        {
-            ret = 1;
-        }
-    }
-
-    return ret;
+    //int ret = 0;
+    //if (rgb == RGB_RED)
+    //{
+    //    int val = led_rgb_get(RGB_RED);
+    //    if (led_rgb_set(rgb, !val) != 0)
+    //    {
+    //        ret = 1;
+    //    }
+    //}
+    //else if (rgb == RGB_GREEN)
+    //{
+    //    int val = led_rgb_get(RGB_GREEN);
+    //    if (led_rgb_set(rgb, !val) != 0)
+    //    {
+    //        ret = 1;
+    //    }
+    //}
+    //else
+    //{
+    //    int val = led_rgb_get(RGB_BLUE);
+    //    if (led_rgb_set(rgb, !val) != 0)
+    //    {
+    //        ret = 1;
+    //    }
+    //}
+//
+    //return ret;
 }
 
 // #define SW0_NODE	DT_ALIAS(sw0)
