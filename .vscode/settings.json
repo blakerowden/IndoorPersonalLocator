@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "stddef.h": "c",
+        "mobile_ble.h": "c",
+        "regulator.h": "c"
+    }
+}
