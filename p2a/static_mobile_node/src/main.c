@@ -19,7 +19,7 @@
 #include <logging/log.h>
 
 #include "shell_base.h"
-#include "mobile_ble.h"
+//#include "mobile_ble.h"
 #include "ble_mobile_scan.h"
 
 // Debug Settings ==============================================================
@@ -28,21 +28,7 @@
 // Logging Module ==============================================================
 LOG_MODULE_REGISTER(log_main);
 
-// Functions ===================================================================
-
-/**
- * @brief Initialises the hardware and shell
- *
- */
-void initialise(void)
-{
-        begin_shell();
-}
-
-void main(void)
-{
-        initialise();
-}
+// Threads =====================================================================
 
 K_THREAD_DEFINE(ble_mobile, 8192, thread_ble_connect, NULL, NULL, NULL, 2, 0, 0);
 K_THREAD_DEFINE(ble_mobile_discover, 8192 ,  thread_ble_discover, NULL, NULL, NULL, 2, 500, 0);

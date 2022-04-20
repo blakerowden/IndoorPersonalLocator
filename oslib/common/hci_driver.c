@@ -42,16 +42,14 @@ static_node static_nodes[12] = {
     {"4011-L", {"EE:32:F7:28:FA:AC"}, 0x0000},
 };
 
-void clear_tx(void)
-{
+void clear_tx(void) {
     for (int i = 0; i < 19; i++)
     {
         tx_buff[i] = 0x0000;
     }
 }
 
-void clear_rx(void)
-{
+void clear_rx(void) {
     for (int i = 0; i < 19; i++)
     {
         rx_buff[i] = 0x0000;

@@ -57,8 +57,30 @@ void process_rx_data(void)
 
         if (!k_sem_take(&sem_data_arrived, K_FOREVER))
         {
-            printk("[RAW RX]: 0x%X 0x%X 0x%X 0x%X 0x%X 0x%X\n", rx_buff[0],
-                    rx_buff[1], rx_buff[2], rx_buff[3], rx_buff[4], rx_buff[5]);
+            printk("Ultrasonic 1: %d \n"
+                    "Ultrasonic 2: %d \n"
+                    "Ultrasonic 3: %d \n"
+                    "Ultrasonic 3: %d \n"
+                    "Delta Movement: %d \n" 
+                    "Current Heading: %d \n" 
+                    "Current Time: %d \n"
+                    "4011-A: %d \n"
+                    "4011-B: %d \n"
+                    "4011-C: %d \n"
+                    "4011-D: %d \n"
+                    "4011-E: %d \n"
+                    "4011-F: %d \n"
+                    "4011-G: %d \n"
+                    "4011-H: %d \n"
+                    "4011-I: %d \n"
+                    "4011-J: %d \n"
+                    "4011-K: %d \n"
+                    "4011-L: %d \n",
+                    rx_buff[US_1], rx_buff[US_2], rx_buff[US_3], rx_buff[US_4],
+                    rx_buff[delta], rx_buff[head], rx_buff[time],
+                    rx_buff[A], rx_buff[B], rx_buff[C], rx_buff[D],
+                    rx_buff[E], rx_buff[F], rx_buff[G], rx_buff[H],
+                    rx_buff[I], rx_buff[J], rx_buff[K], rx_buff[L]);
         }
     }
 }
