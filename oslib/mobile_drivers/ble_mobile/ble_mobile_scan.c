@@ -23,6 +23,7 @@
 #include <bluetooth/hci.h>
 #include <bluetooth/uuid.h>
 #include <sys/byteorder.h>
+#include <string.h>
 
 #include "ble_mobile_scan.h"
 #include "log_driver.h"
@@ -33,8 +34,7 @@ static void start_scan(void);
 
 static struct bt_conn *default_conn;
 
-uint16_t corner_uuid[] = {0xd0, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91,
-                       0x26, 0x49, 0x60, 0xeb, 0x06, 0xa7, 0xca, 0xcb};
+int j;
 
 /* Custom UUIDs For Mobile and it's GATT Attributes */
 #define UUID_BUFFER_SIZE 16
@@ -44,6 +44,7 @@ int currentRSSI;
 // Logging Module
 LOG_MODULE_REGISTER(BLE_SCAN, INITIAL_BLE_LOG_LEVEL);
 
+char currentString[BT_ADDR_LE_STR_LEN];
 
 /**
  * @brief Used to parse the advertisement data
@@ -52,34 +53,24 @@ LOG_MODULE_REGISTER(BLE_SCAN, INITIAL_BLE_LOG_LEVEL);
  */
 static bool parse_device(struct bt_data *data, void *user_data)
 {
-  int i;
-  int matchedCount = 0;
 
   LOG_DBG("[AD]: %u data_len %u\n", data->type, data->data_len);
 
   if (data->type == BT_DATA_UUID128_ALL)
   {
-
-    uint16_t temp = 0;
-    for (i = 0; i < data->data_len; i++)
-    {
-      temp = data->data[i];
-      if (temp == corner_uuid[i])
+    for (int i = 0; i < 12; i++){
+      LOG_INF("%s", static_nodes[i].address);
+      if (strcmp(currentString, static_nodes[i].address) == 0)
       {
-        matchedCount++;
+          tx_buff[i+7] = currentRSSI;
+
+          k_msleep(60);
+        
+          bt_le_scan_stop();
+          start_scan();
+
+          return false;
       }
-    }
-
-    if (matchedCount == UUID_BUFFER_SIZE)
-    {
-        tx_buff[0] = currentRSSI;
-        
-        k_msleep(60);
-        
-        bt_le_scan_stop();
-        start_scan();
-
-        return false;
     }
   }
   return true;
@@ -97,6 +88,8 @@ static bool parse_device(struct bt_data *data, void *user_data)
 static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                          struct net_buf_simple *ad)
 {
+
+  bt_addr_le_to_str(addr, currentString, sizeof(addr));
 
   currentRSSI = rssi;
 
@@ -134,6 +127,8 @@ void thread_ble_mobile_scan(void)
 {
 
   default_conn = NULL;
+
+  j = 7;
 
   LOG_INF("Bluetooth rssi scanning initialized\n");
 
