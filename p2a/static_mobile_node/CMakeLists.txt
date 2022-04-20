@@ -18,7 +18,7 @@ include_directories(
 #Add Target Sources
 target_sources(app PRIVATE
                         ../../oslib/mobile_drivers/ble_mobile/ble_mobile_scan.c
-                        ../../oslib/mobile_drivers/ble_mobile/ble_mobile.c
+                        ../../oslib/mobile_drivers/ble_mobile/mobile_ble.c
                         ../../oslib/ahu_drivers/ahu_shell/shell_base.c
                         ../../oslib/common/hci_driver.c
                         src/main.c

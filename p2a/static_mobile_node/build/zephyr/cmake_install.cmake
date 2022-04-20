@@ -39,266 +39,266 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/arch/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/arch/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/lib/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/lib/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/soc/arm/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/soc/arm/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/boards/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/boards/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/subsys/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/subsys/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/drivers/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/drivers/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/CANopenNode/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/CANopenNode/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/civetweb/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/civetweb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/cmsis/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/cmsis/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/fatfs/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/fatfs/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/altera/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/altera/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/atmel/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/atmel/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/cypress/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/cypress/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/espressif/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/espressif/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/hal_gigadevice/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/hal_gigadevice/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/infineon/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/infineon/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/microchip/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/microchip/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/hal_nordic/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/hal_nordic/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/nuvoton/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/nuvoton/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/hal_nxp/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/hal_nxp/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/openisa/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/openisa/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/quicklogic/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/quicklogic/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/hal_rpi_pico/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/hal_rpi_pico/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/silabs/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/silabs/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/st/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/st/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/stm32/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/stm32/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/telink/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/telink/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/ti/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/ti/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/xtensa/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/xtensa/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/libmetal/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/libmetal/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/littlefs/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/littlefs/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/loramac-node/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/loramac-node/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/lvgl/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/lvgl/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/lz4/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/lz4/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/mbedtls/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/mbedtls/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/mcuboot/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/mcuboot/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/mipi-sys-t/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/mipi-sys-t/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/nanopb/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/nanopb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/nrf_hw_models/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/nrf_hw_models/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/open-amp/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/open-amp/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/openthread/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/openthread/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/segger/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/segger/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/sof/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/sof/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/tflite-micro/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/tflite-micro/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/tinycbor/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/tinycbor/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/tinycrypt/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/tinycrypt/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/TraceRecorder/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/TraceRecorder/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/trusted-firmware-m/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/trusted-firmware-m/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/modules/zscilib/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/modules/zscilib/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/kernel/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/kernel/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/cmake/flash/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/cmake/flash/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/cmake/usage/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/cmake/usage/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/prac2Test/prac2/mobile/build/zephyr/cmake/reports/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/p2a/static_mobile_node/build/zephyr/cmake/reports/cmake_install.cmake")
 endif()
 
