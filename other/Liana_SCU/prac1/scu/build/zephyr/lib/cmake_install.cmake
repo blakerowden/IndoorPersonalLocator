@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/lib/libc/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/lib/posix/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/lib/gui/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/lib/os/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/lib/util/cmake_install.cmake")
+  include("/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/zephyr/lib/libc/cmake_install.cmake")
+  include("/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/zephyr/lib/posix/cmake_install.cmake")
+  include("/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/zephyr/lib/gui/cmake_install.cmake")
+  include("/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/zephyr/lib/os/cmake_install.cmake")
+  include("/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/zephyr/lib/util/cmake_install.cmake")
 
 endif()
 

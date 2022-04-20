@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/repo/csse4011_repo/prac1/scu
+# Install script for directory: /home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/cmake_install.cmake")
+  include("/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/zephyr/cmake_install.cmake")
 
 endif()
 
@@ -51,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/liana/repo/csse4011_repo/prac1/scu/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

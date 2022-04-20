@@ -1,3 +1,4 @@
+/home/liana/csse4011/TrioGit/CSSE4011-Trio/other/Liana_SCU/prac1/scu/build/Kconfig/Kconfig.modules
 /home/liana/csse4011/zephyrproject/modules/audio/sof/Kconfig.sof
 /home/liana/csse4011/zephyrproject/modules/audio/sof/Kconfig.xtos-build
 /home/liana/csse4011/zephyrproject/modules/audio/sof/Kconfig.xtos-dbg
@@ -34,9 +35,9 @@
 /home/liana/csse4011/zephyrproject/zephyr/arch/arm/core/aarch32/mmu/Kconfig
 /home/liana/csse4011/zephyrproject/zephyr/arch/arm/core/aarch32/mpu/Kconfig
 /home/liana/csse4011/zephyrproject/zephyr/boards/Kconfig
-/home/liana/csse4011/zephyrproject/zephyr/boards/arm/thingy52_nrf52832/Kconfig
-/home/liana/csse4011/zephyrproject/zephyr/boards/arm/thingy52_nrf52832/Kconfig.board
-/home/liana/csse4011/zephyrproject/zephyr/boards/arm/thingy52_nrf52832/Kconfig.defconfig
+/home/liana/csse4011/zephyrproject/zephyr/boards/arm/particle_argon/Kconfig
+/home/liana/csse4011/zephyrproject/zephyr/boards/arm/particle_argon/Kconfig.board
+/home/liana/csse4011/zephyrproject/zephyr/boards/arm/particle_argon/Kconfig.defconfig
 /home/liana/csse4011/zephyrproject/zephyr/boards/shields/adafruit_2_8_tft_touch_v2/Kconfig.defconfig
 /home/liana/csse4011/zephyrproject/zephyr/boards/shields/adafruit_2_8_tft_touch_v2/Kconfig.shield
 /home/liana/csse4011/zephyrproject/zephyr/boards/shields/adafruit_winc1500/Kconfig.defconfig
@@ -1517,5 +1518,4 @@
 /home/liana/csse4011/zephyrproject/zephyr/subsys/usb/class/dfu/Kconfig
 /home/liana/csse4011/zephyrproject/zephyr/subsys/usb/class/hid/Kconfig
 /home/liana/csse4011/zephyrproject/zephyr/subsys/usb/class/netusb/Kconfig
-/home/liana/repo/csse4011_repo/prac1/scu/build/Kconfig/Kconfig.modules
 /opt/zephyr-sdk-0.13.2/cmake/zephyr/Kconfig
