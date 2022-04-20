@@ -19,7 +19,7 @@
 #include <logging/log.h>
 
 #include "shell_base.h"
-//#include "mobile_ble.h"
+#include "mobile_ble.h"
 #include "ble_mobile_scan.h"
 
 // Debug Settings ==============================================================
