@@ -143,16 +143,8 @@ static void start_scan(void)
 
 void thread_ble_mobile_scan(void)
 {
-  int err;
 
-  err = bt_enable(NULL);
   default_conn = NULL;
-
-  if (err)
-  {
-    LOG_ERR("Bluetooth init failed (err %d)\n", err);
-    return;
-  }
 
   LOG_INF("Bluetooth rssi scanning initialized\n");
 
