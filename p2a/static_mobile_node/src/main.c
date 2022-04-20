@@ -9,27 +9,23 @@
  *
  */
 
-#include <zephyr/types.h>
-#include <stddef.h>
-#include <errno.h>
-#include <zephyr.h>
-#include <sys/printk.h>
-#include <device.h>
-#include <devicetree.h>
-#include <logging/log.h>
+#include "main.h"
 
-#include "shell_base.h"
-#include "mobile_ble.h"
-#include "ble_mobile_scan.h"
+#define MODE MODE_MOBILE // MODE_MOBILE or MODE_STATIC
 
-// Debug Settings ==============================================================
-#define DEBUG_BLE_LED 0
-
-// Logging Module ==============================================================
-LOG_MODULE_REGISTER(log_main);
+LOG_MODULE_REGISTER(log_main); // Logging Module
 
 // Threads =====================================================================
+#if MODE == MODE_MOBILE
+K_THREAD_DEFINE(ble_mobile, BLE_CONNECT_THREAD_STACK, thread_ble_connect, NULL,
+                NULL, NULL, BLE_CONNECT_THREAD_PRIORITY, 0, 0);
+K_THREAD_DEFINE(ble_mobile_discover, BLE_DISCOVER_THREAD_STACK,
+                thread_ble_discover, NULL, NULL, NULL,
+                BLE_DISCOVER_THREAD_PRIORITY, 0, 0);
+K_THREAD_DEFINE(ble_mobile_scan, BLE_SCAN_THREAD_STACK, thread_ble_mobile_scan,
+                NULL, NULL, NULL, BLE_SCAN_THREAD_PRIORITY, 0, 0);
+#endif
 
-K_THREAD_DEFINE(ble_mobile, 8192, thread_ble_connect, NULL, NULL, NULL, 2, 0, 0);
-K_THREAD_DEFINE(ble_mobile_discover, 8192 ,  thread_ble_discover, NULL, NULL, NULL, 2, 500, 0);
-K_THREAD_DEFINE(ble_mobile_scan, 8192 , thread_ble_mobile_scan, NULL, NULL, NULL, 2, 500, 0);
+#if MODE == MODE_STATIC
+// INSERT STATIC MODULE THREADS HERE
+#endif
