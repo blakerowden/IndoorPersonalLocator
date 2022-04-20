@@ -10,17 +10,23 @@ project(ahu)
 
 #Add Include Directories
 include_directories(
-                        ../../oslib/mobile_drivers/ble_mobile
+                        ../../oslib/ahu_drivers/ahu_ble
                         ../../oslib/ahu_drivers/ahu_shell
+                        ../../oslib/ahu_drivers/ahu_data
                         ../../oslib/common
                         )
 
 #Add Target Sources
 target_sources(app PRIVATE
-                        ../../oslib/mobile_drivers/ble_mobile/ble_mobile_scan.c
-                        ../../oslib/mobile_drivers/ble_mobile/ble_mobile.c
+                        ../../oslib/ahu_drivers/ahu_ble/ble_base.c
+                        ../../oslib/ahu_drivers/ahu_data/ahu_data.c
                         ../../oslib/ahu_drivers/ahu_shell/shell_base.c
+                        ../../oslib/ahu_drivers/ahu_shell/shell_led.c
+                        ../../oslib/ahu_drivers/ahu_shell/shell_time.c
+                        ../../oslib/ahu_drivers/ahu_shell/shell_scu.c
+                        ../../oslib/common/led_driver.c
                         ../../oslib/common/hci_driver.c
+                        ../../oslib/common/pb_driver.c
                         src/main.c
                         )
 
