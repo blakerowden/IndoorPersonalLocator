@@ -10,7 +10,6 @@
  */
 
 #include "shell_scu.h"
-#include "ble_mobile.h"
 #include "hci_driver.h"
 #include "log_driver.h"
 #include <stdio.h>

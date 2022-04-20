@@ -36,9 +36,8 @@ int begin_shell(void)
         k_sleep(K_MSEC(100));
     }
 
-    printk("\n=======================================\n");
-    printk("Welcome to the Weather Station Terminal\n");
-    printk("=======================================\n");
-    printk("\n--Press TAB to see available commands--\n\n");
+    printk("\n======================\n");
+    printk(" Welcome to the Terminal\n");
+    printk("=========================\n");
     return 0;
 }

@@ -155,13 +155,13 @@ void process_rx_data(void)
 
         if (!k_sem_take(&sem_data_arrived, K_FOREVER))
         {
-            LOG_DBG("[RAW RX]: 0x%X 0x%X 0x%X 0x%X 0x%X 0x%X\n", rx_buff[0],
+            printk("[RAW RX]: 0x%X 0x%X 0x%X 0x%X 0x%X 0x%X\n", rx_buff[0],
                     rx_buff[1], rx_buff[2], rx_buff[3], rx_buff[4], rx_buff[5]);
-            process_raw_data();
-            if (!all_active)
-            {
-                print_scu_response();
-            }
+            // process_raw_data();
+            // if (!all_active)
+            // {
+            //     print_scu_response();
+            // }#
         }
     }
 }
