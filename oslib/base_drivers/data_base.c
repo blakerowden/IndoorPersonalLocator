@@ -31,17 +31,17 @@ void process_rx_data(void) {
                 "\"Heading\": %d, "
                 "\"Time\": %d, "
                 "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d, "
-                "\"4011-A\": %d }\n",
+                "\"4011-B\": %d, "
+                "\"4011-C\": %d, "
+                "\"4011-D\": %d, "
+                "\"4011-E\": %d, "
+                "\"4011-F\": %d, "
+                "\"4011-G\": %d, "
+                "\"4011-H\": %d, "
+                "\"4011-I\": %d, "
+                "\"4011-J\": %d, "
+                "\"4011-K\": %d, "
+                "\"4011-L\": %d }\n",
                 rx_buff[Ultrasonic_1], rx_buff[Ultrasonic_2],
                 rx_buff[Ultrasonic_3], rx_buff[Ultrasonic_4], rx_buff[Delta],
                 rx_buff[Heading], rx_buff[Time], rx_buff[Node_A],
