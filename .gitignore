@@ -70,7 +70,7 @@ CTestTestfile.cmake
 _deps
 
 #VSCode fluff
-*.json
+**/.vscode/**
 
 #Trunk Linter
 .trunk/**
