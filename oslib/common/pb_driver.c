@@ -17,7 +17,6 @@
 #include <zephyr.h>
 
 #include "hci_driver.h"
-#include "shell_scu.h"
 
 #define SLEEP_TIME_MS 1
 

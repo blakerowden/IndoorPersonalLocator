@@ -17,14 +17,11 @@
 #include <zephyr.h>
 #include <zephyr/types.h>
 
-#include "ahu_data.h"
+#include "data_base.h"
 #include "ble_base.h"
 #include "led_driver.h"
 #include "pb_driver.h"
 #include "shell_base.h"
-#include "shell_led.h"
-#include "shell_scu.h"
-#include "shell_time.h"
 
 #ifndef __MAIN_H__
 #define __MAIN_H__

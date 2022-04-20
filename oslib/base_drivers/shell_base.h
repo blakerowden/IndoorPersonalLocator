@@ -8,12 +8,12 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
-#include <usb/usb_device.h>
 #include <drivers/uart.h>
 #include <shell/shell.h>
+#include <usb/usb_device.h>
+#include <zephyr.h>
 
 #define OK 0
 
@@ -27,4 +27,4 @@
  */
 int begin_shell(void);
 
-#endif // AHU_SHELL_H
+#endif  // AHU_SHELL_H

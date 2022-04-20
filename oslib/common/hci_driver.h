@@ -12,14 +12,14 @@
 #ifndef HCI_DRIVER_H
 #define HCI_DRIVER_H
 
-#include <zephyr/types.h>
-#include <stddef.h>
-#include <errno.h>
-#include <zephyr.h>
-#include <sys/printk.h>
 #include <device.h>
 #include <devicetree.h>
+#include <errno.h>
 #include <logging/log.h>
+#include <stddef.h>
+#include <sys/printk.h>
+#include <zephyr.h>
+#include <zephyr/types.h>
 
 #define PREAMBLE 0xAA
 #define REQUEST 0x01
@@ -43,32 +43,8 @@ typedef enum {
     ALL
 } device_id;
 
-// Stores the Index for the data access
-typedef enum {
-    US_1,
-    US_2,
-    US_3,
-    US_4,
-    delta,
-    head,
-    time,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I,
-    J,
-    K,
-    L
-} data_access;
-
-//Stores the name and address of a static node
-typedef struct
-{
+// Stores the name and address of a static node
+typedef struct {
     char name[6];
     char address[17];
     uint16_t rssi;
@@ -76,8 +52,8 @@ typedef struct
 
 extern static_node static_nodes[12];
 
-extern uint16_t tx_buff[19]; // Stores the data to be sent to the AHU
-extern uint16_t rx_buff[19]; // Stores the data received to the AHU
+extern uint16_t tx_buff[19];  // Stores the data to be sent to the AHU
+extern uint16_t rx_buff[19];  // Stores the data received to the AHU
 
 /**
  * @brief Clears the TX buffer
@@ -91,4 +67,4 @@ void clear_tx(void);
  */
 void clear_rx(void);
 
-#endif // HCI_DRIVER_H
+#endif  // HCI_DRIVER_H

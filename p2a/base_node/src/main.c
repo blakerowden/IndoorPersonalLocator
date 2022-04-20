@@ -37,7 +37,7 @@ void main(void) { initialise(); }
 K_THREAD_DEFINE(ble_base, THREAD_BLE_BASE_STACK, thread_ble_base, NULL, NULL,
                 NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
 K_THREAD_DEFINE(rx_data, THREAD_BLE_BASE_STACK, process_rx_data, NULL, NULL,
-                NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
+                NULL, THREAD_PRIORITY_DATA_PROCESS, 0, 0);
 // Start BLE LED Thread
 #if DEBUG_BLE_LED
 K_THREAD_DEFINE(ble_led, THREAD_BLE_LED_STACK, thread_ble_led, NULL, NULL, NULL,
