@@ -37,7 +37,7 @@ int begin_shell(void)
     }
 
     printk("\n======================\n");
-    printk(" Welcome to the Terminal\n");
-    printk("=========================\n");
+    printk("Welcome to the Terminal\n");
+    printk("========================\n");
     return 0;
 }

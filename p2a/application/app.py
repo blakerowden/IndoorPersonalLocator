@@ -265,8 +265,8 @@ def main():
     # Create a stop flag
     stop_flag = False
     comms_active = True
-    data_active = True
-    gui_active = True
+    data_active = False
+    gui_active = False
     thread_serial = None
     thread_data = None
     thread_gui = None
