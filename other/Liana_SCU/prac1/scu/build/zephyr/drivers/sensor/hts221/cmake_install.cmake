@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/drivers/sensor/hts221
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/sensor/hts221
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/subsys/pm
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/subsys/pm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/pm/policy/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/pm/policy/cmake_install.cmake")
 
 endif()
 

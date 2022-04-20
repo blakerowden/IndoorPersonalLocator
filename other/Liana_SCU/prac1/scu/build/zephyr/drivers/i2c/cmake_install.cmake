@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/drivers/i2c
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/i2c
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

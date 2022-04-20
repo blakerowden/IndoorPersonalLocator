@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/drivers/sensor/lps22hb
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/sensor/lps22hb
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

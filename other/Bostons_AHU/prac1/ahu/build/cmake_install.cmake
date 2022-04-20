@@ -1,4 +1,4 @@
-# Install script for directory: /home/boston/csse4011/csse4011_repo/repo/prac1/ahu
+# Install script for directory: /home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

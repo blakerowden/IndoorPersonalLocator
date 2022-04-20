@@ -1,4 +1,4 @@
-/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/Kconfig/Kconfig.modules
+/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/Kconfig/Kconfig.modules
 /home/boston/csse4011/zephyrproject/modules/audio/sof/Kconfig.sof
 /home/boston/csse4011/zephyrproject/modules/audio/sof/Kconfig.xtos-build
 /home/boston/csse4011/zephyrproject/modules/audio/sof/Kconfig.xtos-dbg

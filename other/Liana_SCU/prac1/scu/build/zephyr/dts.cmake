@@ -10,8 +10,6 @@ set_target_properties(devicetree_target PROPERTIES "DT_CHOSEN|zephyr,sram" "/soc
 set_target_properties(devicetree_target PROPERTIES "DT_CHOSEN|zephyr,flash" "/soc/flash-controller@4001e000/flash@0")
 set_target_properties(devicetree_target PROPERTIES "DT_CHOSEN|zephyr,code-partition" "/soc/flash-controller@4001e000/flash@0/partitions/partition@c000")
 set_target_properties(devicetree_target PROPERTIES "DT_ALIAS|led0" "/leds/led_0")
-set_target_properties(devicetree_target PROPERTIES "DT_ALIAS|led1" "/leds/led_1")
-set_target_properties(devicetree_target PROPERTIES "DT_ALIAS|led2" "/leds/led_2")
 set_target_properties(devicetree_target PROPERTIES "DT_ALIAS|sw0" "/buttons/button_0")
 set_target_properties(devicetree_target PROPERTIES "DT_ALIAS|pwmsound" "/pwmdevs/pwm_dev_0")
 set_target_properties(devicetree_target PROPERTIES "DT_NODE|/" TRUE)

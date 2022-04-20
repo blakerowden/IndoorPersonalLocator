@@ -25,7 +25,7 @@ rule C_COMPILER__app_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__app_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -62,7 +62,7 @@ rule C_COMPILER__zephyr_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__zephyr_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -148,7 +148,7 @@ rule C_COMPILER__arch__common_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__arch__common_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -167,7 +167,7 @@ rule C_COMPILER__isr_tables_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__isr_tables_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -196,7 +196,7 @@ rule C_COMPILER__arch__arm__core__aarch32_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__arch__arm__core__aarch32_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -225,7 +225,7 @@ rule C_COMPILER__arch__arm__core__aarch32__cortex_m_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__arch__arm__core__aarch32__cortex_m_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -244,7 +244,7 @@ rule C_COMPILER__arch__arm__core__aarch32__mpu_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__arch__arm__core__aarch32__mpu_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -263,7 +263,7 @@ rule C_COMPILER__lib__libc__newlib_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__lib__libc__newlib_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -282,7 +282,7 @@ rule C_COMPILER__lib__posix_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__lib__posix_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -301,7 +301,7 @@ rule C_COMPILER__soc__arm__common__cortex_m_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__soc__arm__common__cortex_m_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -320,7 +320,7 @@ rule C_COMPILER__soc__arm__nordic_nrf__nrf52_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__soc__arm__nordic_nrf__nrf52_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -339,7 +339,7 @@ rule C_COMPILER__boards__arm__thingy52_nrf52832_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__boards__arm__thingy52_nrf52832_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -358,7 +358,7 @@ rule C_COMPILER__subsys__bluetooth__common_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__subsys__bluetooth__common_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -377,7 +377,7 @@ rule C_COMPILER__subsys__bluetooth__host_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__subsys__bluetooth__host_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -396,7 +396,7 @@ rule C_COMPILER__subsys__bluetooth__controller_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__subsys__bluetooth__controller_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -415,7 +415,7 @@ rule C_COMPILER__subsys__net_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__subsys__net_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -434,7 +434,7 @@ rule C_COMPILER__subsys__random_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__subsys__random_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -453,7 +453,7 @@ rule C_COMPILER__drivers__interrupt_controller_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__interrupt_controller_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -472,7 +472,7 @@ rule C_COMPILER__drivers__clock_control_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__clock_control_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -491,7 +491,7 @@ rule C_COMPILER__drivers__console_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__console_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -510,7 +510,7 @@ rule C_COMPILER__drivers__gpio_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__gpio_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -529,7 +529,7 @@ rule C_COMPILER__drivers__i2c_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__i2c_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -548,7 +548,7 @@ rule C_COMPILER__drivers__pwm_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__pwm_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -567,7 +567,7 @@ rule C_COMPILER__drivers__sensor__ccs811_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__sensor__ccs811_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -586,7 +586,7 @@ rule C_COMPILER__drivers__sensor__hts221_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__sensor__hts221_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -605,7 +605,7 @@ rule C_COMPILER__drivers__sensor__lis2dh_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__sensor__lis2dh_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -624,7 +624,7 @@ rule C_COMPILER__drivers__sensor__lps22hb_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__sensor__lps22hb_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -643,7 +643,7 @@ rule C_COMPILER__drivers__sensor__stmemsc_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__sensor__stmemsc_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -662,7 +662,7 @@ rule C_COMPILER__drivers__regulator_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__regulator_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -681,7 +681,7 @@ rule C_COMPILER__drivers__serial_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__serial_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -700,7 +700,7 @@ rule C_COMPILER__drivers__entropy_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__entropy_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -719,7 +719,7 @@ rule C_COMPILER__drivers__timer_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__drivers__timer_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -738,7 +738,7 @@ rule C_COMPILER__modules__hal_nordic__nrfx_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__modules__hal_nordic__nrfx_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -757,7 +757,7 @@ rule C_COMPILER__modules__segger_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__modules__segger_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -776,7 +776,7 @@ rule C_COMPILER__kernel_
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__kernel_
-  command = $PRE_LINK && ccache /usr/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && ccache /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -E rm -f $TARGET_FILE && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ar qc $TARGET_FILE $LINK_FLAGS $in && ccache /opt/zephyr-sdk-0.13.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 
@@ -785,7 +785,7 @@ rule C_STATIC_LIBRARY_LINKER__kernel_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/bin/cmake --regenerate-during-build -S/home/liana/repo/csse4011_repo/prac1/scu -B/home/liana/repo/csse4011_repo/prac1/scu/build
+  command = /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake --regenerate-during-build -S/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu -B/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build
   description = Re-running CMake...
   generator = 1
 
@@ -794,7 +794,7 @@ rule RERUN_CMAKE
 # Rule for cleaning additional files.
 
 rule CLEAN_ADDITIONAL
-  command = /usr/bin/cmake -DCONFIG=$CONFIG -P CMakeFiles/clean_additional.cmake
+  command = /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake -DCONFIG=$CONFIG -P CMakeFiles/clean_additional.cmake
   description = Cleaning additional files...
 
 

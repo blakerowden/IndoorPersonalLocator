@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/soc/arm/nordic_nrf
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/soc/arm/nordic_nrf
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,8 +39,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/soc/arm/nordic_nrf/nrf52/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/soc/arm/nordic_nrf/common/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/soc/arm/nordic_nrf/nrf52/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/soc/arm/nordic_nrf/common/cmake_install.cmake")
 
 endif()
 

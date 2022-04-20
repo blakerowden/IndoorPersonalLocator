@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/subsys
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/subsys
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,24 +39,24 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/debug/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/logging/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/bluetooth/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/fs/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/ipc/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/mgmt/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/net/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/random/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/storage/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/fb/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/portability/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/pm/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/stats/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/task_wdt/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/testsuite/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/tracing/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/canbus/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/subsys/modbus/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/debug/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/logging/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/bluetooth/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/fs/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/ipc/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/mgmt/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/net/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/random/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/storage/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/fb/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/portability/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/pm/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/stats/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/task_wdt/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/testsuite/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/tracing/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/canbus/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/subsys/modbus/cmake_install.cmake")
 
 endif()
 

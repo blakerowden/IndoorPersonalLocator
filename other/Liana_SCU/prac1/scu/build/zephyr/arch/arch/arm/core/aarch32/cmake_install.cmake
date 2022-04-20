@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/arch/arm/core/aarch32
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/arch/arm/core/aarch32
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,8 +39,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/arch/arch/arm/core/aarch32/cortex_m/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/arch/arch/arm/core/aarch32/mpu/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/arch/arch/arm/core/aarch32/cortex_m/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/arch/arch/arm/core/aarch32/mpu/cmake_install.cmake")
 
 endif()
 

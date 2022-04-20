@@ -21,7 +21,7 @@ __devicehdl_DT_N_S_soc_S_clock_40000000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_S
  *   - /soc/i2c@40004000/lis2dh12@19
  */
 const device_handle_t __aligned(2) __attribute__((__section__(".__device_handles_pass2")))
-__devicehdl_DT_N_S_soc_S_gpio_50000000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, 13, 18, 16, 14, 17, DEVICE_HANDLE_ENDS };
+__devicehdl_DT_N_S_soc_S_gpio_50000000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, 16, 14, 13, 17, 18, DEVICE_HANDLE_ENDS };
 
 /* 3 : /soc/random@4000d000:
  * Direct Dependencies:
@@ -75,7 +75,7 @@ __devicehdl_DT_N_S_soc_S_i2c_40004000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP
  *   - /soc/i2c@40003000/sx1509b@3e
  */
 const device_handle_t __aligned(2) __attribute__((__section__(".__device_handles_pass2")))
-__devicehdl_DT_N_S_soc_S_i2c_40003000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, 16, 19, 17, 9, DEVICE_HANDLE_ENDS };
+__devicehdl_DT_N_S_soc_S_i2c_40003000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, 16, 19, 9, 17, DEVICE_HANDLE_ENDS };
 
 /* 9 : /soc/i2c@40003000/sx1509b@3e:
  * Direct Dependencies:
@@ -92,7 +92,7 @@ __devicehdl_DT_N_S_soc_S_i2c_40003000[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP
  *   - /soc/i2c@40003000/ccs811@5a
  */
 const device_handle_t __aligned(2) __attribute__((__section__(".__device_handles_pass2")))
-__devicehdl_DT_N_S_soc_S_i2c_40003000_S_sx1509b_3e[] = { 8, 14, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, 10, 11, 16, 12, DEVICE_HANDLE_ENDS };
+__devicehdl_DT_N_S_soc_S_i2c_40003000_S_sx1509b_3e[] = { 8, 14, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, 16, 11, 10, 12, DEVICE_HANDLE_ENDS };
 
 /* 10 : /ccs-pwr-ctrl:
  * Direct Dependencies:
@@ -153,7 +153,7 @@ __devicehdl_ccs_vdd_pwr_ctrl_init[] = { DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DE
  *   - /soc/i2c@40003000/sx1509b@3e
  */
 const device_handle_t __aligned(2) __attribute__((__section__(".__device_handles_pass2")))
-__devicehdl_DT_N_S_soc_S_i2c_40003000_S_ccs811_5a[] = { 10, 9, 8, 2, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DEVICE_HANDLE_ENDS };
+__devicehdl_DT_N_S_soc_S_i2c_40003000_S_ccs811_5a[] = { 2, 9, 10, 8, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DEVICE_HANDLE_ENDS };
 
 /* 17 : /soc/i2c@40003000/hts221@5f:
  * Direct Dependencies:
@@ -162,7 +162,7 @@ __devicehdl_DT_N_S_soc_S_i2c_40003000_S_ccs811_5a[] = { 10, 9, 8, 2, DEVICE_HAND
  *   - /soc/i2c@40003000
  */
 const device_handle_t __aligned(2) __attribute__((__section__(".__device_handles_pass2")))
-__devicehdl_DT_N_S_soc_S_i2c_40003000_S_hts221_5f[] = { 14, 8, 2, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DEVICE_HANDLE_ENDS };
+__devicehdl_DT_N_S_soc_S_i2c_40003000_S_hts221_5f[] = { 2, 14, 8, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DEVICE_HANDLE_ENDS };
 
 /* 18 : /soc/i2c@40004000/lis2dh12@19:
  * Direct Dependencies:
@@ -170,7 +170,7 @@ __devicehdl_DT_N_S_soc_S_i2c_40003000_S_hts221_5f[] = { 14, 8, 2, DEVICE_HANDLE_
  *   - /soc/i2c@40004000
  */
 const device_handle_t __aligned(2) __attribute__((__section__(".__device_handles_pass2")))
-__devicehdl_DT_N_S_soc_S_i2c_40004000_S_lis2dh12_19[] = { 7, 2, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DEVICE_HANDLE_ENDS };
+__devicehdl_DT_N_S_soc_S_i2c_40004000_S_lis2dh12_19[] = { 2, 7, DEVICE_HANDLE_SEP, DEVICE_HANDLE_SEP, DEVICE_HANDLE_ENDS };
 
 /* 19 : /soc/i2c@40003000/lps22hb_press@5c:
  * Direct Dependencies:

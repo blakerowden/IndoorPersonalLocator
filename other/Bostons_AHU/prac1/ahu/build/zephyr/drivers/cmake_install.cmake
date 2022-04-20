@@ -39,61 +39,61 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/interrupt_controller/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/interrupt_controller/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/misc/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/misc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/pcie/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/pcie/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/disk/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/disk/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/usb/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/usb/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/clock_control/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/clock_control/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/gpio/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/gpio/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/pwm/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/pwm/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/hwinfo/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/hwinfo/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/serial/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/serial/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/entropy/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/entropy/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/drivers/timer/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/drivers/timer/cmake_install.cmake")
 endif()
 

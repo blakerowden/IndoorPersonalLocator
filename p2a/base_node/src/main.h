@@ -11,5 +11,10 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+typedef enum {
+    MODE_MOBILE = 0,
+    MODE_STATIC = 1,
+} mode_t;
+
 #endif //__MAIN_H__
 

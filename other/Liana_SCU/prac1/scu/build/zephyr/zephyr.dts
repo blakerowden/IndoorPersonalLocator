@@ -18,8 +18,6 @@
 	};
 	aliases {
 		led0 = &led0;
-		led1 = &led1;
-		led2 = &led2;
 		sw0 = &button0;
 		pwmsound = &pwm_dev0;
 	};

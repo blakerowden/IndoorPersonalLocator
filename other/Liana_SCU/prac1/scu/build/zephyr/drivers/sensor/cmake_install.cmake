@@ -1,4 +1,4 @@
-# Install script for directory: /home/liana/csse4011/zephyrproject/zephyr/drivers/sensor
+# Install script for directory: /home/boston/csse4011/zephyrproject/zephyr/drivers/sensor
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,11 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/drivers/sensor/ccs811/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/drivers/sensor/hts221/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/drivers/sensor/lis2dh/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/drivers/sensor/lps22hb/cmake_install.cmake")
-  include("/home/liana/repo/csse4011_repo/prac1/scu/build/zephyr/drivers/sensor/stmemsc/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/drivers/sensor/ccs811/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/drivers/sensor/hts221/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/drivers/sensor/lis2dh/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/drivers/sensor/lps22hb/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Liana_SCU/prac1/scu/build/zephyr/drivers/sensor/stmemsc/cmake_install.cmake")
 
 endif()
 

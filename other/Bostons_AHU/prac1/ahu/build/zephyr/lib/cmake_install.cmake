@@ -39,26 +39,26 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/lib/libc/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/lib/libc/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/lib/posix/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/lib/posix/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/lib/gui/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/lib/gui/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/lib/os/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/lib/os/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build/zephyr/lib/util/cmake_install.cmake")
+  include("/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build/zephyr/lib/util/cmake_install.cmake")
 endif()
 

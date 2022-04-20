@@ -652,7 +652,7 @@ rule C_STATIC_LIBRARY_LINKER__kernel_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake --regenerate-during-build -S/home/boston/csse4011/csse4011_repo/repo/prac1/ahu -B/home/boston/csse4011/csse4011_repo/repo/prac1/ahu/build
+  command = /home/boston/.local/lib/python3.9/site-packages/cmake/data/bin/cmake --regenerate-during-build -S/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu -B/home/boston/csse4011/Shared_repo/CSSE4011/other/Bostons_AHU/prac1/ahu/build
   description = Re-running CMake...
   generator = 1
 
