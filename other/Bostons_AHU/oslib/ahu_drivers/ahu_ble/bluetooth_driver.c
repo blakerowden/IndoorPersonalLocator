@@ -20,7 +20,9 @@
 #include <stddef.h>
 #include <logging/log.h>
 #include <errno.h>
+
 #include "kernel.h"
+
 
 #include "bluetooth_driver.h"
 #include "hci.h"
@@ -65,6 +67,12 @@ struct data_item_t3
     uint8_t buttonState;
 } buttonObject;
 
+struct data_item_t4
+{
+    uint8_t rssi;
+    uint8_t USData;
+} currentDevice;
+
 static void start_scan(void);
 
 /*Define all initial variables for hci packets, handles, etc.*/
@@ -104,6 +112,18 @@ static struct bt_uuid *test_svc_uuid = TEST_CH_UUID;
     BT_UUID_DECLARE_128(0x02, 0x23, 0x45, 0x67, 0x89, 0x01, 0x02, 0x03, \
                         0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0xFF, 0x00)
 
+//RSSI RX BUFFER
+int16_t rx_rssi[] = {0x00, 0x00, 0x00, 0x00};
+
+uint8_t read_rssi_from_mobile(struct bt_conn *conn, uint8_t err,
+                              struct bt_gatt_read_params *params,
+                              const void *data, uint16_t length)
+{
+    memcpy(&rx_rssi, data, sizeof(rx_rssi));
+    printk("RSSI: N1:%d, N2:%d, N3:%d, N4:%d\n", rx_rssi[0], rx_rssi[1], rx_rssi[2], rx_rssi[3]);
+    return 0;
+}
+
 /*Found Device Function to establish connection with device*/
 static bool parse_device(struct bt_data *data, void *user_data)
 {
@@ -126,7 +146,9 @@ static bool parse_device(struct bt_data *data, void *user_data)
 
         if (matchedCount == UUID_BUFFER_SIZE)
         {
+            LOG_INF("RSSI of Node is: %d", currentDevice.rssi);
             // MOBILE UUID MATCHED
+            
             LOG_INF("Mobile UUID Found, attempting to connect");
 
             int err = bt_le_scan_stop();
@@ -137,7 +159,8 @@ static bool parse_device(struct bt_data *data, void *user_data)
                 LOG_ERR("Stop LE scan failed (err %d)", err);
                 return true;
             }
-
+            
+            /*
             struct bt_le_conn_param *param = BT_LE_CONN_PARAM_DEFAULT;
 
             err = bt_conn_le_create(addr, BT_CONN_LE_CREATE_CONN,
@@ -145,9 +168,11 @@ static bool parse_device(struct bt_data *data, void *user_data)
             if (err)
             {
                 LOG_ERR("Create conn failed (err %d)", err);
-                start_scan();
+                
             }
-
+            */
+            start_scan();
+            
             return false;
         }
     }
@@ -317,6 +342,8 @@ static void gatt_discover(void)
 static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                          struct net_buf_simple *ad)
 {
+
+    currentDevice.rssi = rssi;
 
     if (default_conn)
     {
