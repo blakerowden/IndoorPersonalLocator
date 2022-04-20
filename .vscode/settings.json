@@ -2,6 +2,7 @@
     "files.associations": {
         "stddef.h": "c",
         "mobile_ble.h": "c",
-        "regulator.h": "c"
+        "regulator.h": "c",
+        "ble_uuid.h": "c"
     }
 }
