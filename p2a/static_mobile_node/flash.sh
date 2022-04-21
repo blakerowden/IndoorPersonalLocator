@@ -1,9 +1,8 @@
 rm build -r
 
-west build -p auto -b nrf52840dongle_nrf52840
+west build
 
-nrfutil pkg generate --hw-version 52 --sd-req=0x00         --application build/zephyr/zephyr.hex         --application-version 1 prac1.zip
+west flash
 
-nrfutil dfu usb-serial -pkg prac1.zip -p /dev/ttyACM0
+JLinkRTTLogger -Device NRF52840_XXAA -RTTChannel 1 -if SWD -Speed 4000 ~/rtt.log
 
-putty

@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
+set(BOARD thingy52_nrf52832)
+set(BOARD_FLASH_RUNNER jlink)
 set(CONF_FILE prj.conf bt.conf)
 
 cmake_minimum_required(VERSION 3.20.0)
@@ -9,7 +11,7 @@ project(ahu)
 #Add Include Directories
 include_directories(
                         ../../oslib/mobile_drivers/ble_mobile
-                        ../../oslib/ahu_drivers/ahu_shell
+                        ../../oslib/base_drivers
                         ../../oslib/common
                         )
 
@@ -17,7 +19,7 @@ include_directories(
 target_sources(app PRIVATE
                         ../../oslib/mobile_drivers/ble_mobile/ble_mobile_scan.c
                         ../../oslib/mobile_drivers/ble_mobile/mobile_ble.c
-                        ../../oslib/ahu_drivers/ahu_shell/shell_base.c
+                        ../../oslib/base_drivers/shell_base.c
                         ../../oslib/common/hci_driver.c
                         src/main.c
                         )

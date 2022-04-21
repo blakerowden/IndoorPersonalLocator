@@ -32,12 +32,8 @@
 #include <drivers/regulator.h>
 
 #include "ble_uuid.h"
-#include "log_driver.h"
 #include "hci_driver.h"
 #include "mobile_ble.h"
-
-// Logging Module
-LOG_MODULE_REGISTER(BLE_MOBILE, INITIAL_BLE_LOG_LEVEL);
 
 K_SEM_DEFINE(sem_data_arrived, 0, 1);
 

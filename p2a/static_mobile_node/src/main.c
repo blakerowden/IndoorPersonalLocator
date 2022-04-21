@@ -23,7 +23,7 @@ K_THREAD_DEFINE(ble_mobile_discover, BLE_DISCOVER_THREAD_STACK,
                 thread_ble_discover, NULL, NULL, NULL,
                 BLE_DISCOVER_THREAD_PRIORITY, 0, 0);
 K_THREAD_DEFINE(ble_mobile_scan, BLE_SCAN_THREAD_STACK, thread_ble_mobile_scan,
-                NULL, NULL, NULL, BLE_SCAN_THREAD_PRIORITY, 0, 0);
+                NULL, NULL, NULL, BLE_SCAN_THREAD_PRIORITY, 0, 500);
 #endif
 
 #if MODE == MODE_STATIC

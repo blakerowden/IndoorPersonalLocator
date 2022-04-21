@@ -26,9 +26,7 @@
 #include <string.h>
 
 #include "ble_mobile_scan.h"
-#include "log_driver.h"
 #include "hci_driver.h"
-#include "shell_scu.h"
 
 static void start_scan(void);
 
@@ -41,9 +39,6 @@ int j;
 
 int currentRSSI;
 
-// Logging Module
-LOG_MODULE_REGISTER(BLE_SCAN, INITIAL_BLE_LOG_LEVEL);
-
 char currentString[BT_ADDR_LE_STR_LEN];
 
 /**
@@ -54,24 +49,23 @@ char currentString[BT_ADDR_LE_STR_LEN];
 static bool parse_device(struct bt_data *data, void *user_data)
 {
 
-  LOG_DBG("[AD]: %u data_len %u\n", data->type, data->data_len);
-
   if (data->type == BT_DATA_UUID128_ALL)
   {
-    for (int i = 0; i < 12; i++){
-      LOG_INF("%s", static_nodes[i].address);
-      if (strcmp(currentString, static_nodes[i].address) == 0)
-      {
-          tx_buff[i+7] = currentRSSI;
+    //for (int i = 0; i < 12; i++){
+      //printk("Expected:%s got:%s\n", static_nodes[i].address, currentString);
+      //if (strcmp(currentString, static_nodes[i].address) == 0)
+      //{
+          //tx_buff[i+7] = currentRSSI;
 
+          printk("RSSI of Device \"%s\" is:%d\n", currentString, currentRSSI);
           k_msleep(60);
         
           bt_le_scan_stop();
           start_scan();
 
-          return false;
-      }
-    }
+          //return false;
+      //}
+    //}
   }
   return true;
 }
@@ -89,7 +83,9 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                          struct net_buf_simple *ad)
 {
 
-  bt_addr_le_to_str(addr, currentString, sizeof(addr));
+  bt_addr_le_to_str(addr, currentString, 18);
+
+  printk("Found:%s\n", currentString);
 
   currentRSSI = rssi;
 
@@ -117,7 +113,7 @@ static void start_scan(void)
   err = bt_le_scan_start(BT_LE_SCAN_PASSIVE, device_found);
   if (err)
   {
-    LOG_ERR("Scanning failed to start (err %d)\n", err);
+    printk("Scanning failed to start (err %d)\n", err);
     return;
   }
 }
@@ -130,7 +126,7 @@ void thread_ble_mobile_scan(void)
 
   j = 7;
 
-  LOG_INF("Bluetooth rssi scanning initialized\n");
+  printk("Bluetooth rssi scanning initialized\n");
 
   start_scan();
 }
