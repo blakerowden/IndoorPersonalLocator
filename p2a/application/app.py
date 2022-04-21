@@ -21,6 +21,7 @@ import logging
 import random
 import csv
 import numpy as np
+from datetime import datetime
 
 # Defines =====================================================================
 START_POS_X = 450
@@ -57,6 +58,7 @@ class TrackingData:
         self.kalman_pos = (0, 0)
         self.rssi_error = 0
         self.us_error = 0
+        self.current_time = ""
 
     def write_rssi_csv(self, file_name, pos_x, pos_y):
         """
@@ -114,16 +116,16 @@ class TrackingData:
 
     def print_data(self):
         """
-        Prints the tracking data to the console.
+        Prints the recieved raw data to the console.
         :return: None
         """
+        print(f"======== Data Packet Recieved {self.current_time} ========")
         print("Ultrasonic: ", self.ultrasonic)
         print("Delta: ", self.delta)
         print("Heading: ", self.heading)
         print("Time: ", self.time)
         print("Node RSSI: ", self.node_rssi)
-        print("Node Distance: ", self.node_distance)
-        print("\n")
+        print("======================================================\n")
 
     def estimate_location(self):
         """
@@ -334,11 +336,12 @@ def data_processing(in_q, out_q, stop):
         except Empty:
             data_raw = None
         if data_raw != None and data_raw != '':
+            now = datetime.now() # Timestamp incomming data
+            live_data.current_time = now.strftime("%H:%M:%S.%f")
             data = json.loads(str(data_raw))
             live_data.populate_data(data)
-            live_data.rssi_to_distance()
-            print("Data Recieved:")
             live_data.print_data()
+            live_data.rssi_to_distance()
             out_q.put(live_data.estimated_pos) # Send the estimated position to the GUI
         if stop():
             logging.info("Stoping Data Thread")
