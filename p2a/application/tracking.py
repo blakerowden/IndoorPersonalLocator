@@ -14,7 +14,7 @@ import numpy
 class Kalman:
     def __init__(self, x_init, cov_init, meas_err, proc_err):
         self.ndim = len(x_init)
-        self.A = numpy.array([(1, 0, dt, 0), (0, 1, 0, dt), (0, 0, 1, 0), (0, 0, 0, 1)]);
+        self.A = numpy.array([(1, 0, dt, 0), (0, 1, 0, dt), (0, 0, 1, 0), (0, 0, 0, 1)])
         self.H = numpy.array([(1, 0, 0, 0), (0, 1, 0, 0)])
         self.x_hat =  x_init
         self.cov = cov_init

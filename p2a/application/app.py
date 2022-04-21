@@ -332,7 +332,7 @@ def data_processing(in_q, out_q, stop):
             live_data.populate_data(data)
             live_data.rssi_to_distance()
             live_data.print_data()
-            out_q.put(live_data.pos)
+            out_q.put(live_data.estimated_pos)
             # for i in data:
             #    logging.debug(f"{i}: {data[i]}")
         if stop():
