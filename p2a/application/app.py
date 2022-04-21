@@ -123,6 +123,7 @@ class TrackingData:
         print("Time: ", self.time)
         print("Node RSSI: ", self.node_rssi)
         print("Node Distance: ", self.node_distance)
+        print("\n")
 
     def estimate_location(self):
         """
@@ -336,10 +337,9 @@ def data_processing(in_q, out_q, stop):
             data = json.loads(str(data_raw))
             live_data.populate_data(data)
             live_data.rssi_to_distance()
+            print("Data Recieved:")
             live_data.print_data()
-            out_q.put(live_data.estimated_pos)
-            # for i in data:
-            #    logging.debug(f"{i}: {data[i]}")
+            out_q.put(live_data.estimated_pos) # Send the estimated position to the GUI
         if stop():
             logging.info("Stoping Data Thread")
             break
