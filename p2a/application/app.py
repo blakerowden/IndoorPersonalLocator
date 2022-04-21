@@ -20,7 +20,7 @@ import math
 import logging
 import random
 import csv
-import numpy as np 
+import numpy as np
 
 # Defines =====================================================================
 START_POS_X = 450
@@ -50,6 +50,9 @@ class TrackingData:
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
+        self.node_transmit_power = [0] * 12
+        self.node_alpha = [0] * 12
+        self.node_error_constant = [0] * 12
         self.estimated_pos = (0, 0)
         self.kalman_pos = (0, 0)
         self.rssi_error = 0
@@ -73,13 +76,15 @@ class TrackingData:
 
     def rssi_to_distance(self):
         """
-        Converts the rssi data to distance.
+        Converts the received power (RSSI) data from dB to distance in m.
         :return: None
         """
+
         for i in range(len(self.node_rssi)):
             if self.node_rssi[i] != 0:
-                self.node_distance[i] = 10 ** (
-                    (self.node_rssi[i] - self.node_rssi[0]) / (10 * 2))
+                self.node_distance[i] = (
+                    (self.node_error_constant[i] * self.node_transmit_power[i]) 
+                    / self.node_rssi[i]) ** (1./self.node_alpha[i])
 
     def populate_data(self, raw_data):
         """
@@ -122,15 +127,15 @@ class TrackingData:
     def estimate_location(self):
         """
         Use the least squares equation to estimate location of the object
-        :return: None
+        :return tuple: position (x,y)
         """
 
     def kalman_filter(self):
         """
-        Use a Kalman filter to fuse the rssi and US data to estimate the location of the object.
-        :return: None
+        Use a Kalman filter to fuse the RF distance and US data to estimate the location of the object.
+        :return tuple: position (x,y)
         """
-        
+
 
 class MainApplication(tk.Frame):
     """
