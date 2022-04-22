@@ -84,9 +84,7 @@ class TrackingData:
 
         for i in range(len(self.node_rssi)):
             if self.node_rssi[i] != 0:
-                self.node_distance[i] = (
-                    (self.node_error_constant[i] * self.node_transmit_power[i])
-                    / self.node_rssi[i]) ** (1./self.node_alpha[i])
+                self.node_distance[i] = (10 ** ((self.node_rssi[i] - self.node_transmit_power[i]) / 20))
 
     def populate_data(self, raw_data):
         """
@@ -94,25 +92,25 @@ class TrackingData:
         :param raw_data: The raw data to populate the tracking data with.
         :return: None
         """
-        self.ultrasonic[0] = raw_data["Ultrasonic_1"]
-        self.ultrasonic[1] = raw_data["Ultrasonic_2"]
-        self.ultrasonic[2] = raw_data["Ultrasonic_3"]
-        self.ultrasonic[3] = raw_data["Ultrasonic_4"]
-        self.delta = raw_data["Delta"]
-        self.heading = raw_data["Heading"]
-        self.time = raw_data["Time"]
-        self.node_rssi[0] = raw_data["4011-A"] - 256
-        self.node_rssi[1] = raw_data["4011-B"] - 256
-        self.node_rssi[2] = raw_data["4011-C"] - 256
-        self.node_rssi[3] = raw_data["4011-D"] - 256
-        self.node_rssi[4] = raw_data["4011-E"] - 256
-        self.node_rssi[5] = raw_data["4011-F"] - 256
-        self.node_rssi[6] = raw_data["4011-G"] - 256
-        self.node_rssi[7] = raw_data["4011-H"] - 256
-        self.node_rssi[8] = raw_data["4011-I"] - 256
-        self.node_rssi[9] = raw_data["4011-J"] - 256
-        self.node_rssi[10] = raw_data["4011-K"] - 256
-        self.node_rssi[11] = raw_data["4011-L"] - 256
+        self.ultrasonic[0]=raw_data["Ultrasonic_1"]
+        self.ultrasonic[1]=raw_data["Ultrasonic_2"]
+        self.ultrasonic[2]=raw_data["Ultrasonic_3"]
+        self.ultrasonic[3]=raw_data["Ultrasonic_4"]
+        self.delta=raw_data["Delta"]
+        self.heading=raw_data["Heading"]
+        self.time=raw_data["Time"]
+        self.node_rssi[0]=raw_data["4011-A"] - 256
+        self.node_rssi[1]=raw_data["4011-B"] - 256
+        self.node_rssi[2]=raw_data["4011-C"] - 256
+        self.node_rssi[3]=raw_data["4011-D"] - 256
+        self.node_rssi[4]=raw_data["4011-E"] - 256
+        self.node_rssi[5]=raw_data["4011-F"] - 256
+        self.node_rssi[6]=raw_data["4011-G"] - 256
+        self.node_rssi[7]=raw_data["4011-H"] - 256
+        self.node_rssi[8]=raw_data["4011-I"] - 256
+        self.node_rssi[9]=raw_data["4011-J"] - 256
+        self.node_rssi[10]=raw_data["4011-K"] - 256
+        self.node_rssi[11]=raw_data["4011-L"] - 256
 
     def print_data(self):
         """
@@ -147,25 +145,25 @@ class MainApplication(tk.Frame):
 
     def __init__(self, inq_q, master=None):
         super().__init__(master)
-        self._master = master
-        self.in_q = inq_q
-        self._stop = False
+        self._master=master
+        self.in_q=inq_q
+        self._stop=False
         self._master.title("Prac 2 - Position GUI Application")
         self._master.geometry("950x950")
         self._master.configure(bg="white")
         self.pack()
 
         # Create the grid
-        self._grid = Grid(self._master)
+        self._grid=Grid(self._master)
         self._grid.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        self._mobile = MobileNode(self._grid)
+        self._mobile=MobileNode(self._grid)
         self._master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         self.update_position()
 
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
-            self._stop = True
+            self._stop=True
             self._master.destroy()
 
     def update_position(self):
@@ -176,12 +174,12 @@ class MainApplication(tk.Frame):
         while True:
             time.sleep(SHORT_SLEEP)
             try:
-                pos = self.in_q.get(block=False)
+                pos=self.in_q.get(block=False)
             except Empty:
-                pos = None
+                pos=None
             if pos is not None:
-                self._mobile.target_x = pos[0]
-                self._mobile.target_y = pos[1]
+                self._mobile.target_x=pos[0]
+                self._mobile.target_y=pos[1]
                 logging.debug(f"Received new position x:{pos[0]} y:{pos[1]}")
             if self._stop:
                 break
@@ -197,15 +195,15 @@ class MobileNode(object):
     """
 
     def __init__(self, canvas, master=None):
-        self.current_x = START_POS_X
-        self.current_y = START_POS_Y
-        self.target_x = START_POS_X
-        self.target_y = START_POS_Y
-        self.canvas = canvas
+        self.current_x=START_POS_X
+        self.current_y=START_POS_Y
+        self.target_x=START_POS_X
+        self.target_y=START_POS_Y
+        self.canvas=canvas
 
-        self.graphic = self.canvas.create_oval(
+        self.graphic=self.canvas.create_oval(
             425, 425, 475, 475, fill="#afbecc")
-        self.text_position = self.canvas.create_text(
+        self.text_position=self.canvas.create_text(
             450, 500, text="(500,500)", fill="black")
 
     def redraw_position(self):
@@ -240,7 +238,7 @@ class Grid(tk.Canvas):
 
     def __init__(self, master):
         super().__init__(master, bg='white', height=900, width=900)
-        self._master = master
+        self._master=master
 
         # create a grid
         for i in range(0, 900, 150):
@@ -275,7 +273,7 @@ def serial_interface(out_q, stop):
     Thread for the serial interfacing.
     """
     try:
-        ser = serial.Serial(
+        ser=serial.Serial(
             port='/dev/ttyACM0',
             baudrate=115200,
             parity=serial.PARITY_NONE,
@@ -283,7 +281,7 @@ def serial_interface(out_q, stop):
             bytesize=serial.EIGHTBITS,
             timeout=1
         )
-        ser.is_open = True
+        ser.is_open=True
         logging.info(f"Connected to Serial Port {ser.name}")
         time.sleep(SHORT_SLEEP)
     except:
@@ -294,7 +292,7 @@ def serial_interface(out_q, stop):
 
     while(ser.is_open):
         try:
-            line = serial_read_line(ser)
+            line=serial_read_line(ser)
         except:
             ser.close()
             logging.warning("Could not read line from serial port")
@@ -302,10 +300,10 @@ def serial_interface(out_q, stop):
             logging.info("Attempting to reconnect to serial port")
             serial_interface(out_q, stop)
         try:
-            data = json.loads(str(line))
+            data=json.loads(str(line))
             out_q.put(data)
         except:
-            #logging.debug(f"Could not parse line from serial port: {line}")
+            # logging.debug(f"Could not parse line from serial port: {line}")
             time.sleep(SHORT_SLEEP)
         if stop():
             break
@@ -318,7 +316,7 @@ def serial_read_line(ser):
     Read a line from the serial port.
     """
     while(ser.is_open):
-        line = ser.readline().decode('utf-8').strip()[3:]
+        line=ser.readline().decode('utf-8').strip()[3:]
         if line:
             return line
 
@@ -329,17 +327,17 @@ def data_processing(in_q, out_q, stop):
     """
     Process the raw JSON data.
     """
-    live_data = TrackingData()
+    live_data=TrackingData()
     while True:
         # Get the next message from the queue
         try:
-            data_raw = in_q.get(block=False)
+            data_raw=in_q.get(block=False)
         except Empty:
-            data_raw = None
+            data_raw=None
         if data_raw != None and data_raw != '':
-            now = datetime.now()  # Timestamp incomming data
-            live_data.current_time = now.strftime("%H:%M:%S.%f")
-            #data = json.loads(str(data_raw))
+            now=datetime.now()  # Timestamp incomming data
+            live_data.current_time=now.strftime("%H:%M:%S.%f")
+            # data = json.loads(str(data_raw))
             live_data.populate_data(data_raw)
             live_data.print_data()
             # live_data.rssi_to_distance()
@@ -357,8 +355,8 @@ def gui_interface(in_q):
     """
     GUI interface for the application.
     """
-    root = tk.Tk()
-    app = MainApplication(in_q, master=root)
+    root=tk.Tk()
+    app=MainApplication(in_q, master=root)
     app.mainloop()
 
 
@@ -371,42 +369,42 @@ def main():
     # Set logging level
     logging.basicConfig(level=logging.INFO)
     # Create a stop flag
-    stop_flag = False
-    comms_active = True
-    data_active = True
-    gui_active = True
-    thread_serial = None
-    thread_data = None
-    thread_gui = None
+    stop_flag=False
+    comms_active=True
+    data_active=True
+    gui_active=True
+    thread_serial=None
+    thread_data=None
+    thread_gui=None
 
-    j_data = Queue()    # Queue for JSON data
-    k_data = Queue()    # Queue for (k)lean data
+    j_data=Queue()    # Queue for JSON data
+    k_data=Queue()    # Queue for (k)lean data
 
     if comms_active:
         # Create thread to read from the serial port
         logging.debug("Starting Serial Thread")
-        thread_serial = Thread(target=serial_interface,
+        thread_serial=Thread(target=serial_interface,
                                args=(j_data, lambda: stop_flag))
         thread_serial.start()
 
     if data_active:
         # Create thread to process the data
         logging.debug("Starting Data Thread")
-        thread_data = Thread(target=data_processing, args=(
+        thread_data=Thread(target=data_processing, args=(
             j_data, k_data, lambda: stop_flag))
         thread_data.start()
 
     if gui_active:
         # Create thread to run the GUI
         logging.debug("Starting GUI Thread")
-        thread_gui = Thread(target=gui_interface, args=(k_data,))
+        thread_gui=Thread(target=gui_interface, args=(k_data,))
         thread_gui.start()
 
     while not stop_flag:
         if (gui_active and not thread_gui.is_alive()) or (data_active and not thread_data.is_alive()) or (comms_active and not thread_serial.is_alive()):
             logging.warning(
                 "One of the threads has stopped. Stopping the program...")
-            stop_flag = True
+            stop_flag=True
         time.sleep(SHORT_SLEEP)
 
     if gui_active:
