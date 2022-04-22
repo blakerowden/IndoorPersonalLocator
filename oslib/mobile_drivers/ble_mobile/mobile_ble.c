@@ -323,7 +323,7 @@ void thread_ble_discover(void *arg1, void *arg2, void *arg3)
             flag = 1;
         }
         if (flag == 1){
-            k_msleep(1000);
+            k_msleep(200);
             printk("Writing: \n{");
             for(int i = 0; i < 19; i++){
                 printk("%d, ", tx_buff[i]);

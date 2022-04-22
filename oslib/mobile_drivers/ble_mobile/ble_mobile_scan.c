@@ -63,7 +63,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
     }
 
     bt_le_scan_stop();
-    k_msleep(100);
+    k_msleep(30);
     start_scan();
     return;
 
