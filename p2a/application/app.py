@@ -85,7 +85,7 @@ class TrackingData:
         for i in range(len(self.node_rssi)):
             if self.node_rssi[i] != 0:
                 self.node_distance[i] = (
-                    (self.node_error_constant[i] * self.node_transmit_power[i]) 
+                    (self.node_error_constant[i] * self.node_transmit_power[i])
                     / self.node_rssi[i]) ** (1./self.node_alpha[i])
 
     def populate_data(self, raw_data):
@@ -101,18 +101,18 @@ class TrackingData:
         self.delta = raw_data["Delta"]
         self.heading = raw_data["Heading"]
         self.time = raw_data["Time"]
-        self.node_rssi[0] = raw_data["4011-A"]
-        self.node_rssi[1] = raw_data["4011-B"]
-        self.node_rssi[2] = raw_data["4011-C"]
-        self.node_rssi[3] = raw_data["4011-D"]
-        self.node_rssi[4] = raw_data["4011-E"]
-        self.node_rssi[5] = raw_data["4011-F"]
-        self.node_rssi[6] = raw_data["4011-G"]
-        self.node_rssi[7] = raw_data["4011-H"]
-        self.node_rssi[8] = raw_data["4011-I"]
-        self.node_rssi[9] = raw_data["4011-J"]
-        self.node_rssi[10] = raw_data["4011-K"]
-        self.node_rssi[11] = raw_data["4011-L"]
+        self.node_rssi[0] = raw_data["4011-A"] - 256
+        self.node_rssi[1] = raw_data["4011-B"] - 256
+        self.node_rssi[2] = raw_data["4011-C"] - 256
+        self.node_rssi[3] = raw_data["4011-D"] - 256
+        self.node_rssi[4] = raw_data["4011-E"] - 256
+        self.node_rssi[5] = raw_data["4011-F"] - 256
+        self.node_rssi[6] = raw_data["4011-G"] - 256
+        self.node_rssi[7] = raw_data["4011-H"] - 256
+        self.node_rssi[8] = raw_data["4011-I"] - 256
+        self.node_rssi[9] = raw_data["4011-J"] - 256
+        self.node_rssi[10] = raw_data["4011-K"] - 256
+        self.node_rssi[11] = raw_data["4011-L"] - 256
 
     def print_data(self):
         """
@@ -301,13 +301,11 @@ def serial_interface(out_q, stop):
             time.sleep(SUPER_LONG_SLEEP)
             logging.info("Attempting to reconnect to serial port")
             serial_interface(out_q, stop)
-        try: 
-            print(line)
+        try:
             data = json.loads(str(line))
             out_q.put(data)
         except:
-            logging.warning("Could not parse line from serial port")
-            logging.debug(f"line = {line}")
+            #logging.debug(f"Could not parse line from serial port: {line}")
             time.sleep(SHORT_SLEEP)
         if stop():
             break
@@ -339,13 +337,14 @@ def data_processing(in_q, out_q, stop):
         except Empty:
             data_raw = None
         if data_raw != None and data_raw != '':
-            now = datetime.now() # Timestamp incomming data
+            now = datetime.now()  # Timestamp incomming data
             live_data.current_time = now.strftime("%H:%M:%S.%f")
             #data = json.loads(str(data_raw))
             live_data.populate_data(data_raw)
             live_data.print_data()
-            live_data.rssi_to_distance()
-            out_q.put(live_data.estimated_pos) # Send the estimated position to the GUI
+            # live_data.rssi_to_distance()
+            # Send the estimated position to the GUI
+            out_q.put(live_data.estimated_pos)
         if stop():
             logging.info("Stoping Data Thread")
             break
