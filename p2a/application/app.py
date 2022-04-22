@@ -47,7 +47,7 @@ class TrackingData:
         self.heading = 0
         self.time = 0
         self.node_rssi = [0] * 12
-        self.node_distance = (2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+        self.node_distance = (225, 225, 225, 225, 225, 225, 225, 225, 225, 225, 225, 225)
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
@@ -132,6 +132,9 @@ class TrackingData:
         Use the least squares equation to estimate location of the object
         :return tuple: position (x,y)
         """
+        x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
+        y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
+        radius = np.array([self.node_distance[i] for i in range(12)])
 
     def kalman_filter(self):
         """
