@@ -52,8 +52,8 @@ typedef struct {
 
 extern static_node static_nodes[12];
 
-extern uint16_t tx_buff[19];  // Stores the data to be sent to the AHU
-extern uint16_t rx_buff[19];  // Stores the data received to the AHU
+extern uint8_t tx_buff[19];  // Stores the data to be sent to the AHU
+extern uint8_t rx_buff[19];  // Stores the data received to the AHU
 
 /**
  * @brief Clears the TX buffer

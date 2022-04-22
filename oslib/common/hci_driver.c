@@ -14,13 +14,13 @@
 // Logging Module
 LOG_MODULE_REGISTER(HCI, LOG_LEVEL_ERR);
 
-uint16_t tx_buff[] = {
+uint8_t tx_buff[] = {
     0x0000, 0x0000, 0x0000, 0x0000,                  // US1, US2, US3, US4,
     0x0000, 0x0000, 0x0000,                          // Delta, Heading, Time
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  // Nodes 1-6
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000   // Nodes 7-12
 };
-uint16_t rx_buff[] = {
+uint8_t rx_buff[] = {
     0x0000, 0x0000, 0x0000, 0x0000,                  // US1, US2, US3, US4,
     0x0000, 0x0000, 0x0000,                          // Delta, Heading, Time
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  // Nodes 1-6

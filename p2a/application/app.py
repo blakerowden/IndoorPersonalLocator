@@ -301,11 +301,14 @@ def serial_interface(out_q, stop):
             time.sleep(SUPER_LONG_SLEEP)
             logging.info("Attempting to reconnect to serial port")
             serial_interface(out_q, stop)
-        if line[0] == '{':
-            out_q.put(line)
-        else:
-            if line[0] != '\n' and line[0] != ';' and line[0] != '\x1b' and line[0] != 'm':
-                print(f"{line}\n")
+        try: 
+            print(line)
+            data = json.loads(str(line))
+            out_q.put(data)
+        except:
+            logging.warning("Could not parse line from serial port")
+            logging.debug(f"line = {line}")
+            time.sleep(SHORT_SLEEP)
         if stop():
             break
 
@@ -338,8 +341,8 @@ def data_processing(in_q, out_q, stop):
         if data_raw != None and data_raw != '':
             now = datetime.now() # Timestamp incomming data
             live_data.current_time = now.strftime("%H:%M:%S.%f")
-            data = json.loads(str(data_raw))
-            live_data.populate_data(data)
+            #data = json.loads(str(data_raw))
+            live_data.populate_data(data_raw)
             live_data.print_data()
             live_data.rssi_to_distance()
             out_q.put(live_data.estimated_pos) # Send the estimated position to the GUI
