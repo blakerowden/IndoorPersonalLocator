@@ -261,9 +261,9 @@ static void gatt_write(uint16_t handle)
 {
     static struct bt_gatt_write_params write_params;
 
-    printk("Writing to base\n");
+    //printk("Writing to base\n");
     write_params.data = tx_buff;
-    write_params.length = 6 * sizeof(uint16_t);
+    write_params.length = 19 * sizeof(uint8_t);
 
     write_params.func = gatt_write_cb;
     write_params.handle = handle;
@@ -324,6 +324,11 @@ void thread_ble_discover(void *arg1, void *arg2, void *arg3)
         }
         if (flag == 1){
             k_msleep(1000);
+            printk("Writing: \n{");
+            for(int i = 0; i < 19; i++){
+                printk("%d, ", tx_buff[i]);
+            }
+            printk("}\n");
             gatt_write(base_handle);
         }
     }
