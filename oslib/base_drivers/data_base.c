@@ -20,6 +20,7 @@ LOG_MODULE_REGISTER(DATA, INITIAL_DATA_LOG_LEVEL);
  */
 void process_rx_data(void) {
     while (true) {
+        printk("\n");
         if (!k_sem_take(&sem_data_arrived, K_FOREVER)) {
             printk(
                 "{ "
