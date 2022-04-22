@@ -13,9 +13,9 @@
 #define BLE_MOBILE_SCAN_H
 
 /* Debug Thread Stack size */
-#define THREAD_BLE_SCAN_STACK 4094
+#define THREAD_BLE_SCAN_STACK 4096
 /* Debug Thread Priority */
-#define THREAD_PRIORITY_BLE_SCAN -2
+#define THREAD_PRIORITY_BLE_SCAN -3
 
 /* 1000 msec = 1 sec */
 #define BLE_DISC_SLEEP_MS 250

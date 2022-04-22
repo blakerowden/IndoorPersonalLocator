@@ -53,7 +53,7 @@ K_SEM_DEFINE(sem_data_arrived, 0, 1);
 static const struct bt_data ad[] = {
     BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
     BT_DATA_BYTES(BT_DATA_UUID128_ALL,
-                  0xd1, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91,
+                  0xd5, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91,
                   0x26, 0x49, 0x60, 0xeb, 0x06, 0xa7, 0xca, 0xcb),
 };
 
@@ -173,6 +173,7 @@ static uint8_t discover_func(struct bt_conn *conn,
                              const struct bt_gatt_attr *attr,
                              struct bt_gatt_discover_params *params)
 {
+
     int err;
 
     if (attr == NULL)
@@ -310,6 +311,7 @@ void thread_ble_connect(void)
 void thread_ble_discover(void *arg1, void *arg2, void *arg3)
 {
     int flag = 0;
+    uint8_t lastNum = 0;
     while (1)
     {
         while (!ble_connected)
@@ -323,13 +325,18 @@ void thread_ble_discover(void *arg1, void *arg2, void *arg3)
             flag = 1;
         }
         if (flag == 1){
-            k_msleep(200);
-            printk("Writing: \n{");
-            for(int i = 0; i < 19; i++){
-                printk("%d, ", tx_buff[i]);
-            }
-            printk("}\n");
-            gatt_write(base_handle);
+            k_msleep(400);
+            
+            //if(lastNum != tx_buff[7]){
+                printk("Writing: \n{");
+                for(int i = 0; i < 19; i++){
+                    printk("%d, ", tx_buff[i]-256);
+                }
+                printk("}\n");
+                lastNum = tx_buff[7];
+                gatt_write(base_handle);
+           // }
+            
         }
     }
 }

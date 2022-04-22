@@ -53,33 +53,28 @@ char currentString[BT_ADDR_LE_STR_LEN];
 static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                          struct net_buf_simple *ad) {
     bt_addr_le_to_str(addr, currentString, 18);
+
+    if (currentString[0] == 'D' && currentString[1] == '1'){
+            //printk("%d\n", rssi);
+            //tx_buff[7] = rssi + 256;
+    }
+
     for (int i = 0; i < 12; i++) {
         //printk("Expected:%s got:%s\n", static_nodes[i].address, currentString);
         if (strcmp(currentString, static_nodes[i].address) == 0) {
-            tx_buff[i+7] = rssi+256;
-            //printk("RSSI of Device \"%s\" is:%d\n", currentString, rssi);
-            //printk("Sending in node %d: %d\n", i, tx_buff[i+7]);
+        tx_buff[i+7] = rssi + 256;
+        //printk("RSSI of Device \"%s\" is:%d\n", currentString, rssi);
+        //printk("Sending in node %d: %d\n", i, tx_buff[i+7]);
         }
     }
 
     bt_le_scan_stop();
-    k_msleep(30);
+    k_msleep(10);
     start_scan();
     return;
 
-    /*
-    if (default_conn)
-    {
-      return;
-    }
-
-    // We're only interested in connectable events
-    if (type == BT_GAP_ADV_TYPE_ADV_IND ||
-        type == BT_GAP_ADV_TYPE_ADV_DIRECT_IND)
-    {
-      bt_data_parse(ad, parse_device, (void *)addr);
-    }
-    */
+    
+    
 }
 
 /**

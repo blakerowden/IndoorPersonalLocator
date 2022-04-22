@@ -10,13 +10,8 @@
 #ifndef SCU_BLE_H
 #define SCU_BLE_H
 
-#define THREAD_BLE_CONNECT_STACK 2048
-#define THREAD_PRIORITY_BLE_LED_THREAD 20
+#define THREAD_BLE_CONNECT_STACK 4096
 #define THREAD_PRIORITY_BLE_CONNECT_THREAD -3
-
-#define RGB_RED 0
-#define RGB_GREEN 1
-#define RGB_BLUE 2
 
 extern struct k_sem sem_data_arrived;
 
