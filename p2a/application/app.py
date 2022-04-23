@@ -135,6 +135,21 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
+        
+        BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]**2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
+        AMat = np.array([[(2*(x_fixed[11] - x_fixed[i])) for i in range(12)], [(2*(y_fixed[11] - y_fixed[i])) for i in range(12)]])
+
+        ATranspose = AMat.transpose()
+        Prod1 = []
+        Prod2 = []
+
+        Prod1 = AMat.dot(ATranspose)
+        Prod1 = np.linalg.inv(Prod1)
+        Prod2 = ATranspose.dot(Prod1)
+        FinalProd = BMat.dot(Prod2)
+        
+        self.estimated_pos = FinalProd.tolist()
+
 
     def kalman_filter(self):
         """
@@ -334,6 +349,13 @@ def data_processing(in_q, out_q, stop):
     """
     live_data = TrackingData()
     while True:
+
+
+        #Bostons testing for estimte location()
+        live_data.estimate_location()
+        out_q.put(live_data.estimated_pos)
+        
+        
         # Get the next message from the queue
         try:
             data_raw = in_q.get(block=False)
@@ -345,6 +367,7 @@ def data_processing(in_q, out_q, stop):
             live_data.populate_data(data_raw)
             #live_data.rssi_to_distance()
             live_data.print_data()
+            
             # Send the estimated position to the GUI
             out_q.put(live_data.estimated_pos)
         if stop():
