@@ -47,7 +47,8 @@ class TrackingData:
         self.heading = 0
         self.time = 0
         self.node_rssi = [0] * 12
-        self.node_distance = (225, 225, 225, 225, 225, 225, 225, 225, 225, 225, 225, 225)
+        self.node_distance = (450, 450, 450, 900, 950,
+                              1000, 900, 1000, 900, 900, 600, 300)
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
@@ -135,10 +136,10 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
-        
-        BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]**2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
-        AMat = np.array([[(2*(x_fixed[11] - x_fixed[i])) for i in range(12)], [(2*(y_fixed[11] - y_fixed[i])) for i in range(12)]])
-
+        BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]
+                        ** 2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
+        AMat = np.array([[(2*(x_fixed[11] - x_fixed[i])) for i in range(12)],
+                        [(2*(y_fixed[11] - y_fixed[i])) for i in range(12)]])
         ATranspose = AMat.transpose()
         Prod1 = []
         Prod2 = []
@@ -147,9 +148,10 @@ class TrackingData:
         Prod1 = np.linalg.inv(Prod1)
         Prod2 = ATranspose.dot(Prod1)
         FinalProd = BMat.dot(Prod2)
-        
-        self.estimated_pos = FinalProd.tolist()
 
+        self.estimated_pos = FinalProd.tolist()
+        self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
+        self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
 
     def kalman_filter(self):
         """
@@ -267,9 +269,17 @@ class Grid(tk.Canvas):
             self.create_line(0, i, 900, i, fill="black")
 
         self.create_static_node_graphic(25, 25, 25)
-        self.create_static_node_graphic(900-25, 900-25, 25)
-        self.create_static_node_graphic(25, 900-25, 25)
+        self.create_static_node_graphic(600-25, 25, 25)
+        self.create_static_node_graphic(300-25, 25, 25)
         self.create_static_node_graphic(900-25, 25, 25)
+        self.create_static_node_graphic(900-25, 600-25, 25)
+        self.create_static_node_graphic(900-25, 300-25, 25)
+        self.create_static_node_graphic(900-25, 900-25, 25)
+        self.create_static_node_graphic(600-25, 900-25, 25)
+        self.create_static_node_graphic(300-25, 900-25, 25)
+        self.create_static_node_graphic(25, 900-25, 25)
+        self.create_static_node_graphic(25, 600-25, 25)
+        self.create_static_node_graphic(25, 300-25, 25)
 
     def create_static_node_graphic(self, pos_x, pos_y, size):
         """
@@ -350,12 +360,10 @@ def data_processing(in_q, out_q, stop):
     live_data = TrackingData()
     while True:
 
-
-        #Bostons testing for estimte location()
+        # Bostons testing for estimte location()
         live_data.estimate_location()
         out_q.put(live_data.estimated_pos)
-        
-        
+
         # Get the next message from the queue
         try:
             data_raw = in_q.get(block=False)
@@ -365,9 +373,9 @@ def data_processing(in_q, out_q, stop):
             now = datetime.now()  # Timestamp incomming data
             live_data.current_time = now.strftime("%H:%M:%S.%f")
             live_data.populate_data(data_raw)
-            #live_data.rssi_to_distance()
+            # live_data.rssi_to_distance()
             live_data.print_data()
-            
+
             # Send the estimated position to the GUI
             out_q.put(live_data.estimated_pos)
         if stop():
