@@ -85,7 +85,7 @@ class TrackingData:
 
         for i in range(len(self.node_rssi)):
             if self.node_rssi[i] != -256 and self.node_rssi[i] != 0:
-                self.node_distance[i] = (
+                self.node_distance[i] = 225 * (
                     0.4406*math.exp(-0.042*self.node_rssi[i])) - 1
 
     def populate_data(self, raw_data):
@@ -302,43 +302,45 @@ def serial_interface(out_q, stop):
     """
     Thread for the serial interfacing.
     """
-    try:
-        ser = serial.Serial(
-            port='/dev/ttyACM0',
-            baudrate=115200,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=1
-        )
-        ser.is_open = True
-        logging.info(f"Connected to Serial Port {ser.name}")
-        time.sleep(SHORT_SLEEP)
-    except:
-        logging.warning("Could not connect to serial port")
-        time.sleep(LONG_SLEEP)
-        logging.info("Attempting to reconnect to serial port")
-        serial_interface(out_q, stop)
-
-    while(ser.is_open):
+    if not stop(): 
         try:
-            line = serial_read_line(ser)
+            ser = serial.Serial(
+                port='/dev/ttyACM0',
+                baudrate=115200,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                bytesize=serial.EIGHTBITS,
+                timeout=1
+            )
+            ser.is_open = True
+            logging.info(f"Connected to Serial Port {ser.name}")
+            time.sleep(SHORT_SLEEP)
         except:
-            ser.close()
-            logging.warning("Could not read line from serial port")
-            time.sleep(SUPER_LONG_SLEEP)
+            logging.warning("Could not connect to serial port")
+            time.sleep(LONG_SLEEP)
             logging.info("Attempting to reconnect to serial port")
             serial_interface(out_q, stop)
-        try:
-            data = json.loads(str(line))
-            out_q.put(data)
-        except:
-            logging.debug(f"Could not parse line from serial port: {line}")
-        if stop():
-            break
-        time.sleep(SHORT_SLEEP)
 
-    ser.close()
+    if 'ser' in locals():
+        while(ser.is_open):
+            try:
+                line = serial_read_line(ser)
+            except:
+                ser.close()
+                logging.warning("Could not read line from serial port")
+                time.sleep(SUPER_LONG_SLEEP)
+                logging.info("Attempting to reconnect to serial port")
+                serial_interface(out_q, stop)
+            try:
+                data = json.loads(str(line))
+                out_q.put(data)
+            except:
+                logging.debug(f"Could not parse line from serial port: {line}")
+            if stop():
+                break
+            time.sleep(SHORT_SLEEP)
+
+        ser.close()
 
 
 def serial_read_line(ser):
@@ -373,7 +375,7 @@ def data_processing(in_q, out_q, stop):
             now = datetime.now()  # Timestamp incomming data
             live_data.current_time = now.strftime("%H:%M:%S.%f")
             live_data.populate_data(data_raw)
-            # live_data.rssi_to_distance()
+            live_data.rssi_to_distance()
             live_data.print_data()
 
             # Send the estimated position to the GUI
