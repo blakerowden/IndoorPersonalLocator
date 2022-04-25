@@ -136,8 +136,7 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
-<<<<<<< HEAD
-        
+
         BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]**2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
         AMat = np.array([((2*(x_fixed[11] - x_fixed[i])), (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
 
