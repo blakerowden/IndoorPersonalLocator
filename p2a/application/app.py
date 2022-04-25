@@ -137,18 +137,11 @@ class TrackingData:
         radius = np.array([self.node_distance[i] for i in range(12)])
         
         BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]**2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
-        AMat = np.array([[(2*(x_fixed[11] - x_fixed[i])) for i in range(12)], [(2*(y_fixed[11] - y_fixed[i])) for i in range(12)]])
+        AMat = np.array([((2*(x_fixed[11] - x_fixed[i])), (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
 
-        ATranspose = AMat.transpose()
-        Prod1 = []
-        Prod2 = []
+        FinalProd = np.linalg.lstsq(AMat, BMat, rcond = -1)[0]
 
-        Prod1 = AMat.dot(ATranspose)
-        Prod1 = np.linalg.inv(Prod1)
-        Prod2 = ATranspose.dot(Prod1)
-        FinalProd = BMat.dot(Prod2)
-        
-        self.estimated_pos = FinalProd.tolist()
+        self.estimated_pos = FinalProd
 
 
     def kalman_filter(self):
@@ -156,7 +149,6 @@ class TrackingData:
         Use a Kalman filter to fuse the RF distance and US data to estimate the location of the object.
         :return tuple: position (x,y)
         """
-
 
 class MainApplication(tk.Frame):
     """
