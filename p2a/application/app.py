@@ -47,7 +47,8 @@ class TrackingData:
         self.heading = 0
         self.time = 0
         self.node_rssi = [0] * 12
-        self.node_distance = (225, 225, 225, 225, 225, 225, 225, 225, 225, 225, 225, 225)
+        self.node_distance = (450, 450, 450, 900, 950,
+                              1000, 900, 1000, 900, 900, 600, 300)
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
@@ -84,7 +85,7 @@ class TrackingData:
 
         for i in range(len(self.node_rssi)):
             if self.node_rssi[i] != -256 and self.node_rssi[i] != 0:
-                self.node_distance[i] = (
+                self.node_distance[i] = 225 * (
                     0.4406*math.exp(-0.042*self.node_rssi[i])) - 1
 
     def populate_data(self, raw_data):
@@ -135,14 +136,16 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
+<<<<<<< HEAD
         
         BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]**2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
         AMat = np.array([((2*(x_fixed[11] - x_fixed[i])), (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
 
         FinalProd = np.linalg.lstsq(AMat, BMat, rcond = -1)[0]
 
-        self.estimated_pos = FinalProd
-
+        self.estimated_pos = FinalProd.tolist()
+        self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
+        self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
 
     def kalman_filter(self):
         """
@@ -259,9 +262,17 @@ class Grid(tk.Canvas):
             self.create_line(0, i, 900, i, fill="black")
 
         self.create_static_node_graphic(25, 25, 25)
-        self.create_static_node_graphic(900-25, 900-25, 25)
-        self.create_static_node_graphic(25, 900-25, 25)
+        self.create_static_node_graphic(600-25, 25, 25)
+        self.create_static_node_graphic(300-25, 25, 25)
         self.create_static_node_graphic(900-25, 25, 25)
+        self.create_static_node_graphic(900-25, 600-25, 25)
+        self.create_static_node_graphic(900-25, 300-25, 25)
+        self.create_static_node_graphic(900-25, 900-25, 25)
+        self.create_static_node_graphic(600-25, 900-25, 25)
+        self.create_static_node_graphic(300-25, 900-25, 25)
+        self.create_static_node_graphic(25, 900-25, 25)
+        self.create_static_node_graphic(25, 600-25, 25)
+        self.create_static_node_graphic(25, 300-25, 25)
 
     def create_static_node_graphic(self, pos_x, pos_y, size):
         """
@@ -284,43 +295,45 @@ def serial_interface(out_q, stop):
     """
     Thread for the serial interfacing.
     """
-    try:
-        ser = serial.Serial(
-            port='/dev/ttyACM0',
-            baudrate=115200,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=1
-        )
-        ser.is_open = True
-        logging.info(f"Connected to Serial Port {ser.name}")
-        time.sleep(SHORT_SLEEP)
-    except:
-        logging.warning("Could not connect to serial port")
-        time.sleep(LONG_SLEEP)
-        logging.info("Attempting to reconnect to serial port")
-        serial_interface(out_q, stop)
-
-    while(ser.is_open):
+    if not stop(): 
         try:
-            line = serial_read_line(ser)
+            ser = serial.Serial(
+                port='/dev/ttyACM0',
+                baudrate=115200,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                bytesize=serial.EIGHTBITS,
+                timeout=1
+            )
+            ser.is_open = True
+            logging.info(f"Connected to Serial Port {ser.name}")
+            time.sleep(SHORT_SLEEP)
         except:
-            ser.close()
-            logging.warning("Could not read line from serial port")
-            time.sleep(SUPER_LONG_SLEEP)
+            logging.warning("Could not connect to serial port")
+            time.sleep(LONG_SLEEP)
             logging.info("Attempting to reconnect to serial port")
             serial_interface(out_q, stop)
-        try:
-            data = json.loads(str(line))
-            out_q.put(data)
-        except:
-            logging.debug(f"Could not parse line from serial port: {line}")
-        if stop():
-            break
-        time.sleep(SHORT_SLEEP)
 
-    ser.close()
+    if 'ser' in locals():
+        while(ser.is_open):
+            try:
+                line = serial_read_line(ser)
+            except:
+                ser.close()
+                logging.warning("Could not read line from serial port")
+                time.sleep(SUPER_LONG_SLEEP)
+                logging.info("Attempting to reconnect to serial port")
+                serial_interface(out_q, stop)
+            try:
+                data = json.loads(str(line))
+                out_q.put(data)
+            except:
+                logging.debug(f"Could not parse line from serial port: {line}")
+            if stop():
+                break
+            time.sleep(SHORT_SLEEP)
+
+        ser.close()
 
 
 def serial_read_line(ser):
@@ -342,12 +355,10 @@ def data_processing(in_q, out_q, stop):
     live_data = TrackingData()
     while True:
 
-
-        #Bostons testing for estimte location()
+        # Bostons testing for estimte location()
         live_data.estimate_location()
         out_q.put(live_data.estimated_pos)
-        
-        
+
         # Get the next message from the queue
         try:
             data_raw = in_q.get(block=False)
@@ -357,9 +368,9 @@ def data_processing(in_q, out_q, stop):
             now = datetime.now()  # Timestamp incomming data
             live_data.current_time = now.strftime("%H:%M:%S.%f")
             live_data.populate_data(data_raw)
-            #live_data.rssi_to_distance()
+            live_data.rssi_to_distance()
             live_data.print_data()
-            
+
             # Send the estimated position to the GUI
             out_q.put(live_data.estimated_pos)
         if stop():
