@@ -350,6 +350,7 @@ def serial_read_line(ser):
 
 # Data Processing =============================================================
 
+
 def data_processing(in_q, out_q, stop):
     """
     Process the raw JSON data.
@@ -382,31 +383,37 @@ def data_processing(in_q, out_q, stop):
         MQTT_Publisher(live_data, my_device)
         time.sleep(SHORT_SLEEP)
 
+
 def MQTT_Publisher(live_data, my_device):
-    # Simple test functionality to publish to MQTT
-    data1 = {
-        'variable': 'position_x',
-        'unit'    : 'm',
-        'value'   : 2,
+    """
+    Publish the data to the MQTT broker.
+    """
+    publish_data = []
+
+    for i in range(len(live_data.node_distance)):
+
+        publish_data.append(
+            {
+                'variable': 'node_distance_' + str(i+1),
+                'unit': 'cm',
+                'value': math.ceil(live_data.node_distance[i]*100/225),
+            }
+        )
+
+    estimated_position = {
+        "variable": "position",
+        "value": 10,
+        "metadata": {"x":live_data.estimated_pos[0]/900.0, "y":live_data.estimated_pos[1]/900.0},
     }
 
-    data2 = {
-        'variable': 'position_y',
-        'unit'    : 'm',
-        'value'   : 50,
-    }
+    publish_data.append(estimated_position)
 
-    list_data = []
-    list_data.append(data1)
-    list_data.append(data2)
-
-    result = my_device.insert(list_data)
+    result = my_device.insert(publish_data)
 
     if result['status']:
-            print("Successfull starting publishing with result: ",
-                  result['result'])
+        logging.info(f"Successfully published with result: {result['result']}")
     else:
-        print("Fail to publish data with error: ", result['message'])
+        logging.info(f"Fail to publish data with error:  {result['message']}")
 
 
 # GUI Interface ===============================================================
