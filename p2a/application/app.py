@@ -384,15 +384,23 @@ def data_processing(in_q, out_q, stop):
 
 def MQTT_Publisher(live_data, my_device):
     # Simple test functionality to publish to MQTT
-    data = {
-        'variable': 'temperature',
-        'unit'    : 'F',
-        'value'   : 55,
-        'time'    : '2015-11-03 13:44:33',
-        'location': {'lat': 42.2974279, 'lng': -85.628292}
+    data1 = {
+        'variable': 'position_x',
+        'unit'    : 'm',
+        'value'   : 2,
     }
 
-    result = my_device.insert(data)
+    data2 = {
+        'variable': 'position_y',
+        'unit'    : 'm',
+        'value'   : 50,
+    }
+
+    list_data = []
+    list_data.append(data1)
+    list_data.append(data2)
+
+    result = my_device.insert(list_data)
 
     if result['status']:
             print("Successfull starting publishing with result: ",
