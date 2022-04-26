@@ -7,9 +7,7 @@ Semester 1, 2022
 
 __author__ = "Blake Rowden s4427634"
 
-from cmath import sqrt
 import time
-from turtle import update
 import serial
 import json
 import tkinter as tk
@@ -18,10 +16,13 @@ from threading import Thread
 from queue import *
 import math
 import logging
-import random
+import tago
 import csv
 import numpy as np
 from datetime import datetime
+
+# MQTT Publishing Code ========================================================
+MY_DEVICE_TOKEN = '21d9ce6b-e764-4f0a-83a2-ed2bfdea09f6'
 
 # Defines =====================================================================
 START_POS_X = 450
@@ -137,10 +138,12 @@ class TrackingData:
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
 
-        BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]**2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
-        AMat = np.array([((2*(x_fixed[11] - x_fixed[i])), (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
+        BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]
+                        ** 2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
+        AMat = np.array([((2*(x_fixed[11] - x_fixed[i])),
+                        (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
 
-        FinalProd = np.linalg.lstsq(AMat, BMat, rcond = -1)[0]
+        FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
 
         self.estimated_pos = FinalProd.tolist()
         self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
@@ -151,6 +154,7 @@ class TrackingData:
         Use a Kalman filter to fuse the RF distance and US data to estimate the location of the object.
         :return tuple: position (x,y)
         """
+
 
 class MainApplication(tk.Frame):
     """
@@ -294,7 +298,7 @@ def serial_interface(out_q, stop):
     """
     Thread for the serial interfacing.
     """
-    if not stop(): 
+    if not stop():
         try:
             ser = serial.Serial(
                 port='/dev/ttyACM0',
@@ -346,12 +350,12 @@ def serial_read_line(ser):
 
 # Data Processing =============================================================
 
-
 def data_processing(in_q, out_q, stop):
     """
     Process the raw JSON data.
     """
     live_data = TrackingData()
+    my_device = tago.Device(MY_DEVICE_TOKEN)
     while True:
 
         # Bostons testing for estimte location()
@@ -375,7 +379,26 @@ def data_processing(in_q, out_q, stop):
         if stop():
             logging.info("Stoping Data Thread")
             break
+        MQTT_Publisher(live_data, my_device)
         time.sleep(SHORT_SLEEP)
+
+def MQTT_Publisher(live_data, my_device):
+    # Simple test functionality to publish to MQTT
+    data = {
+        'variable': 'temperature',
+        'unit'    : 'F',
+        'value'   : 55,
+        'time'    : '2015-11-03 13:44:33',
+        'location': {'lat': 42.2974279, 'lng': -85.628292}
+    }
+
+    result = my_device.insert(data)
+
+    if result['status']:
+            print("Successfull starting publishing with result: ",
+                  result['result'])
+    else:
+        print("Fail to publish data with error: ", result['message'])
 
 
 # GUI Interface ===============================================================
@@ -399,14 +422,14 @@ def main():
     logging.basicConfig(level=logging.INFO)
     # Create a stop flag
     stop_flag = False
-    comms_active = True
+    comms_active = False
     data_active = True
     gui_active = True
     thread_serial = None
     thread_data = None
     thread_gui = None
 
-    j_data = Queue()    # Queue for JSON data
+    j_data = Queue()    # Queue for Raw JSON data
     k_data = Queue()    # Queue for (k)lean data
 
     if comms_active:
