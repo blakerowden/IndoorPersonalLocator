@@ -22,7 +22,9 @@
 
 #include "ble_mobile_scan.h"
 #include "mobile_ble.h"
+#include "static_ble.h"
 #include "shell_base.h"
+#include "ultrasonic_static.h"
 
 // Define Thread Settings ======================================================
 #define BLE_CONNECT_THREAD_STACK    8192

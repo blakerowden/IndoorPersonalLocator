@@ -13,7 +13,7 @@
 #include <logging/log.h>
 #include <sys/printk.h>
 
-#include "ultrasonic.h"
+#include "ultrasonic_static.h"
 
 #define SLEEP_TIME_MS   1000
 
@@ -24,12 +24,14 @@ uint8_t echo = 8;
 
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
+K_MSGQ_DEFINE(ultra_msgq, sizeof(uint16_t), 10, 4);
+
 void thread_ultra_read(void)
 {
 	const struct device *ultra = device_get_binding("GPIO_1");
 	if (ultra == NULL)
 	{
-		return
+		return;
 	}
 
 	gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
@@ -62,8 +64,13 @@ void thread_ultra_read(void)
 		}
 
 		printk("return pulse: %lld\n", k_uptime_delta(&now));
-		float dist = (0.5 * 34 * k_uptime_delta(&now));
+		uint16_t dist = (uint16_t) (0.5 * 34 * k_uptime_delta(&now));
 		//printk("dist: %d\n", dist);
+
+		if (k_msgq_put(&ultra_msgq, &dist, K_NO_WAIT) != 0)
+		{
+			k_msgq_purge(&ultra_msgq);	
+		}
 
 		k_msleep(SLEEP_TIME_MS);
 
