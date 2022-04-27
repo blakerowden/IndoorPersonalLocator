@@ -34,6 +34,9 @@ static struct bt_conn *default_conn;
 
 int j;
 
+uint16_t static_uuid[] = {0xd8, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91, 
+                       0x26, 0x49, 0x60, 0xeb, 0x06, 0xa7, 0xca, 0xcb};
+
 /* Custom UUIDs For Mobile and it's GATT Attributes */
 #define UUID_BUFFER_SIZE 16
 
@@ -54,27 +57,37 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
                          struct net_buf_simple *ad) {
     bt_addr_le_to_str(addr, currentString, 18);
 
-    if (currentString[0] == 'D' && currentString[1] == '1'){
-            //printk("%d\n", rssi);
-            //tx_buff[7] = rssi + 256;
-    }
+    int temp = 0;
+    int matchedCount = 0;
 
     for (int i = 0; i < 12; i++) {
-        //printk("Expected:%s got:%s\n", static_nodes[i].address, currentString);
+        // printk("Expected:%s got:%s\n", static_nodes[i].address,
+        // currentString);
         if (strcmp(currentString, static_nodes[i].address) == 0) {
-        tx_buff[i+7] = rssi + 256;
-        //printk("RSSI of Device \"%s\" is:%d\n", currentString, rssi);
-        //printk("Sending in node %d: %d\n", i, tx_buff[i+7]);
+            tx_buff[i + 7] = rssi + 256;
+            // printk("RSSI of Device \"%s\" is:%d\n", currentString, rssi);
+            // printk("Sending in node %d: %d\n", i, tx_buff[i+7]);
         }
+    }
+
+    for (int i = 0; i < ad->len; i++) {
+        temp = ad->data[i];
+        if (temp == static_uuid[i]) {
+            printk("Found match bit %d\n", i);
+            matchedCount++;
+        } else {
+            break;
+        }
+    }
+
+    if (matchedCount == UUID_BUFFER_SIZE) {
+        // Do Nothing for now
     }
 
     bt_le_scan_stop();
     k_msleep(10);
     start_scan();
     return;
-
-    
-    
 }
 
 /**

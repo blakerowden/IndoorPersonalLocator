@@ -11,9 +11,12 @@ project(ahu)
 #Add Include Directories
 include_directories(
                         ../../oslib/mobile_drivers/ble_mobile
+<<<<<<< HEAD
                         ../../oslib/static_drivers/ultrasonic_static
                         ../../oslib/static_drivers/ble_static
                         ../../oslib/base_drivers
+=======
+>>>>>>> 2db60a528cf2785bfa478a0525ff85ed4862d824
                         ../../oslib/common
                         )
 
@@ -21,9 +24,12 @@ include_directories(
 target_sources(app PRIVATE
                         ../../oslib/mobile_drivers/ble_mobile/ble_mobile_scan.c
                         ../../oslib/mobile_drivers/ble_mobile/mobile_ble.c
+<<<<<<< HEAD
                         ../../oslib/static_drivers/ultrasonic_static/ultrasonic_static.c
                         ../../oslib/static_drivers/ble_static/static_ble.c
                         ../../oslib/base_drivers/shell_base.c
+=======
+>>>>>>> 2db60a528cf2785bfa478a0525ff85ed4862d824
                         ../../oslib/common/hci_driver.c
                         src/main.c
                         )
