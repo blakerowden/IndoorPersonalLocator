@@ -1,7 +1,7 @@
 /**
  * @file main.c
  * @author Blake Rowden (b.rowden@uqconnect.edu.au) - s4427634
- * @brief Weather Station - Application Host Unit
+ * @brief Base Node
  * @version 0.2
  * @date 2022-03-15
  *
@@ -19,27 +19,36 @@ LOG_MODULE_REGISTER(log_main);
 
 // Functions ===================================================================
 
+K_THREAD_STACK_DEFINE(ble_base_stack, THREAD_BLE_BASE_STACK);
+K_THREAD_STACK_DEFINE(ble_terminal_stack, THREAD_BLE_BASE_STACK);
+
 /**
- * @brief Initialises the hardware and shell
+ * @brief Enable USB Driver.
  *
  */
-void initialise(void) {
-    init_leds();
-    setup_pb();
-    begin_shell();
+void main(void) {
+    /* Setup DTR */
+    const struct device *console_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
+    uint32_t dtr = 0;
+    
+    /* Enable the USB Driver */
+    if (usb_enable(NULL)) return;
+    /* Wait on DTR - 'Data Terminal Ready'*/
+    while (!dtr) {
+        uart_line_ctrl_get(console_dev, UART_LINE_CTRL_DTR, &dtr);
+        k_sleep(K_MSEC(100));
+    }
+
+    struct k_thread ble_base;
+    struct k_thread ble_terminal;
+
+   k_thread_create(
+       &ble_base, ble_base_stack, K_THREAD_STACK_SIZEOF(ble_base_stack),
+       thread_ble_base, NULL, NULL, NULL, THREAD_PRIORITY_BLE_BASE, 0,
+       K_MSEC(100));
+
+    k_thread_create(
+        &ble_terminal, ble_terminal_stack, K_THREAD_STACK_SIZEOF(ble_terminal_stack),
+        thread_ble_terminal_print, NULL, NULL, NULL, THREAD_PRIORITY_READ_BASE, 0,
+        K_MSEC(100));
 }
-
-void main(void) { initialise(); }
-
-// Thread Defines ==============================================================
-
-// START BLE BASE entry thread : Delayed Start (Wait for USB to be ready)
-K_THREAD_DEFINE(ble_base, THREAD_BLE_BASE_STACK, thread_ble_base, NULL, NULL,
-                NULL, THREAD_PRIORITY_BLE_BASE, 0, 0);
-K_THREAD_DEFINE(rx_data, THREAD_BLE_BASE_STACK, process_rx_data, NULL, NULL,
-                NULL, THREAD_PRIORITY_DATA_PROCESS, 0, 0);
-// Start BLE LED Thread
-#if DEBUG_BLE_LED
-K_THREAD_DEFINE(ble_led, THREAD_BLE_LED_STACK, thread_ble_led, NULL, NULL, NULL,
-                THREAD_PRIORITY_BLE_LED, 0, 0);
-#endif

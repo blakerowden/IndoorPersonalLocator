@@ -6,6 +6,7 @@
         "ble_uuid.h": "c",
         "devicetree.h": "c",
         "shell_scu.h": "c",
-        "zephyr.h": "c"
+        "zephyr.h": "c",
+        "log_driver.h": "c"
     }
 }

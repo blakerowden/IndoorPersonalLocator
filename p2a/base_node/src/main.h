@@ -16,6 +16,8 @@
 #include <sys/printk.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <usb/usb_device.h>
+#include <drivers/uart.h>  
 
 #include "data_base.h"
 #include "ble_base.h"
