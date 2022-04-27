@@ -1,11 +1,13 @@
 /**
- ************************************************************************
- * @file mobile_connect.h
- * @author Wilfred MK, Aaron Helmore
- * @date 20.04.2021
- * @brief Contains required definitions by mobile_connect.c
- **********************************************************************
- **/
+ * @file mobile_ble.h
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-28
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
 #ifndef MOBILE_CONNECT_H
 #define MOBILE_CONNECT_H

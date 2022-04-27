@@ -299,7 +299,7 @@ static struct bt_conn_cb conn_callbacks = {
  * @brief BLE Base entry thread, starts initial ble scanning.
  *          When a valid mobile device is connected.
  */
-void thread_ble_base(void * p1, void * p2, void * p3) {
+void thread_ble_base(void *p1, void *p2, void *p3) {
     int err;
 
     err = bt_enable(NULL);
@@ -321,8 +321,7 @@ void thread_ble_base(void * p1, void * p2, void * p3) {
  * @brief
  *
  */
-void thread_ble_terminal_print(void * p1, void * p2, void * p3) {
-    
+void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
     static struct bt_gatt_read_params read_params_rssi = {
         .func = read_rssi_from_mobile,
         .handle_count = 0,
@@ -379,32 +378,50 @@ void thread_ble_terminal_print(void * p1, void * p2, void * p3) {
             bt_gatt_read(default_conn, &read_param_gyro);
             bt_gatt_read(default_conn, &read_param_mag);
 
-            printk("Delay Time: %d\n",
-                   (int)k_cyc_to_ms_floor64(k_cycle_get_32()) - timeStamp);
-
-            printk("RSSI: N1:%d, N2:%d, N3:%d, N4:%d\n", rx_rssi[0], rx_rssi[1],
-                   rx_rssi[2], rx_rssi[3]);
-            printk("ULTRA: N1:%d, N2:%d, N3:%d, N4:%d\n", rx_ultra[0],
-                   rx_ultra[1], rx_ultra[2], rx_ultra[3]);
-
-            printk("aX %f, aY %f, aZ %f\n", rx_imu_accel_raw[0] * accel_scale,
-                   rx_imu_accel_raw[1] * accel_scale,
-                   rx_imu_accel_raw[2] * accel_scale);
-            printk("gX %f, gY %f, gZ %f\n", rx_imu_gyro_raw[0] * gyro_scale,
-                   rx_imu_gyro_raw[1] * gyro_scale,
-                   rx_imu_gyro_raw[2] * gyro_scale);
-            printk("mX %f, mY %f, mZ %f\n", rx_imu_mag_raw[0] * mag_scale[0],
-                   rx_imu_mag_raw[1] * mag_scale[1],
-                   rx_imu_mag_raw[2] * mag_scale[2]);
-
-            printk("%d,%d,%d,%d,%d,",
-                   (int)k_cyc_to_ms_floor64(k_cycle_get_32()), rx_rssi[0],
-                   rx_rssi[1], rx_rssi[2], rx_rssi[3]);
-            printk("%d,%d,", rx_ultra[0], rx_ultra[1]);
-            printk("%d,%d,%d,", rx_imu_accel_raw[0], rx_imu_accel_raw[1],
-                   rx_imu_accel_raw[2]);
-            printk("%d,%d,%d\n", rx_imu_gyro_raw[0], rx_imu_gyro_raw[1],
-                   rx_imu_gyro_raw[2]);
+            printk(
+                "{ "
+                "\"Ultrasonic-1\": %d, "
+                "\"Ultrasonic-2\": %d, "
+                "\"Ultrasonic-3\": %d, "
+                "\"Ultrasonic-4\": %d, "
+                "\"Accel-X\": %f, "
+                "\"Accel-Y\": %f, "
+                "\"Accel-Z\": %f, "
+                "\"Gyro-X\": %f, "
+                "\"Gyro-Y\": %f, "
+                "\"Gyro-Z\": %f, "
+                "\"Mag-X\": %f, "
+                "\"Mag-Y\": %f, "
+                "\"Mag-Z\": %f, "
+                "\"Delay-Time\": %d, "
+                "\"4011-A\": %d, "
+                "\"4011-B\": %d, "
+                "\"4011-C\": %d, "
+                "\"4011-D\": %d, "
+                "\"4011-E\": %d, "
+                "\"4011-F\": %d, "
+                "\"4011-G\": %d, "
+                "\"4011-H\": %d, "
+                "\"4011-I\": %d, "
+                "\"4011-J\": %d, "
+                "\"4011-K\": %d, "
+                "\"4011-L\": %d, "
+                "\"Time-Stamp\": %d }\n",
+                rx_ultra[0], rx_ultra[1], rx_ultra[2], rx_ultra[3],
+                rx_imu_accel_raw[0] * accel_scale,
+                rx_imu_accel_raw[1] * accel_scale,
+                rx_imu_accel_raw[2] * accel_scale,
+                rx_imu_gyro_raw[0] * gyro_scale,
+                rx_imu_gyro_raw[1] * gyro_scale,
+                rx_imu_gyro_raw[2] * gyro_scale,
+                rx_imu_mag_raw[0] * mag_scale[0],
+                rx_imu_mag_raw[1] * mag_scale[1],
+                rx_imu_mag_raw[2] * mag_scale[2],
+                (int)k_cyc_to_ms_floor64(k_cycle_get_32()) - timeStamp,
+                rx_rssi[0], rx_rssi[1], rx_rssi[2], rx_rssi[3], rx_rssi[4],
+                rx_rssi[5], rx_rssi[6], rx_rssi[7], rx_rssi[8], rx_rssi[9],
+                rx_rssi[10], rx_rssi[11],
+                (int)k_cyc_to_ms_floor64(k_cycle_get_32()));
         }
 
         k_usleep(100);

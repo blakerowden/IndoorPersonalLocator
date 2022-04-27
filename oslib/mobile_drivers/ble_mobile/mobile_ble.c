@@ -1,12 +1,13 @@
 /**
- ************************************************************************
- * @file mobile_connect.c
- * @author Wilfred MK, Aaron Helmore
- * @date 20.04.2021
- * @brief Mobile node will adv on BLE and await connection. Sets up 
- *          GATT attritubes for the base to read required data.
- **********************************************************************
- **/
+ * @file mobile_ble.c
+ * @author your name (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2022-04-28
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
@@ -43,9 +44,6 @@ static const struct bt_data ad[] = {
 //Keeps Track of BLE connection within APP
 bool ble_conencted = false;
 
-//!XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-//!XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-//TEST SERVIES N STUFF HERE
 /* Custom Service Variables */
 static struct bt_uuid_128 mobile_uuid = BT_UUID_INIT_128(
     0xd5, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91,
@@ -73,12 +71,12 @@ static struct bt_uuid_128 imu_mag_uuid = BT_UUID_INIT_128(
 
 //GATT CHARACTERISTIC VALUES
 uint16_t node_rssi[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-uint16_t node_ultra[] = {0x00, 0x00, 0x00, 0x00};
+                     0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C};
+uint16_t node_ultra[] = {0x01, 0x02, 0x03, 0x04};
 
-int16_t imu_accel_raw[] = {0x00, 0x00, 0x00};
-int16_t imu_gyro_raw[] = {0x00, 0x00, 0x00};
-int16_t imu_mag_raw[] = {0x00, 0x00, 0x00};
+int16_t imu_accel_raw[] = {0x01, 0x02, 0x03};
+int16_t imu_gyro_raw[] = {0x01, 0x02, 0x03};
+int16_t imu_mag_raw[] = {0x01, 0x02, 0x03};
 
 /**
  * @brief Callback funtion to read RSSI buffer.

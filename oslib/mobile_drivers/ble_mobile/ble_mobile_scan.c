@@ -27,6 +27,7 @@
 #include <zephyr/types.h>
 
 #include "hci_driver.h"
+#include "mobile_ble.h"
 
 static void start_scan(void);
 
@@ -64,7 +65,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
         // printk("Expected:%s got:%s\n", static_nodes[i].address,
         // currentString);
         if (strcmp(currentString, static_nodes[i].address) == 0) {
-            tx_buff[i + 7] = rssi + 256;
+            node_rssi[i] = rssi + 256;
             // printk("RSSI of Device \"%s\" is:%d\n", currentString, rssi);
             // printk("Sending in node %d: %d\n", i, tx_buff[i+7]);
         }

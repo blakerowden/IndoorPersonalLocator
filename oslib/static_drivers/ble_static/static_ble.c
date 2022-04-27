@@ -31,7 +31,6 @@
 #include <drivers/pwm.h>
 #include <drivers/regulator.h>
 
-#include "ble_uuid.h"
 #include "hci_driver.h"
 #include "static_ble.h"
 

@@ -35,9 +35,8 @@
 #define BLE_DISCOVER_THREAD_PRIORITY    2
 #define BLE_SCAN_THREAD_PRIORITY        2
 
-typedef enum {
-    MODE_MOBILE = 0,
-    MODE_STATIC = 1,
-} mode_t;
+#define MODE_MOBILE  0
+#define MODE_STATIC  1
+
 
 #endif //__MAIN_H__

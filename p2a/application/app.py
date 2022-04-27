@@ -44,8 +44,10 @@ class TrackingData:
 
     def __init__(self):
         self.ultrasonic = [0] * 4
-        self.delta = 0
-        self.heading = 0
+        self.acceleration = [0] * 3
+        self.gyro = [0] * 3
+        self.magnetometer = [0] * 3
+        self.delay = 0
         self.time = 0
         self.node_rssi = [0] * 12
         self.node_distance = (450, 450, 450, 900, 950,
@@ -83,11 +85,11 @@ class TrackingData:
         Converts the received power (RSSI) data from dB to distance in m.
         :return: None
         """
-
-        for i in range(len(self.node_rssi)):
-            if self.node_rssi[i] != -256 and self.node_rssi[i] != 0:
-                self.node_distance[i] = 225 * (
-                    0.4406*math.exp(-0.042*self.node_rssi[i])) - 1
+        return
+        # for i in range(len(self.node_rssi)):
+        # if self.node_rssi[i] != -256 and self.node_rssi[i] != 0:
+        # self.node_distance[i] = 225 * (
+        # 0.4406*math.exp(-0.042*self.node_rssi[i])) - 1
 
     def populate_data(self, raw_data):
         """
@@ -95,13 +97,21 @@ class TrackingData:
         :param raw_data: The raw data to populate the tracking data with.
         :return: None
         """
-        self.ultrasonic[0] = raw_data["Ultrasonic_1"]
-        self.ultrasonic[1] = raw_data["Ultrasonic_2"]
-        self.ultrasonic[2] = raw_data["Ultrasonic_3"]
-        self.ultrasonic[3] = raw_data["Ultrasonic_4"]
-        self.delta = raw_data["Delta"]
-        self.heading = raw_data["Heading"]
-        self.time = raw_data["Time"]
+        self.ultrasonic[0] = raw_data["Ultrasonic-1"]
+        self.ultrasonic[1] = raw_data["Ultrasonic-2"]
+        self.ultrasonic[2] = raw_data["Ultrasonic-3"]
+        self.ultrasonic[3] = raw_data["Ultrasonic-4"]
+        self.acceleration[0] = raw_data["Accel-X"]
+        self.acceleration[1] = raw_data["Accel-Y"]
+        self.acceleration[2] = raw_data["Accel-Z"]
+        self.gyro[0] = raw_data["Gyro-X"]
+        self.gyro[1] = raw_data["Gyro-Y"]
+        self.gyro[2] = raw_data["Gyro-Z"]
+        self.magnetometer[0] = raw_data["Mag-X"]
+        self.magnetometer[1] = raw_data["Mag-Y"]
+        self.magnetometer[2] = raw_data["Mag-Z"]
+        self.time = raw_data["Time-Stamp"]
+        self.delay = raw_data["Delay-Time"]
         self.node_rssi[0] = raw_data["4011-A"] - 256
         self.node_rssi[1] = raw_data["4011-B"] - 256
         self.node_rssi[2] = raw_data["4011-C"] - 256
@@ -122,9 +132,11 @@ class TrackingData:
         """
         print(f"======== Data Packet Recieved {self.current_time} ========")
         print("Ultrasonic: ", self.ultrasonic)
-        print("Delta: ", self.delta)
-        print("Heading: ", self.heading)
+        print("Accelerometer: ", self.acceleration)
+        print("Gyro: ", self.gyro)
+        print("Magnetometer: ", self.magnetometer)
         print("Time: ", self.time)
+        print("Delay: ", self.delay)
         print("Node RSSI: ", self.node_rssi)
         print("Node Distance: ", self.node_distance)
         print("======================================================\n")
@@ -320,7 +332,7 @@ def serial_interface(out_q, stop):
     if 'ser' in locals():
         while(ser.is_open):
             try:
-                line = serial_read_line(ser)
+                line = ser.readline().decode('utf-8').strip()
             except:
                 ser.close()
                 logging.warning("Could not read line from serial port")
@@ -328,63 +340,51 @@ def serial_interface(out_q, stop):
                 logging.info("Attempting to reconnect to serial port")
                 serial_interface(out_q, stop)
             try:
-                data = json.loads(str(line))
+                data = json.loads(line)
                 out_q.put(data)
             except:
                 logging.debug(f"Could not parse line from serial port: {line}")
             if stop():
                 break
-            time.sleep(SHORT_SLEEP)
 
         ser.close()
 
 
-def serial_read_line(ser):
-    """
-    Read a line from the serial port.
-    """
-    while(ser.is_open):
-        line = ser.readline().decode('utf-8').strip()[3:]
-        if line:
-            return line
-
 # Data Processing =============================================================
 
 
-def data_processing(in_q, out_q, stop):
+def data_processing(in_q, out_q, pub_q, stop):
     """
     Process the raw JSON data.
     """
     live_data = TrackingData()
-    my_device = tago.Device(MY_DEVICE_TOKEN)
     while True:
 
         # Bostons testing for estimte location()
-        live_data.estimate_location()
-        out_q.put(live_data.estimated_pos)
+        # live_data.estimate_location()
+        # out_q.put(live_data.estimated_pos)
 
         # Get the next message from the queue
-        try:
-            data_raw = in_q.get(block=False)
-        except Empty:
-            data_raw = None
-        if data_raw != None and data_raw != '':
-            now = datetime.now()  # Timestamp incomming data
-            live_data.current_time = now.strftime("%H:%M:%S.%f")
-            live_data.populate_data(data_raw)
-            live_data.rssi_to_distance()
-            live_data.print_data()
 
-            # Send the estimated position to the GUI
-            out_q.put(live_data.estimated_pos)
+        data_raw = in_q.get(block=True)
+
+        now = datetime.now()  # Timestamp incomming data
+        live_data.current_time = now.strftime("%H:%M:%S.%f")
+        live_data.populate_data(data_raw)
+        # live_data.rssi_to_distance()
+        live_data.print_data()
+
+        # Send the estimated position to the GUI
+        # out_q.put(live_data.estimated_pos)
+        pub_data = MQTT_Packer(live_data)
+        pub_q.queue.clear()
+        pub_q.put(pub_data)
         if stop():
             logging.info("Stoping Data Thread")
             break
-        MQTT_Publisher(live_data, my_device)
-        time.sleep(SHORT_SLEEP)
 
 
-def MQTT_Publisher(live_data, my_device):
+def MQTT_Packer(live_data):
     """
     Publish the data to the MQTT broker.
     """
@@ -403,17 +403,34 @@ def MQTT_Publisher(live_data, my_device):
     estimated_position = {
         "variable": "position",
         "value": 10,
-        "metadata": {"x":live_data.estimated_pos[0]/900.0, "y":live_data.estimated_pos[1]/900.0},
+        "metadata": {"x": live_data.estimated_pos[0]/900.0, "y": live_data.estimated_pos[1]/900.0},
     }
 
     publish_data.append(estimated_position)
 
-    result = my_device.insert(publish_data)
+    delay_time = {
+        "variable": "delay",
+        "value": live_data.delay,
+    }
 
-    if result['status']:
-        logging.info(f"Successfully published with result: {result['result']}")
-    else:
-        logging.info(f"Fail to publish data with error:  {result['message']}")
+    publish_data.append(delay_time)
+
+    return publish_data
+
+
+def MQTT_Publisher(pub_q, stop):
+
+    my_device = tago.Device(MY_DEVICE_TOKEN)
+    while(True):
+        publish_data = pub_q.get(block=True)
+        result = my_device.insert(publish_data)
+
+        if result['status']:
+            logging.info(
+                f"Successfully published with result: {result['result']}")
+        else:
+            logging.info(
+                f"Fail to publish data with error:  {result['message']}")
 
 
 # GUI Interface ===============================================================
@@ -437,15 +454,19 @@ def main():
     logging.basicConfig(level=logging.INFO)
     # Create a stop flag
     stop_flag = False
-    comms_active = False
+    comms_active = True
     data_active = True
-    gui_active = True
+    mqtt_active = True
+    gui_active = False
+
     thread_serial = None
     thread_data = None
     thread_gui = None
+    thread_mqtt = None
 
     j_data = Queue()    # Queue for Raw JSON data
     k_data = Queue()    # Queue for (k)lean data
+    m_data = Queue()    # Queue for MQTT data
 
     if comms_active:
         # Create thread to read from the serial port
@@ -458,7 +479,7 @@ def main():
         # Create thread to process the data
         logging.debug("Starting Data Thread")
         thread_data = Thread(target=data_processing, args=(
-            j_data, k_data, lambda: stop_flag))
+            j_data, k_data, m_data, lambda: stop_flag))
         thread_data.start()
 
     if gui_active:
@@ -466,6 +487,13 @@ def main():
         logging.debug("Starting GUI Thread")
         thread_gui = Thread(target=gui_interface, args=(k_data,))
         thread_gui.start()
+
+    if mqtt_active:
+        # Create thread to run the MQTT interface
+        logging.debug("Starting MQTT Thread")
+        thread_mqtt = Thread(target=MQTT_Publisher,
+                             args=(m_data, lambda: stop_flag))
+        thread_mqtt.start()
 
     while not stop_flag:
         if (gui_active and not thread_gui.is_alive()) or (data_active and not thread_data.is_alive()) or (comms_active and not thread_serial.is_alive()):
