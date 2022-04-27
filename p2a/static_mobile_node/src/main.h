@@ -22,7 +22,6 @@
 
 #include "ble_mobile_scan.h"
 #include "mobile_ble.h"
-#include "shell_base.h"
 
 // Define Thread Settings ======================================================
 #define BLE_CONNECT_THREAD_STACK    8192
