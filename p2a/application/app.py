@@ -50,8 +50,8 @@ class TrackingData:
         self.delay = 0
         self.time = 0
         self.node_rssi = [0] * 12
-        self.node_distance = (450, 450, 450, 900, 950,
-                              1000, 900, 1000, 900, 900, 600, 300)
+        self.node_distance = [450, 450, 450, 900, 950,
+                              1000, 900, 1000, 900, 900, 600, 300]
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
@@ -85,11 +85,11 @@ class TrackingData:
         Converts the received power (RSSI) data from dB to distance in m.
         :return: None
         """
-        return
-        # for i in range(len(self.node_rssi)):
-        # if self.node_rssi[i] != -256 and self.node_rssi[i] != 0:
-        # self.node_distance[i] = 225 * (
-        # 0.4406*math.exp(-0.042*self.node_rssi[i])) - 1
+        for i in range(len(self.node_rssi)):
+            if self.node_rssi[i] > 0:
+                self.node_distance[i] = 225 * 0.4406*math.exp(-0.042*self.node_rssi[i]) - 1
+            else:
+                self.node_distance[i] = 0
 
     def populate_data(self, raw_data):
         """
@@ -112,18 +112,18 @@ class TrackingData:
         self.magnetometer[2] = raw_data["Mag-Z"]
         self.time = raw_data["Time-Stamp"]
         self.delay = raw_data["Delay-Time"]
-        self.node_rssi[0] = raw_data["4011-A"] - 256
-        self.node_rssi[1] = raw_data["4011-B"] - 256
-        self.node_rssi[2] = raw_data["4011-C"] - 256
-        self.node_rssi[3] = raw_data["4011-D"] - 256
-        self.node_rssi[4] = raw_data["4011-E"] - 256
-        self.node_rssi[5] = raw_data["4011-F"] - 256
-        self.node_rssi[6] = raw_data["4011-G"] - 256
-        self.node_rssi[7] = raw_data["4011-H"] - 256
-        self.node_rssi[8] = raw_data["4011-I"] - 256
-        self.node_rssi[9] = raw_data["4011-J"] - 256
-        self.node_rssi[10] = raw_data["4011-K"] - 256
-        self.node_rssi[11] = raw_data["4011-L"] - 256
+        self.node_rssi[0] = raw_data["4011-A"]
+        self.node_rssi[1] = raw_data["4011-B"]
+        self.node_rssi[2] = raw_data["4011-C"]
+        self.node_rssi[3] = raw_data["4011-D"]
+        self.node_rssi[4] = raw_data["4011-E"]
+        self.node_rssi[5] = raw_data["4011-F"]
+        self.node_rssi[6] = raw_data["4011-G"]
+        self.node_rssi[7] = raw_data["4011-H"]
+        self.node_rssi[8] = raw_data["4011-I"]
+        self.node_rssi[9] = raw_data["4011-J"]
+        self.node_rssi[10] = raw_data["4011-K"]
+        self.node_rssi[11] = raw_data["4011-L"]
 
     def print_data(self):
         """
@@ -360,22 +360,17 @@ def data_processing(in_q, out_q, pub_q, stop):
     live_data = TrackingData()
     while True:
 
-        # Bostons testing for estimte location()
-        # live_data.estimate_location()
-        # out_q.put(live_data.estimated_pos)
-
         # Get the next message from the queue
-
         data_raw = in_q.get(block=True)
-
         now = datetime.now()  # Timestamp incomming data
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
-        # live_data.rssi_to_distance()
+        live_data.rssi_to_distance()
+        live_data.estimate_location()
         live_data.print_data()
 
         # Send the estimated position to the GUI
-        # out_q.put(live_data.estimated_pos)
+        out_q.put(live_data.estimated_pos)
         pub_data = MQTT_Packer(live_data)
         pub_q.queue.clear()
         pub_q.put(pub_data)
@@ -457,7 +452,7 @@ def main():
     comms_active = True
     data_active = True
     mqtt_active = True
-    gui_active = False
+    gui_active = True
 
     thread_serial = None
     thread_data = None
