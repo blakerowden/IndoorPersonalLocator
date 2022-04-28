@@ -325,8 +325,7 @@ void thread_ble_discover(void *arg1, void *arg2, void *arg3)
             flag = 1;
         }
         if (flag == 1){
-            k_msleep(400);
-            
+            k_msleep(300);
             //if(lastNum != tx_buff[7]){
                 printk("Writing: \n{");
                 for(int i = 0; i < 19; i++){
