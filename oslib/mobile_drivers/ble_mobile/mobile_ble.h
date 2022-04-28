@@ -20,7 +20,7 @@
 #define THREAD_PRIORITY_BLE_CONNECT_THREAD -3
 
 //GATT CHARACTERISTIC VALUES
-extern uint16_t node_rssi[];
+extern int node_rssi[];
 extern uint16_t node_ultra[];
 
 //Contains All scaled Sensor data for in the following format.

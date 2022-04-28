@@ -149,17 +149,19 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
+        
+        if 0 not in radius:
+            
+            BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]
+                            ** 2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
+            AMat = np.array([((2*(x_fixed[11] - x_fixed[i])),
+                            (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
 
-        BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]
-                        ** 2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
-        AMat = np.array([((2*(x_fixed[11] - x_fixed[i])),
-                        (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
+            FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
 
-        FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
-
-        self.estimated_pos = FinalProd.tolist()
-        self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
-        self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
+            self.estimated_pos = FinalProd.tolist()
+            self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
+            self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
 
     def kalman_filter(self):
         """
