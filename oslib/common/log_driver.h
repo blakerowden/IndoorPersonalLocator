@@ -13,6 +13,7 @@
 #define __LOG_DRIVER_H__
 
 #include <logging/log.h>
+#include <errno.h>
 
 #define INITIAL_BLE_LOG_LEVEL LOG_LEVEL_INF
 #define INITIAL_SHELL_BASE_LOG_LEVEL LOG_LEVEL_INF

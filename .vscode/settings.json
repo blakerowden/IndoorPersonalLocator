@@ -7,6 +7,7 @@
         "devicetree.h": "c",
         "shell_scu.h": "c",
         "zephyr.h": "c",
-        "log_driver.h": "c"
+        "log_driver.h": "c",
+        "log.h": "c"
     }
 }

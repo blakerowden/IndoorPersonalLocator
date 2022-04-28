@@ -26,6 +26,7 @@
 #include <zephyr/types.h>
 
 #include "log_driver.h"
+#include "led_driver.h"
 
 static void start_scan(void);
 
@@ -318,7 +319,7 @@ void thread_ble_base(void *p1, void *p2, void *p3) {
 }
 
 /**
- * @brief
+ * @brief Prints data to the terminal in JSON format
  *
  */
 void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
@@ -366,6 +367,7 @@ void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
 
     while (1) {
         if (ble_connected) {
+            
             timeStamp = k_cyc_to_ms_floor64(k_cycle_get_32());
             // Read Node RSSI data from mobile
             bt_gatt_read(default_conn, &read_params_rssi);
@@ -377,7 +379,7 @@ void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
             bt_gatt_read(default_conn, &read_param_accel);
             bt_gatt_read(default_conn, &read_param_gyro);
             bt_gatt_read(default_conn, &read_param_mag);
-
+            led0_toggle();        
             printk(
                 "{ "
                 "\"Ultrasonic-1\": %d, "
@@ -422,8 +424,38 @@ void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
                 rx_rssi[5], rx_rssi[6], rx_rssi[7], rx_rssi[8], rx_rssi[9],
                 rx_rssi[10], rx_rssi[11],
                 (int)k_cyc_to_ms_floor64(k_cycle_get_32()));
+                
         }
 
-        k_usleep(100);
+        k_usleep(200);
+        
+    }
+}
+
+/**
+ * @brief Blink LED when BLE connected
+ *
+ */
+void thread_ble_led(void *p1, void *p2, void *p3) {
+    ble_connected = false;
+    bool red_led_is_on = false;
+    bool green_led_is_on = false;
+    init_leds();
+
+    while (1) {
+
+        if (ble_connected) {
+            if (red_led_is_on) { led1_off(); }
+            red_led_is_on = false;
+            if (!green_led_is_on) { led2_on(); }
+            green_led_is_on = true;
+            k_msleep(BLE_CONN_SLEEP_MS);
+        } else {
+            if (green_led_is_on) { led2_off(); }
+            green_led_is_on = false;
+            red_led_is_on ? led1_off() : led1_on();
+            k_msleep(BLE_DISC_SLEEP_MS);
+            red_led_is_on = !red_led_is_on;
+        }
     }
 }

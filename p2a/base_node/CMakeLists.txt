@@ -17,6 +17,7 @@ include_directories(
 #Add Target Sources
 target_sources(app PRIVATE
                         ../../oslib/base_drivers/ble_base.c
+                        ../../oslib/common/led_driver.c
                         src/main.c
                         )
 

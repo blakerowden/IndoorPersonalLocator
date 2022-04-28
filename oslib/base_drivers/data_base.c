@@ -10,6 +10,7 @@
  */
 
 #include "data_base.h"
+#include "led_driver.h"
 
 // Logging Module
 LOG_MODULE_REGISTER(DATA, INITIAL_DATA_LOG_LEVEL);
