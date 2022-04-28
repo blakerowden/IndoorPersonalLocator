@@ -34,7 +34,7 @@ elif [[ ( $1 == "-r" ) ]]
 then
    echo "Running the project..."
    sleep 1
-   sudo screen /dev/ttyACM0
+   sudo screen /dev/ttyACM0 115200
 else
    echo "Some or all of the parameters are not set";
    helpFunction
@@ -57,7 +57,7 @@ elif [[ ( $2 == "-r" ) ]]
 then
    echo "Running the project..."
    sleep 1
-   sudo screen /dev/ttyACM0
+   sudo screen /dev/ttyACM0 115200
 elif [[ ( -z "$3" ) ]]
 then
    exit 1
@@ -84,7 +84,7 @@ elif [[ ( $3 == "-r" ) ]]
 then
    echo "Running the project..."
    sleep 2
-   sudo screen /dev/ttyACM0
+   sudo screen /dev/ttyACM0 115200
 elif [[ ( -z "$3" ) ]]
 then
    exit 1

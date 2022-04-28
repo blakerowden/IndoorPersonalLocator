@@ -10,18 +10,16 @@
 
 #include <device.h>
 #include <devicetree.h>
-#include <errno.h>
-#include <logging/log.h>
 #include <stddef.h>
 #include <sys/printk.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
+#include <usb/usb_device.h>
+#include <drivers/uart.h>  
 
-#include "data_base.h"
 #include "ble_base.h"
 #include "led_driver.h"
-#include "pb_driver.h"
-#include "shell_base.h"
+#include "log_driver.h"
 
 #ifndef __MAIN_H__
 #define __MAIN_H__
