@@ -73,11 +73,11 @@ int16_t rx_imu_gyro_raw[] = {0x00, 0x00, 0x00};
 int16_t rx_imu_mag_raw[] = {0x00, 0x00, 0x00};
 
 // Accel Range/32767.5
-float accel_scale = 0.0002441;
+float accel_scale = 1;
 // Gyro DPS/32767.5
-float gyro_scale = 0.01397917;
+float gyro_scale = 1;
 // These values were read from the calibration registers on the Mag.
-float mag_scale[3] = {0.176835, 0.177421, 0.170980};
+float mag_scale[3] = {1, 1, 1};
 
 /**
  * @brief Used to parse the advertisement data
