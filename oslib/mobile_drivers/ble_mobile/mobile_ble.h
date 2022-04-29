@@ -33,4 +33,6 @@ void thread_ble_connect(void);
 
 void thread_ble_led(void);
 
+void thread_read_imu(void);
+
 #endif

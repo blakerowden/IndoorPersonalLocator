@@ -133,6 +133,7 @@ class TrackingData:
         self.ultrasonic[1] = raw_data["Ultrasonic-2"]
         self.ultrasonic[2] = raw_data["Ultrasonic-3"]
         self.ultrasonic[3] = raw_data["Ultrasonic-4"]
+        #Divide by 100 to convert back to float:
         self.acceleration[0] = raw_data["Accel-X"]
         self.acceleration[1] = raw_data["Accel-Y"]
         self.acceleration[2] = raw_data["Accel-Z"]
@@ -181,6 +182,7 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
+
 
         if 0 not in radius:
 

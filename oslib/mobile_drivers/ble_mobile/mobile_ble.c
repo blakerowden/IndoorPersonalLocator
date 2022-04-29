@@ -12,6 +12,7 @@
 #include <device.h>
 #include <devicetree.h>
 #include <drivers/gpio.h>
+#include <drivers/sensor.h>
 
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/hci.h>
@@ -21,6 +22,7 @@
 #include <sys/byteorder.h>
 
 #include "mobile_ble.h"
+#include "imu_mobile.h"
 
 /* 1000 msec = 1 sec */
 #define BLE_DISC_SLEEP_MS 250
@@ -311,15 +313,26 @@ void thread_ble_connect(void)
     }
 }
 
-/**
- * @brief Enable GPIO led pins
- * 
- */
-void led_gpio_enable(void)
+void thread_read_imu(void)
 {
-    int ret = gpio_pin_configure(device_get_binding(LED0), PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-    if (ret < 0)
-    {
-        return;
+
+    init_lis();
+
+    while (1) {
+        double x = read_lis(0x00);
+        double y = read_lis(0x01);
+        double z = read_lis(0x02);
+
+        int16_t xint = (int16_t) (x / 0.0002441);
+        int16_t yint = (int16_t) (y / 0.0002441);
+        int16_t zint = (int16_t) (z / 0.0002441);
+
+        imu_accel_raw[0] = xint;
+        imu_accel_raw[1] = yint;
+        imu_accel_raw[2] = zint;
+        printk("x: %d, y: %d, z: %d\n", imu_accel_raw[0],imu_accel_raw[1],imu_accel_raw[2]);
+
+        k_msleep(1000);
     }
+
 }

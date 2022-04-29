@@ -21,6 +21,7 @@ include_directories(
 target_sources(app PRIVATE
                         ../../oslib/mobile_drivers/ble_mobile/ble_mobile_scan.c
                         ../../oslib/mobile_drivers/ble_mobile/mobile_ble.c
+                        ../../oslib/mobile_drivers/ble_mobile/imu_mobile.c
                         ../../oslib/static_drivers/ultrasonic_static/ultrasonic_static.c
                         ../../oslib/static_drivers/ble_static/static_ble.c
                         ../../oslib/base_drivers/shell_base.c

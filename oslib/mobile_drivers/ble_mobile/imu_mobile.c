@@ -39,6 +39,7 @@ void init_lis(void)
         printk("Device %s is not ready\n", lis->name);
         return;
     }
+    return;
 }
 
 double read_lis(int axis)
@@ -77,26 +78,10 @@ double read_lis(int axis)
     {
         return y_value;
     }
-}
-
-void thread_read_imu(void)
-{
-
-    init_lis();
-
-    while (1) {
-        double x = read_lis(0x00);
-        double y = read_lis(0x01);
-
-        int xint = (int) x;
-        int yint = (int) y;
-        int xfl = (int) (x - xint)*110;
-        int xfl = (int) (x - xint)*110;
-
-        printk("imu reading x: %d.%d, imu reading y: %d.%d" xint, xfl, yint, yfl);
-
-        k_msleep(SLEEP_TIME_MS);
+    else if (axis == 0x02)
+    {
+        return z_value;
     }
-
+    return 0;
 }
 
