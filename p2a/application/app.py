@@ -62,9 +62,8 @@ class TrackingData:
         self.currentFile = 0
         self.currentTestpoint = 0
         self.testxy = [0.5, 0.5]  # Make sure you do 49 different points
-        self.node_transmit_power = [0] * 12
-        self.node_alpha = [0] * 12
-        self.node_error_constant = [0] * 12
+        self.node_transmit_power = [-35.5, -43.5, -39, -48.75, -51.75, -54.25,
+                                    -48.5, -59, -52.25, -47.5, -44.5, -45.5]
         self.estimated_pos = (0, 0)
         self.kalman_pos = (0, 0)
         self.rssi_error = 0
@@ -119,12 +118,13 @@ class TrackingData:
         Converts the received power (RSSI) data from dB to distance in m.
         :return: None
         """
-        for i in range(len(self.node_rssi)):
-            if self.node_rssi[i] > 0:
-                self.node_distance[i] = 225 * 0.4406 * \
-                    math.exp(-0.042*self.node_rssi[i]) - 1
+        N = 4
+        for idx, rssi in enumerate(self.node_rssi):
+            if rssi != 0:
+                self.node_distance[idx] = 10 ** (
+                    (self.node_transmit_power[idx]-rssi) / (10*N))
             else:
-                self.node_distance[i] = 0
+                self.node_distance[idx] = 0
 
     def populate_data(self, raw_data):
         """
@@ -208,7 +208,8 @@ class TrackingData:
 
         # Check case where an array is empty
         if len(AMat) == 0 or len(BMat) == 0:
-            return (450, 450)
+            self.estimated_pos = (450, 450)
+            return
 
         FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
 
