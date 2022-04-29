@@ -38,39 +38,47 @@ class Kalman:
             self.cov = (1-self.K)*self.cov_est 
             
 if __name__ == "__main__":		
-    print ("***** 1d ***********")
-    ndim = 1
-    nsteps = 50
-    k = Kalman(numpy.array([0]), numpy.eye(ndim),0.01, 1e-5) #this assumes initial value not known
-    x_init=numpy.array([-0.37727])
-    cov_init=1.0*numpy.ones((ndim))
-    obs = numpy.random.normal(x_init,cov_init,(ndim, nsteps))
-    xhat = numpy.zeros(nsteps)
-    for t in range(nsteps):
-        k.update(obs[:,t])
-        xhat[t]=k.x_hat        
-    print ("Constant value estimate after 50 iterations: %f" % xhat[-1])
-
-    pylab.figure()
-    pylab.plot(obs[0],'k+',label='noisy measurements')
-    pylab.plot(xhat,'b-',label='a posteri estimate')
-    pylab.axhline(x_init[0],color='g',label='truth value')
-    #legend()
-    pylab.xlabel('Iteration')
-    pylab.ylabel('Voltage')
-    pylab.show()
+#    print ("***** 1d ***********")
+#    ndim = 1
+#    nsteps = 50
+#    k = Kalman(numpy.array([0]), numpy.eye(ndim),0.01, 1e-5) #this assumes initial value not known
+#    x_init=numpy.array([-0.37727])
+#    cov_init=1.0*numpy.ones((ndim))
+#    obs = numpy.random.normal(x_init,cov_init,(ndim, nsteps))
+#    xhat = numpy.zeros(nsteps)
+#    for t in range(nsteps):
+#        k.update(obs[:,t])
+#        xhat[t]=k.x_hat        
+#    print ("Constant value estimate after 50 iterations: %f" % xhat[-1])
+#
+#    pylab.figure()
+#    pylab.plot(obs[0],'k+',label='noisy measurements')
+#    pylab.plot(xhat,'b-',label='a posteri estimate')
+#    pylab.axhline(x_init[0],color='g',label='truth value')
+#    #legend()
+#    pylab.xlabel('Iteration')
+#    pylab.ylabel('Voltage')
+#    pylab.show()
 
 #    print "***** 2d ***********"
-#    ndim = 2
-#    nsteps = 50
-#    k = Kalman(ndim)    
-#    x_init=numpy.array([-0.37727, 2.333])
-#    cov_init=0.1*numpy.ones((ndim))
-#    obs = numpy.zeros((ndim, nsteps))
-#    for t in range(nsteps):
-#        obs[:, t] = numpy.random.normal(x_init,cov_init)
-#    for t in range(ndim,nsteps):
-#        k.update(obs[:,t])
-#    print k.x_hat_est
+    ndim = 2
+    nsteps = 50
+    k = Kalman(ndim)    
+    x_init=numpy.array([-0.37727, 2.333])
+    cov_init=0.1*numpy.ones((ndim))
+    obs = numpy.zeros((ndim, nsteps))
+    for t in range(nsteps):
+        obs[:, t] = numpy.random.normal(x_init,cov_init)
+    for t in range(ndim,nsteps):
+        k.update(obs[:,t])
+    print(k.x_hat_est)
+#
+#    pylab.figure()
+#    pylab.plot(obs[0],'k+',label='noisy measurements')
+#    pylab.plot(xhat,'b-',label='a posteri estimate')
+#    pylab.axhline(x_init[0],color='g',label='truth value')
+#    #legend()
+#    pylab.xlabel('Iteration')
+#    pylab.ylabel('Voltage')
+#    pylab.show()
 #    
-

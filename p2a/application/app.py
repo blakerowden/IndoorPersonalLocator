@@ -55,6 +55,10 @@ class TrackingData:
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
+        self.fileList = ["datapoints" + str(i) + ".csv" for i in range(49)]
+        self.currentFile = 0
+        self.currentTestpoint = 0
+        self.testxy = [0.5, 0.5]  # Make sure you do 49 different points
         self.node_transmit_power = [0] * 12
         self.node_alpha = [0] * 12
         self.node_error_constant = [0] * 12
@@ -64,21 +68,48 @@ class TrackingData:
         self.us_error = 0
         self.current_time = ""
 
-    def write_rssi_csv(self, file_name, pos_x, pos_y):
+    def write_rssi_csv(self):
         """
         Writes the rssi data to a csv file.
         :param file_name: The name of the file to write to.
         :return: None
         """
-        with open(file_name, 'w') as file:
-            rows = {'Pos_X': pos_x, 'Pos_Y': pos_y}
-            fieldnames = ['Pos_X', 'Pos_Y', 'Node_A', 'Node_B', 'Node_C', 'Node_D', 'Node_E',
-                          'Node_F', 'Node_G', 'Node_H', 'Node_I', 'Node_J', 'Node_K', 'Node_L']
-            for i in range(len(self.node_rssi)):
-                rows[fieldnames[i+2]] = self.node_rssi[i]
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(rows)
+        if self.currentTestpoint == 501:
+            return
+        else:
+            self.currentTestpoint += 1
+
+        pos_x = self.testxy[0]
+        pos_y = self.testxy[1]
+        file_name = self.fileList[self.currentFile]
+
+        rowDictionary = {'Pos_X': pos_x, 'Pos_Y': pos_y, 'Node_A': 0, 'Node_B': 0, 'Node_C': 0, 'Node_D': 0,
+                         'Node_E': 0, 'Node_F': 0, 'Node_G': 0, 'Node_H': 0, 'Node_I': 0, 'Node_J': 0, 'Node_K': 0, 'Node_L': 0}
+
+        fieldnames = ['Pos_X', 'Pos_Y', 'Node_A', 'Node_B', 'Node_C', 'Node_D', 'Node_E',
+                      'Node_F', 'Node_G', 'Node_H', 'Node_I', 'Node_J', 'Node_K', 'Node_L']
+
+        if self.currentTestpoint == 1:
+
+            with open(file_name, 'w') as file:
+
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+
+                for i in range(12):
+                    rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
+
+                writer.writerow(rowDictionary)
+                print("wrote")
+        else:
+            with open(file_name, 'a') as file:
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+                for i in range(12):
+                    rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
+
+                writer.writerow(rowDictionary)
+                print("wrote: " + str(self.currentTestpoint))
 
     def rssi_to_distance(self):
         """
@@ -87,7 +118,8 @@ class TrackingData:
         """
         for i in range(len(self.node_rssi)):
             if self.node_rssi[i] > 0:
-                self.node_distance[i] = 225 * 0.4406*math.exp(-0.042*self.node_rssi[i]) - 1
+                self.node_distance[i] = 225 * 0.4406 * \
+                    math.exp(-0.042*self.node_rssi[i]) - 1
             else:
                 self.node_distance[i] = 0
 
@@ -101,6 +133,7 @@ class TrackingData:
         self.ultrasonic[1] = raw_data["Ultrasonic-2"]
         self.ultrasonic[2] = raw_data["Ultrasonic-3"]
         self.ultrasonic[3] = raw_data["Ultrasonic-4"]
+        #Divide by 100 to convert back to float:
         self.acceleration[0] = raw_data["Accel-X"]
         self.acceleration[1] = raw_data["Accel-Y"]
         self.acceleration[2] = raw_data["Accel-Z"]
@@ -149,9 +182,10 @@ class TrackingData:
         x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
         y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
         radius = np.array([self.node_distance[i] for i in range(12)])
-        
+
+
         if 0 not in radius:
-            
+
             BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]
                             ** 2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
             AMat = np.array([((2*(x_fixed[11] - x_fixed[i])),
@@ -370,6 +404,7 @@ def data_processing(in_q, out_q, pub_q, stop):
         live_data.rssi_to_distance()
         live_data.estimate_location()
         live_data.print_data()
+        live_data.write_rssi_csv()
 
         # Send the estimated position to the GUI
         out_q.put(live_data.estimated_pos)
