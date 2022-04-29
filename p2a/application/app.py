@@ -55,6 +55,10 @@ class TrackingData:
         self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
                                (900, 300), (900, 600), (900, 900), (600, 900),
                                (300, 900), (0, 900), (0, 600), (0, 300)]
+        self.fileList = ["datapoints" + i + ".csv" for i in range(49)]
+        self.currentFile = 0;
+        self.currentTestpoint = 0;
+        self.testxy = [0.5,0.5] #Make sure you do 49 different points
         self.node_transmit_power = [0] * 12
         self.node_alpha = [0] * 12
         self.node_error_constant = [0] * 12
@@ -64,21 +68,35 @@ class TrackingData:
         self.us_error = 0
         self.current_time = ""
 
-    def write_rssi_csv(self, file_name, pos_x, pos_y):
+    def write_rssi_csv(self):
         """
         Writes the rssi data to a csv file.
         :param file_name: The name of the file to write to.
         :return: None
         """
+        if self.currentTestpoint == 501:
+            return
+        else:
+            self.currentTestpoint += 1
+
+        pos_x = self.currentTestpoint[0];
+        pos_y = self.currentTestpoint[1];
+        file_name = self.fileList[self.currentFile];
+
+        rowDictionary = {'Pos_X': pos_x, 'Pos_Y': pos_y, 'Node_A': 0, 'Node_B': 0, 'Node_C': 0, 'Node_D': 0,
+                     'Node_E': 0, 'Node_F': 0, 'Node_G': 0, 'Node_H': 0, 'Node_I': 0, 'Node_J': 0, 'Node_K': 0, 'Node_L': 0}
+
         with open(file_name, 'w') as file:
-            rows = {'Pos_X': pos_x, 'Pos_Y': pos_y}
             fieldnames = ['Pos_X', 'Pos_Y', 'Node_A', 'Node_B', 'Node_C', 'Node_D', 'Node_E',
                           'Node_F', 'Node_G', 'Node_H', 'Node_I', 'Node_J', 'Node_K', 'Node_L']
-            for i in range(len(self.node_rssi)):
-                rows[fieldnames[i+2]] = self.node_rssi[i]
+
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()
-            writer.writerows(rows)
+
+            for i in range(12):
+                rowDictionary[fieldnames[i + 2]] = self.node_rssi[i];
+
+            writer.writerow(rowDictionary)
 
     def rssi_to_distance(self):
         """

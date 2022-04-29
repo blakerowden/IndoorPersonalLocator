@@ -98,13 +98,10 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
         }
     }
 
-    if (type == BT_GAP_ADV_TYPE_ADV_IND ||
-        type == BT_GAP_ADV_TYPE_ADV_DIRECT_IND) {
-        bt_data_parse(ad, parse_device, (void *)addr);
-    }
+    bt_data_parse(ad, parse_device, (void *)addr);
 
     bt_le_scan_stop();
-    k_msleep(10);
+    k_msleep(2);
     start_scan();
     return;
 }
