@@ -24,6 +24,9 @@ from datetime import datetime
 # MQTT Publishing Code ========================================================
 MY_DEVICE_TOKEN = '21d9ce6b-e764-4f0a-83a2-ed2bfdea09f6'
 
+# Data Collection Trigger =====================================================
+DATA_COLLECTION = False
+
 # Defines =====================================================================
 START_POS_X = 450
 START_POS_Y = 450
@@ -133,7 +136,7 @@ class TrackingData:
         self.ultrasonic[1] = raw_data["Ultrasonic-2"]
         self.ultrasonic[2] = raw_data["Ultrasonic-3"]
         self.ultrasonic[3] = raw_data["Ultrasonic-4"]
-        #Divide by 100 to convert back to float:
+        # Divide by 100 to convert back to float:
         self.acceleration[0] = raw_data["Accel-X"]
         self.acceleration[1] = raw_data["Accel-Y"]
         self.acceleration[2] = raw_data["Accel-Z"]
@@ -174,28 +177,45 @@ class TrackingData:
         print("Node Distance: ", self.node_distance)
         print("======================================================\n")
 
-    def estimate_location(self):
+    def multilateration(self):
         """
         Use the least squares equation to estimate location of the object
         :return tuple: position (x,y)
         """
-        x_fixed = np.array([self.node_locations[i][0] for i in range(12)])
-        y_fixed = np.array([self.node_locations[i][1] for i in range(12)])
-        radius = np.array([self.node_distance[i] for i in range(12)])
 
+        fixed_node_x = []
+        fixed_node_y = []
+        fixed_node_distance = []
 
-        if 0 not in radius:
+        # Remove nodes that have not provided an RSSI
+        for idx, dist in enumerate(self.node_distance):
+            if dist != 0:
+                fixed_node_x.append(self.node_locations[idx][0])
+                fixed_node_y.append(self.node_locations[idx][1])
+                fixed_node_distance.append(dist)
 
-            BMat = np.array([(radius[i]**2 - radius[11]**2-x_fixed[i]**2-y_fixed[i]
-                            ** 2+x_fixed[11]**2 + y_fixed[11]**2) for i in range(12)])
-            AMat = np.array([((2*(x_fixed[11] - x_fixed[i])),
-                            (2*(y_fixed[11] - y_fixed[i]))) for i in range(12)])
+        num_live_nodes = len(fixed_node_distance)
 
-            FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
+        x_fixed_array = np.array(fixed_node_x)
+        y_fixed_array = np.array(fixed_node_y)
+        radius_array = np.array(fixed_node_distance)
 
-            self.estimated_pos = FinalProd.tolist()
-            self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
-            self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
+        BMat = np.array([(radius_array[i]**2 - radius_array[num_live_nodes - 1]**2-x_fixed_array[i]**2-y_fixed_array[i]
+                         ** 2+x_fixed_array[num_live_nodes-1]**2 + y_fixed_array[num_live_nodes-1]**2) for i in range(num_live_nodes)])
+
+        AMat = np.array([((2*(x_fixed_array[num_live_nodes - 1] - x_fixed_array[i])),
+                         (2*(y_fixed_array[num_live_nodes - 1] - y_fixed_array[i]))) for i in range(num_live_nodes)])
+
+        # Check case where an array is empty
+        if len(AMat) == 0 or len(BMat) == 0:
+            return (450, 450)
+
+        FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
+
+        self.estimated_pos = FinalProd.tolist()
+
+        self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
+        self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
 
     def kalman_filter(self):
         """
@@ -402,9 +422,10 @@ def data_processing(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         live_data.rssi_to_distance()
-        live_data.estimate_location()
+        live_data.multilateration()
         live_data.print_data()
-        live_data.write_rssi_csv()
+        if DATA_COLLECTION:
+            live_data.write_rssi_csv()
 
         # Send the estimated position to the GUI
         out_q.put(live_data.estimated_pos)
@@ -454,7 +475,11 @@ def MQTT_Publisher(pub_q, stop):
 
     my_device = tago.Device(MY_DEVICE_TOKEN)
     while(True):
-        publish_data = pub_q.get(block=True)
+        try:
+            publish_data = pub_q.get(block=True, timeout=5)
+        except Empty:
+            continue
+
         result = my_device.insert(publish_data)
 
         if result['status']:
@@ -463,6 +488,10 @@ def MQTT_Publisher(pub_q, stop):
         else:
             logging.info(
                 f"Fail to publish data with error:  {result['message']}")
+
+        if stop():
+            logging.info("Stoping MQTT Thread")
+            break
 
 
 # GUI Interface ===============================================================
