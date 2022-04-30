@@ -46,7 +46,7 @@ class TrackingData:
     """
 
     def __init__(self):
-        self.ultrasonic = [0] * 4
+        self.node_ultra = [0] * 4
         self.acceleration = [0] * 3
         self.gyro = [0] * 3
         self.magnetometer = [0] * 3
@@ -132,10 +132,10 @@ class TrackingData:
         :param raw_data: The raw data to populate the tracking data with.
         :return: None
         """
-        self.ultrasonic[0] = raw_data["Ultrasonic-1"]
-        self.ultrasonic[1] = raw_data["Ultrasonic-2"]
-        self.ultrasonic[2] = raw_data["Ultrasonic-3"]
-        self.ultrasonic[3] = raw_data["Ultrasonic-4"]
+        self.node_ultra[0] = raw_data["Ultrasonic-1"]
+        self.node_ultra[1] = raw_data["Ultrasonic-2"]
+        self.node_ultra[2] = raw_data["Ultrasonic-3"]
+        self.node_ultra[3] = raw_data["Ultrasonic-4"]
         # Divide by 100 to convert back to float:
         self.acceleration[0] = raw_data["Accel-X"]
         self.acceleration[1] = raw_data["Accel-Y"]
@@ -167,7 +167,7 @@ class TrackingData:
         :return: None
         """
         print(f"======== Data Packet Recieved {self.current_time} ========")
-        print("Ultrasonic: ", self.ultrasonic)
+        print("Ultrasonic: ", self.node_ultra)
         print("Accelerometer: ", self.acceleration)
         print("Gyro: ", self.gyro)
         print("Magnetometer: ", self.magnetometer)
@@ -453,6 +453,26 @@ def MQTT_Packer(live_data):
                 'value': math.ceil(live_data.node_distance[i]*100/225),
             }
         )
+    
+    for idx, rssi in enumerate(live_data.node_rssi):
+
+        publish_data.append(
+            {
+                'variable': 'rssi_' + str(idx + 1),
+                'unit': 'dB',
+                'value': rssi,
+            }
+        )
+
+    for idx, ultra in enumerate(live_data.node_ultra):
+
+        publish_data.append(
+            {
+                'variable': 'ultra_' + str(idx + 1),
+                'unit': 'cm',
+                'value': ultra,
+            }
+        )
 
     estimated_position = {
         "variable": "position",
@@ -464,6 +484,7 @@ def MQTT_Packer(live_data):
 
     delay_time = {
         "variable": "delay",
+        'unit': 'ms',
         "value": live_data.delay,
     }
 
