@@ -27,7 +27,7 @@ from datetime import datetime
 MY_DEVICE_TOKEN = '21d9ce6b-e764-4f0a-83a2-ed2bfdea09f6'
 
 # Data Collection Trigger =====================================================
-DATA_COLLECTION = False
+DATA_COLLECTION = True
 
 # Defines =====================================================================
 START_POS_X = 450
@@ -92,26 +92,28 @@ class TrackingData:
         """
         if(is_meter_meas == 1):
             # Change nodeName for ML:
-            nodeName = '4011A'
+            nodeName = '4011B'
             rowDictionary = {'Node': nodeName, 'RSSI': 0}
             fieldnames = ['Node', 'RSSI']
             file_name = 'datapoints' + nodeName + '.csv'
             nodeDictionary = {'4011A': 0, '4011B': 1, '4011C': 2, '4011D': 3, '4011E': 4,
                               '4011F': 5, '4011G': 6, '4011H': 7, '4011I': 8, '4011J': 9, '4011K': 10, '4011L': 11}
+            if self.currentTestpoint == 501:
+                return
+            else:
+                self.currentTestpoint += 1
 
             if self.currentTestpoint == 1:
                 with open(file_name, 'w') as file:
                     writer = csv.DictWriter(file, fieldnames=fieldnames)
                     writer.writeheader()
-                    for i in range(1):
-                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[nodeDictionary[nodeName]]
+                    rowDictionary[fieldnames[1]] = self.node_rssi[nodeDictionary[nodeName]]
                     writer.writerow(rowDictionary)
                     print("wrote")
             else:
                 with open(file_name, 'a') as file:
                     writer = csv.DictWriter(file, fieldnames=fieldnames)
-                    for i in range(1):
-                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[nodeDictionary[nodeName]]
+                    rowDictionary[fieldnames[1]] = self.node_rssi[nodeDictionary[nodeName]]
                     writer.writerow(rowDictionary)
                     print("wrote: " + str(self.currentTestpoint))
 
