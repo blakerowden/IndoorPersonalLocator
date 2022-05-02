@@ -21,6 +21,7 @@
 
 //GATT CHARACTERISTIC VALUES
 extern int node_rssi[];
+extern int node_timestamp[];
 extern uint16_t node_ultra[];
 
 //Contains All scaled Sensor data for in the following format.

@@ -22,8 +22,10 @@ K_THREAD_DEFINE(ble_mobile, BLE_CONNECT_THREAD_STACK, thread_ble_connect, NULL,
                 NULL, NULL, BLE_CONNECT_THREAD_PRIORITY, 0, 0);
 K_THREAD_DEFINE(ble_mobile_scan, BLE_SCAN_THREAD_STACK, thread_ble_mobile_scan,
                 NULL, NULL, NULL, BLE_SCAN_THREAD_PRIORITY, 0, 500);
-K_THREAD_DEFINE(read_imu, IMU_THREAD_STACK, thread_read_imu,
+K_THREAD_DEFINE(read_imu, IMU_THREAD_STACK, thread_imu_rw,
                 NULL, NULL, NULL, IMU_THREAD_PRIORITY, 0, 500);
+K_THREAD_DEFINE(rssi_monitor, BLE_SCAN_THREAD_STACK, rssi_monitor_thread,
+                NULL, NULL, NULL, BLE_SCAN_THREAD_PRIORITY, 0, 500);
 // MPU9250 Thread
 //K_THREAD_DEFINE(imu, THREAD_IMU_RW_STACK, thread_read_imu, NULL, NULL, NULL, THREAD_PRIORITY_IMU, 0, 100);
 
