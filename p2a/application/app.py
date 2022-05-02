@@ -8,6 +8,7 @@ Semester 1, 2022
 __author__ = "Blake Rowden s4427634"
 
 import time
+from turtle import color
 import serial
 import json
 import tkinter as tk
@@ -30,12 +31,24 @@ DATA_COLLECTION = False
 # Defines =====================================================================
 START_POS_X = 450
 START_POS_Y = 450
+WINDOW_HEIGHT = 1080
+WINDOW_WIDTH = 1920
+GRID_HEIGHT = 900
+GRID_WIDTH = 900
 
 SUPER_SHORT_SLEEP = 0.0001
 SHORT_SLEEP = 0.001
 MEDIUM_SLEEP = 0.1
 LONG_SLEEP = 1
 SUPER_LONG_SLEEP = 5
+
+# Colour Definitions ==========================================================
+
+BACKGROUND = '#18191A'
+CARD = '#242526'
+HOVER = '#3A3B3C'
+PRIMARY_TEXT = '#E4E6EB'
+SECONDARY_TEXT = '#B0B3B8'
 
 # Classes =====================================================================
 
@@ -47,11 +60,11 @@ class TrackingData:
 
     def __init__(self):
         self.node_ultra = [0] * 4
-        self.acceleration = [0] * 3
+        self.accel = [0] * 3
         self.gyro = [0] * 3
-        self.magnetometer = [0] * 3
+        self.mag = [0] * 3
         self.delay = 0
-        self.time = 0
+        self.timestamp = 0
         self.node_rssi = [0] * 12
         self.node_distance = [450, 450, 450, 900, 950,
                               1000, 900, 1000, 900, 900, 600, 300]
@@ -64,8 +77,8 @@ class TrackingData:
         self.testxy = [0.5, 0.5]  # Make sure you do 49 different points
         self.node_transmit_power = [-35.5, -43.5, -39, -48.75, -51.75, -54.25,
                                     -48.5, -59, -52.25, -47.5, -44.5, -45.5]
-        self.estimated_pos = (0, 0)
-        self.kalman_pos = (0, 0)
+        self.multilat_pos = (GRID_WIDTH/2, GRID_HEIGHT/2)
+        self.kalman_pos = (GRID_WIDTH/2, GRID_HEIGHT/2)
         self.rssi_error = 0
         self.us_error = 0
         self.current_time = ""
@@ -136,17 +149,16 @@ class TrackingData:
         self.node_ultra[1] = raw_data["Ultrasonic-2"]
         self.node_ultra[2] = raw_data["Ultrasonic-3"]
         self.node_ultra[3] = raw_data["Ultrasonic-4"]
-        # Divide by 100 to convert back to float:
-        self.acceleration[0] = raw_data["Accel-X"]
-        self.acceleration[1] = raw_data["Accel-Y"]
-        self.acceleration[2] = raw_data["Accel-Z"]
+        self.accel[0] = raw_data["Accel-X"]
+        self.accel[1] = raw_data["Accel-Y"]
+        self.accel[2] = raw_data["Accel-Z"]
         self.gyro[0] = raw_data["Gyro-X"]
         self.gyro[1] = raw_data["Gyro-Y"]
         self.gyro[2] = raw_data["Gyro-Z"]
-        self.magnetometer[0] = raw_data["Mag-X"]
-        self.magnetometer[1] = raw_data["Mag-Y"]
-        self.magnetometer[2] = raw_data["Mag-Z"]
-        self.time = raw_data["Time-Stamp"]
+        self.mag[0] = raw_data["Mag-X"]
+        self.mag[1] = raw_data["Mag-Y"]
+        self.mag[2] = raw_data["Mag-Z"]
+        self.timestamp = raw_data["Time-Stamp"]
         self.delay = raw_data["Delay-Time"]
         self.node_rssi[0] = raw_data["4011-A"]
         self.node_rssi[1] = raw_data["4011-B"]
@@ -168,10 +180,10 @@ class TrackingData:
         """
         print(f"======== Data Packet Recieved {self.current_time} ========")
         print("Ultrasonic: ", self.node_ultra)
-        print("Accelerometer: ", self.acceleration)
+        print("Accelerometer: ", self.accel)
         print("Gyro: ", self.gyro)
-        print("Magnetometer: ", self.magnetometer)
-        print("Time: ", self.time)
+        print("Magnetometer: ", self.mag)
+        print("Time: ", self.timestamp)
         print("Delay: ", self.delay)
         print("Node RSSI: ", self.node_rssi)
         print("Node Distance: ", self.node_distance)
@@ -208,21 +220,22 @@ class TrackingData:
 
         # Check case where an array is empty
         if len(AMat) == 0 or len(BMat) == 0:
-            self.estimated_pos = (450, 450)
             return
 
         FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
 
-        self.estimated_pos = FinalProd.tolist()
+        self.multilat_pos = FinalProd.tolist()
 
-        self.estimated_pos[0] = math.ceil(self.estimated_pos[0])
-        self.estimated_pos[1] = math.ceil(self.estimated_pos[1])
+        self.multilat_pos[0] = math.ceil(self.multilat_pos[0])
+        self.multilat_pos[1] = math.ceil(self.multilat_pos[1])
 
     def kalman_filter(self):
         """
         Use a Kalman filter to fuse the RF distance and US data to estimate the location of the object.
         :return tuple: position (x,y)
         """
+
+# GUI =========================================================================
 
 
 class MainApplication(tk.Frame):
@@ -236,86 +249,62 @@ class MainApplication(tk.Frame):
         self.in_q = inq_q
         self._stop = False
         self._master.title("Prac 2 - Position GUI Application")
-        self._master.geometry("950x950")
-        self._master.configure(bg="white")
+        self._master.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        self._master.configure(bg=BACKGROUND)
         self.pack()
+
+        title = tk.Label(self._master, text="CSSE4011 GUI", borderwidth=0,
+                         font="Montserrat, 25", bg=BACKGROUND, fg=PRIMARY_TEXT)
+        title.pack(side=tk.TOP, padx=10, pady=10)
 
         # Create the grid
         self._grid = Grid(self._master)
-        self._grid.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        self._mobile = MobileNode(self._grid)
+        self._grid.place(relx=0.4, rely=0.5, anchor=tk.W)
+        self._multilateration_node = MobileNode(self._grid, "multilateration")
+        self._kalman_node = MobileNode(self._grid, "kalman")
+
+        self._data_container = DataDisplayContainer(self._master)
+        self._data_container.place(relx=0.3, rely=0.5, anchor=tk.E)
+        self._data = DataDisplay(self._data_container)
+
         self._master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-        self.update_position()
+        self.refresh_application()
 
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self._stop = True
             self._master.destroy()
 
-    def update_position(self):
+    def refresh_application(self):
         """
-        Update the position of the mobile node.
+        Update the position of the mobile node and the values.
         """
 
         while True:
             time.sleep(SHORT_SLEEP)
+
             try:
-                pos = self.in_q.get(block=False)
+                data = self.in_q.get(block=False)
             except Empty:
-                pos = None
-            if pos is not None:
-                self._mobile.target_x = pos[0]
-                self._mobile.target_y = pos[1]
-                logging.debug(f"Received new position x:{pos[0]} y:{pos[1]}")
+                data = None
+            if data is not None:
+
+                self._multilateration_node.target_x = data.multilat_pos[0]
+                self._multilateration_node.target_y = data.multilat_pos[1]
+
+                self._kalman_node.target_x = data.kalman_pos[0]
+                self._kalman_node.target_y = data.kalman_pos[1]
+
+                self._data.update_data(data)
+
             if self._stop:
                 break
             # Update the GUI
 
-            self._mobile.redraw_position()
+            self._multilateration_node.redraw_position()
+            self._kalman_node.redraw_position()
             self._master.update()
-
-
-class MobileNode(object):
-    """
-    Class for the mobile node
-    """
-
-    def __init__(self, canvas, master=None):
-        self.current_x = START_POS_X
-        self.current_y = START_POS_Y
-        self.target_x = START_POS_X
-        self.target_y = START_POS_Y
-        self.canvas = canvas
-
-        self.graphic = self.canvas.create_oval(
-            425, 425, 475, 475, fill="#afbecc")
-        self.text_position = self.canvas.create_text(
-            450, 500, text="(500,500)", fill="black")
-
-    def redraw_position(self):
-        """
-        Redraw the position of the mobile node.
-        """
-
-        if self.current_x < self.target_x:
-            self.current_x += 1
-            self.canvas.move(self.graphic, 1, 0)
-            self.canvas.move(self.text_position, 1, 0)
-        elif self.current_x > self.target_x:
-            self.current_x -= 1
-            self.canvas.move(self.graphic, -1, 0)
-            self.canvas.move(self.text_position, -1, 0)
-        if self.current_y < self.target_y:
-            self.current_y += 1
-            self.canvas.move(self.graphic, 0, 1)
-            self.canvas.move(self.text_position, 0, 1)
-        elif self.current_y > self.target_y:
-            self.current_y -= 1
-            self.canvas.move(self.graphic, 0, -1)
-            self.canvas.move(self.text_position, 0, -1)
-        self.canvas.itemconfig(self.text_position,
-                               text="({},{})".format(self.current_x, self.current_y))
 
 
 class Grid(tk.Canvas):
@@ -324,14 +313,18 @@ class Grid(tk.Canvas):
     """
 
     def __init__(self, master):
-        super().__init__(master, bg='white', height=900, width=900)
+        super().__init__(master, bg=CARD, height=900, width=900, highlightthickness=0)
         self._master = master
 
         # create a grid
         for i in range(0, 900, 150):
-            self.create_line(i, 0, i, 900, fill="black")
+            self.create_line(i, 0, i, 900, fill=SECONDARY_TEXT, width=2)
         for i in range(0, 900, 150):
-            self.create_line(0, i, 900, i, fill="black")
+            self.create_line(0, i, 900, i, fill=SECONDARY_TEXT, width=2)
+        self.create_line(0, 0, 900, 0, fill=SECONDARY_TEXT, width=4)
+        self.create_line(900, 0, 900, 900, fill=SECONDARY_TEXT, width=4)
+        self.create_line(900, 900, 0, 900, fill=SECONDARY_TEXT, width=4)
+        self.create_line(0, 900, 0, 0, fill=SECONDARY_TEXT, width=4)
 
         self.create_static_node_graphic(25, 25, 25)
         self.create_static_node_graphic(600-25, 25, 25)
@@ -358,7 +351,145 @@ class Grid(tk.Canvas):
             pos_x - (size/2), pos_y - math.sqrt(3)*size/2,  # Vertex E
             pos_x + (size/2), pos_y - math.sqrt(3)*size/2,  # Vertex F
 
-            fill="black")
+            fill=SECONDARY_TEXT)
+
+
+class DataDisplayContainer(tk.Canvas):
+
+    def __init__(self, master):
+        super().__init__(master, bg=CARD, height=900, width=450, highlightthickness=0)
+        self._master = master
+
+
+class DataDisplay(object):
+
+    def __init__(self, canvas, master=None):
+        self.canvas = canvas
+        # Create Labels
+        self.canvas.create_text(
+            200, 30, text="Multilateration Position:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        self.canvas.create_text(
+            200, 50, text="Kalman Position:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        for idx in range(0, 12):
+            self.canvas.create_text(
+                200, 80 + idx*20, text="RSSI Node {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        for idx in range(0, 12):
+            self.canvas.create_text(
+                200, 350 + idx*20, text="Distance Node {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        for idx in range(0, 4):
+            self.canvas.create_text(
+                200, 610 + idx*20, text="Ultrasonic Distance {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        self.canvas.create_text(
+            200, 710, text="Accelerometer:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        self.canvas.create_text(
+            200, 740, text="Gyro:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        self.canvas.create_text(
+            200, 770, text="Magnetometer:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        self.canvas.create_text(
+            200, 800, text="Timestamp:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+        self.canvas.create_text(
+            200, 830, text="Delay Time:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+
+        # Create values
+        self.multilat_pos = self.canvas.create_text(
+            250, 30, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.kalman_pos = self.canvas.create_text(
+            250, 50, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.rssi = [0] * 12
+        for idx in range(0, 12):
+            self.rssi[idx] = self.canvas.create_text(
+                250, 80 + idx*20, text="NO DATA".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.distance = [0] * 12
+        for idx in range(0, 12):
+            self.distance[idx] = self.canvas.create_text(
+                250, 350 + idx*20, text="NO DATA".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.ultra = [0] * 4
+        for idx in range(0, 4):
+            self.ultra[idx] = self.canvas.create_text(
+                250, 610 + idx*20, text="NO DATA".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.accel = self.canvas.create_text(
+            250, 710, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.gyro = self.canvas.create_text(
+            250, 740, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.mag = self.canvas.create_text(
+            250, 770, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.time = self.canvas.create_text(
+            250, 800, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+        self.delay = self.canvas.create_text(
+            250, 830, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+
+    def update_data(self, data):
+        """
+        Redraw the position of the mobile node.
+        """
+        self.canvas.itemconfig(
+            self.multilat_pos, text=f"({data.multilat_pos[0]}, {data.multilat_pos[1]})")
+        self.canvas.itemconfig(
+            self.kalman_pos, text=f"({data.kalman_pos[0]}, {data.kalman_pos[1]})")
+        for idx in range(0, 12):
+            self.canvas.itemconfig(
+                self.rssi[idx], text=f"{data.node_rssi[idx]}")
+        for idx in range(0, 12):
+            self.canvas.itemconfig(
+                self.distance[idx], text=f"{data.node_distance[idx]}")
+        for idx in range(0, 4):
+            self.canvas.itemconfig(
+                self.ultra[idx], text=f"{data.node_ultra[idx]}")
+        self.canvas.itemconfig(
+            self.accel, text=f"({data.accel[0]}, {data.accel[1]}, {data.accel[2]})")
+        self.canvas.itemconfig(
+            self.gyro, text=f"({data.gyro[0]}, {data.gyro[1]}, {data.gyro[2]})")
+        self.canvas.itemconfig(
+            self.mag, text=f"({data.mag[0]}, {data.mag[1]}, {data.mag[2]})")
+        self.canvas.itemconfig(self.time, text=f"{data.timestamp}")
+        self.canvas.itemconfig(self.delay, text=f"{data.delay}")
+
+
+class MobileNode(object):
+    """
+    Class for the mobile node
+    """
+
+    def __init__(self, canvas, type, master=None):
+        self.current_x = START_POS_X
+        self.current_y = START_POS_Y
+        self.target_x = START_POS_X
+        self.target_y = START_POS_Y
+        self.canvas = canvas
+        if type == "multilateration":
+            self.node_colour = "#E2703A"
+        elif type == "kalman":
+            self.node_colour = "#9C3D54"
+
+        self.graphic = self.canvas.create_oval(
+            425, 425, 475, 475, fill=self.node_colour)
+        self.text_position = self.canvas.create_text(
+            450, 500, text="(500,500)", fill=PRIMARY_TEXT)
+
+    def redraw_position(self):
+        """
+        Redraw the position of the mobile node.
+        """
+
+        if self.current_x < self.target_x:
+            self.current_x += 1
+            self.canvas.move(self.graphic, 1, 0)
+            self.canvas.move(self.text_position, 1, 0)
+        elif self.current_x > self.target_x:
+            self.current_x -= 1
+            self.canvas.move(self.graphic, -1, 0)
+            self.canvas.move(self.text_position, -1, 0)
+        if self.current_y < self.target_y:
+            self.current_y += 1
+            self.canvas.move(self.graphic, 0, 1)
+            self.canvas.move(self.text_position, 0, 1)
+        elif self.current_y > self.target_y:
+            self.current_y -= 1
+            self.canvas.move(self.graphic, 0, -1)
+            self.canvas.move(self.text_position, 0, -1)
+        self.canvas.itemconfig(self.text_position,
+                               text="({},{})".format(self.current_x, self.current_y))
+
 
 # Serial Interface ============================================================
 
@@ -402,9 +533,8 @@ def serial_interface(out_q, stop):
             except:
                 logging.debug(f"Could not parse line from serial port: {line}")
             if stop():
-                break
-
-        ser.close()
+                ser.close()
+                return
 
 
 # Data Processing =============================================================
@@ -418,7 +548,14 @@ def data_processing(in_q, out_q, pub_q, stop):
     while True:
 
         # Get the next message from the queue
-        data_raw = in_q.get(block=True)
+        try:
+            data_raw = in_q.get(block=False)
+        except Empty:
+            if stop():
+                logging.info("Stoping Data Thread")
+                break
+            time.sleep(SHORT_SLEEP)
+            continue
         now = datetime.now()  # Timestamp incomming data
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
@@ -429,7 +566,7 @@ def data_processing(in_q, out_q, pub_q, stop):
             live_data.write_rssi_csv()
 
         # Send the estimated position to the GUI
-        out_q.put(live_data.estimated_pos)
+        out_q.put(live_data)
         pub_data = MQTT_Packer(live_data)
         pub_q.queue.clear()
         pub_q.put(pub_data)
@@ -453,7 +590,7 @@ def MQTT_Packer(live_data):
                 'value': math.ceil(live_data.node_distance[i]*100/225),
             }
         )
-    
+
     for idx, rssi in enumerate(live_data.node_rssi):
 
         publish_data.append(
@@ -477,7 +614,7 @@ def MQTT_Packer(live_data):
     estimated_position = {
         "variable": "position",
         "value": 10,
-        "metadata": {"x": live_data.estimated_pos[0]/900.0, "y": live_data.estimated_pos[1]/900.0},
+        "metadata": {"x": live_data.kalman_pos[0]/900.0, "y": live_data.kalman_pos[1]/900.0},
     }
 
     publish_data.append(estimated_position)
