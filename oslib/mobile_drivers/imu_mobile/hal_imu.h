@@ -48,11 +48,11 @@ bool dataReady(void);
 
 int update(unsigned char sensors);
 
-float calcAccel(int axis);
+float calcAccel(int raw_data);
 
-float calcGyro(int axis);
+float calcGyro(int raw_data);
 
-float calcMag(int axis);
+float calcMag(int raw_data);
 
 int updateTemperature(void);
 

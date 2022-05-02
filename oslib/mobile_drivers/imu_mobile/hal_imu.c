@@ -182,16 +182,19 @@ void thread_imu_rw(void)
     }
 }
 
-float calcAccel(int axis){
-    return (float) axis;
+float calcAccel(int raw_data){
+    //raw data to m/s^2
+    return (float) raw_data;
 }
 
-float calcGyro(int axis){
-    return (float) axis;
+float calcGyro(int raw_data){
+    //raw data to m/s^2
+    return (float) raw_data;
 }
 
-float calcMag(int axis){
-    return (float) axis;
+float calcMag(int raw_data){
+    //raw data to m/s^2
+    return (float) raw_data;
 }
 
 /**
