@@ -20,6 +20,7 @@ import logging
 import tago
 import csv
 import numpy as np
+import pylab
 from datetime import datetime
 
 # MQTT Publishing Code ========================================================
@@ -51,7 +52,6 @@ PRIMARY_TEXT = '#E4E6EB'
 SECONDARY_TEXT = '#B0B3B8'
 
 # Classes =====================================================================
-
 
 class TrackingData:
     """
@@ -235,6 +235,32 @@ class TrackingData:
         :return tuple: position (x,y)
         """
 
+class Kalman:
+    def __init__(self, x_init, cov_init, meas_err, proc_err):
+        self.ndim = len(x_init)
+        self.A = np.array([(1, 0, 1, 0), (0, 1, 0, 1), (0, 0, 1, 0), (0, 0, 0, 1)])
+        self.H = np.array([(1, 0, 0, 0), (0, 1, 0, 0)])
+        self.x_hat =  x_init
+        self.cov = cov_init
+        self.Q_k = np.eye(self.ndim)*proc_err
+        self.R = np.eye(len(self.H))*meas_err
+
+    def update(self, obs):
+
+        # Make prediction
+        self.x_hat_est = np.dot(self.A,self.x_hat)
+        self.cov_est = np.dot(self.A,np.dot(self.cov,np.transpose(self.A))) + self.Q_k
+
+        # Update estimate
+        self.error_x = obs - np.dot(self.H,self.x_hat_est)
+        self.error_cov = np.dot(self.H,np.dot(self.cov_est,np.transpose(self.H))) + self.R
+        self.K = np.dot(np.dot(self.cov_est,np.transpose(self.H)),np.linalg.inv(self.error_cov))
+        self.x_hat = self.x_hat_est + np.dot(self.K,self.error_x)
+        if self.ndim>1:
+            self.cov = np.dot((np.eye(self.ndim) - np.dot(self.K,self.H)),self.cov_est)
+        else:
+            self.cov = (1-self.K)*self.cov_est 
+
 # GUI =========================================================================
 
 
@@ -326,18 +352,18 @@ class Grid(tk.Canvas):
         self.create_line(900, 900, 0, 900, fill=SECONDARY_TEXT, width=4)
         self.create_line(0, 900, 0, 0, fill=SECONDARY_TEXT, width=4)
 
-        self.create_static_node_graphic(25, 25, 25)
-        self.create_static_node_graphic(600-25, 25, 25)
-        self.create_static_node_graphic(300-25, 25, 25)
-        self.create_static_node_graphic(900-25, 25, 25)
-        self.create_static_node_graphic(900-25, 600-25, 25)
-        self.create_static_node_graphic(900-25, 300-25, 25)
-        self.create_static_node_graphic(900-25, 900-25, 25)
-        self.create_static_node_graphic(600-25, 900-25, 25)
-        self.create_static_node_graphic(300-25, 900-25, 25)
-        self.create_static_node_graphic(25, 900-25, 25)
-        self.create_static_node_graphic(25, 600-25, 25)
-        self.create_static_node_graphic(25, 300-25, 25)
+        self.create_static_node_graphic(30, 30, 25)
+        self.create_static_node_graphic(600-30, 30, 25)
+        self.create_static_node_graphic(300-30, 30, 25)
+        self.create_static_node_graphic(900-30, 30, 25)
+        self.create_static_node_graphic(900-30, 600-30, 25)
+        self.create_static_node_graphic(900-30, 300-30, 25)
+        self.create_static_node_graphic(900-30, 900-30, 25)
+        self.create_static_node_graphic(600-30, 900-30, 25)
+        self.create_static_node_graphic(300-30, 900-30, 25)
+        self.create_static_node_graphic(30, 900-30, 25)
+        self.create_static_node_graphic(30, 600-30, 25)
+        self.create_static_node_graphic(30, 300-30, 25)
 
     def create_static_node_graphic(self, pos_x, pos_y, size):
         """
@@ -367,9 +393,9 @@ class DataDisplay(object):
         self.canvas = canvas
         # Create Labels
         self.canvas.create_text(
-            200, 30, text="Multilateration Position:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200, 30, text="Multilateration Position:", font="Montserrat, 12", fill="#E2703A", anchor="e")
         self.canvas.create_text(
-            200, 50, text="Kalman Position:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200, 50, text="Kalman Position:", font="Montserrat, 12", fill="#9C3D54", anchor="e")
         for idx in range(0, 12):
             self.canvas.create_text(
                 200, 80 + idx*20, text="RSSI Node {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
@@ -392,9 +418,9 @@ class DataDisplay(object):
 
         # Create values
         self.multilat_pos = self.canvas.create_text(
-            250, 30, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250, 30, text="NO DATA", font="Montserrat, 12", fill="#E2703A", anchor="w")
         self.kalman_pos = self.canvas.create_text(
-            250, 50, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250, 50, text="NO DATA", font="Montserrat, 12", fill="#9C3D54", anchor="w")
         self.rssi = [0] * 12
         for idx in range(0, 12):
             self.rssi[idx] = self.canvas.create_text(
@@ -545,6 +571,28 @@ def data_processing(in_q, out_q, pub_q, stop):
     Process the raw JSON data.
     """
     live_data = TrackingData()
+    ndim = 4
+    ndim_obs = 2
+    xcoord = 5.0
+    ycoord = 2.0
+    vx = 0.5 #m.s
+    vy = 1.0 #m/s
+    dt = 1.0 #sec
+    meas_error = 10.0 #m
+
+    #generate ground truth
+    x_true = np.array([xcoord,ycoord,vx,vy])
+    obs_err = np.array([meas_error,meas_error])
+    obs = x_true[0:1] + np.random.randn(ndim_obs)*obs_err
+
+    #init filter
+    proc_error = 0.01
+    init_error = 150.0
+    x_init = np.array( [xcoord+init_error, ycoord+init_error, vx, vy] ) #introduced initial xcoord error of 2m 
+    cov_init=init_error*np.eye(ndim)
+    x_hat = np.zeros((ndim))
+    k_filter = Kalman(x_init, cov_init, meas_error, proc_error)
+    
     while True:
 
         # Get the next message from the queue
@@ -564,6 +612,10 @@ def data_processing(in_q, out_q, pub_q, stop):
         live_data.print_data()
         if DATA_COLLECTION:
             live_data.write_rssi_csv()
+
+        # Process the data through the Kalman Filter
+        k_filter.update([live_data.multilat_pos[0], live_data.multilat_pos[1]])
+        live_data.kalman_pos = k_filter.x_hat
 
         # Send the estimated position to the GUI
         out_q.put(live_data)
@@ -635,8 +687,11 @@ def MQTT_Publisher(pub_q, stop):
     my_device = tago.Device(MY_DEVICE_TOKEN)
     while(True):
         try:
-            publish_data = pub_q.get(block=True, timeout=5)
+            publish_data = pub_q.get(block=True, timeout=2)
         except Empty:
+            if stop():
+                logging.info("Stoping MQTT Thread")
+                break
             continue
 
         result = my_device.insert(publish_data)
