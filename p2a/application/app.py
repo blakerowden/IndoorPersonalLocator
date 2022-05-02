@@ -53,6 +53,7 @@ SECONDARY_TEXT = '#B0B3B8'
 
 # Classes =====================================================================
 
+
 class TrackingData:
     """
     Class to hold the tracking data.
@@ -74,7 +75,7 @@ class TrackingData:
         self.fileList = ["datapoints" + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
-        self.testxy = [0.5, 0.5]  # Make sure you do 49 different points
+        self.testxy = [0.5, 0.5]
         self.node_transmit_power = [-35.5, -43.5, -39, -48.75, -51.75, -54.25,
                                     -48.5, -59, -52.25, -47.5, -44.5, -45.5]
         self.multilat_pos = (GRID_WIDTH/2, GRID_HEIGHT/2)
@@ -83,48 +84,71 @@ class TrackingData:
         self.us_error = 0
         self.current_time = ""
 
-    def write_rssi_csv(self):
+    def write_rssi_csv(self, is_meter_meas):
         """
         Writes the rssi data to a csv file.
         :param file_name: The name of the file to write to.
         :return: None
         """
-        if self.currentTestpoint == 501:
-            return
+        if(is_meter_meas == 1):
+            # Change nodeName for ML:
+            nodeName = '4011A'
+            rowDictionary = {'Node': nodeName, 'RSSI': 0}
+            fieldnames = ['Node', 'RSSI']
+            file_name = 'datapoints' + nodeName + '.csv'
+            nodeDictionary = {'4011A': 0, '4011B': 1, '4011C': 2, '4011D': 3, '4011E': 4,
+                              '4011F': 5, '4011G': 6, '4011H': 7, '4011I': 8, '4011J': 9, '4011K': 10, '4011L': 11}
+
+            if self.currentTestpoint == 1:
+                with open(file_name, 'w') as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                    writer.writeheader()
+                    for i in range(1):
+                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[nodeDictionary[nodeName]]
+                    writer.writerow(rowDictionary)
+                    print("wrote")
+            else:
+                with open(file_name, 'a') as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                    for i in range(1):
+                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[nodeDictionary[nodeName]]
+                    writer.writerow(rowDictionary)
+                    print("wrote: " + str(self.currentTestpoint))
+
         else:
-            self.currentTestpoint += 1
+            # Change testxy for ML:
+            self.testxy = [0.5, 0.5]
+            pos_x = self.testxy[0]
+            pos_y = self.testxy[1]
 
-        pos_x = self.testxy[0]
-        pos_y = self.testxy[1]
-        file_name = self.fileList[self.currentFile]
+            if self.currentTestpoint == 501:
+                return
+            else:
+                self.currentTestpoint += 1
 
-        rowDictionary = {'Pos_X': pos_x, 'Pos_Y': pos_y, 'Node_A': 0, 'Node_B': 0, 'Node_C': 0, 'Node_D': 0,
-                         'Node_E': 0, 'Node_F': 0, 'Node_G': 0, 'Node_H': 0, 'Node_I': 0, 'Node_J': 0, 'Node_K': 0, 'Node_L': 0}
+            file_name = self.fileList[self.currentFile]
 
-        fieldnames = ['Pos_X', 'Pos_Y', 'Node_A', 'Node_B', 'Node_C', 'Node_D', 'Node_E',
-                      'Node_F', 'Node_G', 'Node_H', 'Node_I', 'Node_J', 'Node_K', 'Node_L']
+            rowDictionary = {'Pos_X': pos_x, 'Pos_Y': pos_y, 'Node_A': 0, 'Node_B': 0, 'Node_C': 0, 'Node_D': 0,
+                             'Node_E': 0, 'Node_F': 0, 'Node_G': 0, 'Node_H': 0, 'Node_I': 0, 'Node_J': 0, 'Node_K': 0, 'Node_L': 0}
 
-        if self.currentTestpoint == 1:
+            fieldnames = ['Pos_X', 'Pos_Y', 'Node_A', 'Node_B', 'Node_C', 'Node_D', 'Node_E',
+                          'Node_F', 'Node_G', 'Node_H', 'Node_I', 'Node_J', 'Node_K', 'Node_L']
 
-            with open(file_name, 'w') as file:
-
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-                writer.writeheader()
-
-                for i in range(12):
-                    rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
-
-                writer.writerow(rowDictionary)
-                print("wrote")
-        else:
-            with open(file_name, 'a') as file:
-                writer = csv.DictWriter(file, fieldnames=fieldnames)
-
-                for i in range(12):
-                    rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
-
-                writer.writerow(rowDictionary)
-                print("wrote: " + str(self.currentTestpoint))
+            if self.currentTestpoint == 1:
+                with open(file_name, 'w') as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                    writer.writeheader()
+                    for i in range(12):
+                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
+                    writer.writerow(rowDictionary)
+                    print("wrote")
+            else:
+                with open(file_name, 'a') as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                    for i in range(12):
+                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
+                    writer.writerow(rowDictionary)
+                    print("wrote: " + str(self.currentTestpoint))
 
     def rssi_to_distance(self):
         """
@@ -235,12 +259,14 @@ class TrackingData:
         :return tuple: position (x,y)
         """
 
+
 class Kalman:
     def __init__(self, x_init, cov_init, meas_err, proc_err):
         self.ndim = len(x_init)
-        self.A = np.array([(1, 0, 1, 0), (0, 1, 0, 1), (0, 0, 1, 0), (0, 0, 0, 1)])
+        self.A = np.array([(1, 0, 1, 0), (0, 1, 0, 1),
+                          (0, 0, 1, 0), (0, 0, 0, 1)])
         self.H = np.array([(1, 0, 0, 0), (0, 1, 0, 0)])
-        self.x_hat =  x_init
+        self.x_hat = x_init
         self.cov = cov_init
         self.Q_k = np.eye(self.ndim)*proc_err
         self.R = np.eye(len(self.H))*meas_err
@@ -248,18 +274,22 @@ class Kalman:
     def update(self, obs):
 
         # Make prediction
-        self.x_hat_est = np.dot(self.A,self.x_hat)
-        self.cov_est = np.dot(self.A,np.dot(self.cov,np.transpose(self.A))) + self.Q_k
+        self.x_hat_est = np.dot(self.A, self.x_hat)
+        self.cov_est = np.dot(self.A, np.dot(
+            self.cov, np.transpose(self.A))) + self.Q_k
 
         # Update estimate
-        self.error_x = obs - np.dot(self.H,self.x_hat_est)
-        self.error_cov = np.dot(self.H,np.dot(self.cov_est,np.transpose(self.H))) + self.R
-        self.K = np.dot(np.dot(self.cov_est,np.transpose(self.H)),np.linalg.inv(self.error_cov))
-        self.x_hat = self.x_hat_est + np.dot(self.K,self.error_x)
-        if self.ndim>1:
-            self.cov = np.dot((np.eye(self.ndim) - np.dot(self.K,self.H)),self.cov_est)
+        self.error_x = obs - np.dot(self.H, self.x_hat_est)
+        self.error_cov = np.dot(self.H, np.dot(
+            self.cov_est, np.transpose(self.H))) + self.R
+        self.K = np.dot(np.dot(self.cov_est, np.transpose(
+            self.H)), np.linalg.inv(self.error_cov))
+        self.x_hat = self.x_hat_est + np.dot(self.K, self.error_x)
+        if self.ndim > 1:
+            self.cov = np.dot(
+                (np.eye(self.ndim) - np.dot(self.K, self.H)), self.cov_est)
         else:
-            self.cov = (1-self.K)*self.cov_est 
+            self.cov = (1-self.K)*self.cov_est
 
 # GUI =========================================================================
 
@@ -575,24 +605,25 @@ def data_processing(in_q, out_q, pub_q, stop):
     ndim_obs = 2
     xcoord = 5.0
     ycoord = 2.0
-    vx = 0.5 #m.s
-    vy = 1.0 #m/s
-    dt = 1.0 #sec
-    meas_error = 10.0 #m
+    vx = 0.5  # m.s
+    vy = 1.0  # m/s
+    dt = 1.0  # sec
+    meas_error = 10.0  # m
 
-    #generate ground truth
-    x_true = np.array([xcoord,ycoord,vx,vy])
-    obs_err = np.array([meas_error,meas_error])
+    # generate ground truth
+    x_true = np.array([xcoord, ycoord, vx, vy])
+    obs_err = np.array([meas_error, meas_error])
     obs = x_true[0:1] + np.random.randn(ndim_obs)*obs_err
 
-    #init filter
+    # init filter
     proc_error = 0.01
     init_error = 150.0
-    x_init = np.array( [xcoord+init_error, ycoord+init_error, vx, vy] ) #introduced initial xcoord error of 2m 
-    cov_init=init_error*np.eye(ndim)
+    # introduced initial xcoord error of 2m
+    x_init = np.array([xcoord+init_error, ycoord+init_error, vx, vy])
+    cov_init = init_error*np.eye(ndim)
     x_hat = np.zeros((ndim))
     k_filter = Kalman(x_init, cov_init, meas_error, proc_error)
-    
+
     while True:
 
         # Get the next message from the queue
@@ -611,7 +642,7 @@ def data_processing(in_q, out_q, pub_q, stop):
         live_data.multilateration()
         live_data.print_data()
         if DATA_COLLECTION:
-            live_data.write_rssi_csv()
+            live_data.write_rssi_csv(1)
 
         # Process the data through the Kalman Filter
         k_filter.update([live_data.multilat_pos[0], live_data.multilat_pos[1]])
