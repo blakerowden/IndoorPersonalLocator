@@ -11,6 +11,7 @@ project(ahu)
 #Add Include Directories
 include_directories(
                         ../../oslib/mobile_drivers/ble_mobile
+                        ../../oslib/mobile_drivers/imu_mobile
                         ../../oslib/static_drivers/ultrasonic_static
                         ../../oslib/static_drivers/ble_static
                         ../../oslib/base_drivers
@@ -21,7 +22,10 @@ include_directories(
 target_sources(app PRIVATE
                         ../../oslib/mobile_drivers/ble_mobile/ble_mobile_scan.c
                         ../../oslib/mobile_drivers/ble_mobile/mobile_ble.c
-                        ../../oslib/mobile_drivers/ble_mobile/imu_mobile.c
+                        ../../oslib/mobile_drivers/imu_mobile/hal_imu.c
+                        ../../oslib/mobile_drivers/imu_mobile/inv_mpu_dmp_motion_driver.c
+                        ../../oslib/mobile_drivers/imu_mobile/inv_mpu.c
+                        ../../oslib/mobile_drivers/imu_mobile/zephyr_i2c.c
                         ../../oslib/static_drivers/ultrasonic_static/ultrasonic_static.c
                         ../../oslib/static_drivers/ble_static/static_ble.c
                         ../../oslib/base_drivers/shell_base.c

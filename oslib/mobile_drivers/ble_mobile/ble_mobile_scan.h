@@ -27,6 +27,8 @@
  */
 void thread_ble_mobile_scan(void);
 
+void rssi_monitor_thread(void);
+
 /**
  * @brief Write data to the SCU TX GATT attribute.
  *

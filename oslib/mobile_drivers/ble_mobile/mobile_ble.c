@@ -22,7 +22,6 @@
 #include <sys/byteorder.h>
 
 #include "mobile_ble.h"
-#include "imu_mobile.h"
 
 /* 1000 msec = 1 sec */
 #define BLE_DISC_SLEEP_MS 250
@@ -74,11 +73,15 @@ static struct bt_uuid_128 imu_mag_uuid = BT_UUID_INIT_128(
 //GATT CHARACTERISTIC VALUES
 int node_rssi[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                      0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+int node_timestamp[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
 uint16_t node_ultra[] = {0x00, 0x00, 0x00, 0x00};
 
-int16_t imu_accel_raw[] = {0x00, 0x00, 0x00};
-int16_t imu_gyro_raw[] = {0x00, 0x00, 0x00};
-int16_t imu_mag_raw[] = {0x00, 0x00, 0x00};
+float imu_accel_raw[] = {0x00, 0x00, 0x00};
+float imu_gyro_raw[] = {0x00, 0x00, 0x00};
+float imu_mag_raw[] = {0x00, 0x00, 0x00};
 
 /**
  * @brief Callback funtion to read RSSI buffer.
@@ -311,28 +314,4 @@ void thread_ble_connect(void)
     {
         k_msleep(SHORT_SLEEP_MS);
     }
-}
-
-void thread_read_imu(void)
-{
-
-    init_lis();
-
-    while (1) {
-        double x = read_lis(0x00);
-        double y = read_lis(0x01);
-        double z = read_lis(0x02);
-
-        int16_t xint = (int16_t) (x / 0.0002441);
-        int16_t yint = (int16_t) (y / 0.0002441);
-        int16_t zint = (int16_t) (z / 0.0002441);
-
-        imu_accel_raw[0] = xint;
-        imu_accel_raw[1] = yint;
-        imu_accel_raw[2] = zint;
-        printk("x: %d, y: %d, z: %d\n", imu_accel_raw[0],imu_accel_raw[1],imu_accel_raw[2]);
-
-        k_msleep(1000);
-    }
-
 }

@@ -26,6 +26,7 @@
 #include <zephyr.h>
 #include <zephyr/types.h>
 
+#include "kernel.h"
 #include "hci_driver.h"
 #include "mobile_ble.h"
 
@@ -93,6 +94,7 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
         // currentString);
         if (strcmp(currentString, static_nodes[i].address) == 0) {
             node_rssi[i] = rssi;
+            node_timestamp[i] = k_uptime_get();
             // printk("RSSI of Device \"%s\" is:%d\n", currentString, rssi);
             // printk("Sending in node %d: %d\n", i, tx_buff[i+7]);
         }
@@ -124,4 +126,18 @@ void thread_ble_mobile_scan(void) {
     default_conn = NULL;
 
     start_scan();
+}
+
+void rssi_monitor_thread(void)
+{
+    for (int i = 0; i < 12; i++){
+        for (int j = 0; j < 12; j++){
+            if(node_timestamp[i] <= node_timestamp[j] - 500){
+                node_rssi[i] = 0;
+            }
+        }
+    }
+
+    k_msleep(5);
+
 }
