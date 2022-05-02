@@ -274,17 +274,17 @@ void printIMUData(void)
     float magY = calcMag(my);
     float magZ = calcMag(mz);
 
-    imu_accel_raw[0] = accelX/2048;
-    imu_accel_raw[1] = accelY/2048;
-    imu_accel_raw[2] = accelZ/2048;
+    imu_accel_raw[0] = accelX;
+    imu_accel_raw[1] = accelY;
+    imu_accel_raw[2] = accelZ;
 
-    imu_gyro_raw[0] = gyroX/2048;
-    imu_gyro_raw[1] = gyroY/2048;
-    imu_gyro_raw[2] = gyroZ/2048;
+    imu_gyro_raw[0] = gyroX;
+    imu_gyro_raw[1] = gyroY;
+    imu_gyro_raw[2] = gyroZ;
 
-    imu_mag_raw[0] = magX/2048;
-    imu_mag_raw[1] = magY/2048;
-    imu_mag_raw[2] = magZ/2048;
+    imu_mag_raw[0] = magX;
+    imu_mag_raw[1] = magY;
+    imu_mag_raw[2] = magZ;
 
     //printk("aX: %d aY: %d aZ; %d", ax, ay, az);
     // printk("gX: %f gY: %f gZ; %f", gyroX, gyroY, gyroZ);
