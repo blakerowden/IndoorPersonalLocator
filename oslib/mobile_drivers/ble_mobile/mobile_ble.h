@@ -28,7 +28,7 @@ extern uint16_t node_ultra[];
 //accel_XYZ[0:2], Gyro_XYZ[3:5], Mag_XYZ[6:8]
 extern double mpu9250_sensor[];
 
-extern int16_t imu_accel_raw[], imu_gyro_raw[], imu_mag_raw[];
+extern float imu_accel_raw[], imu_gyro_raw[], imu_mag_raw[];
 
 void thread_ble_connect(void);
 

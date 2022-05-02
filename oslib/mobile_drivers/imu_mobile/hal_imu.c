@@ -182,6 +182,18 @@ void thread_imu_rw(void)
     }
 }
 
+float calcAccel(int axis){
+    return (float) axis;
+}
+
+float calcGyro(int axis){
+    return (float) axis;
+}
+
+float calcMag(int axis){
+    return (float) axis;
+}
+
 /**
  * @brief Initialise IMU
  * 
@@ -252,23 +264,27 @@ int begin(void)
  */
 void printIMUData(void)
 {
-    // float accelX = calcAccel(ax);
-    // float accelY = calcAccel(ay);
-    // float accelZ = calcAccel(az);
-    // float gyroX = calcGyro(gx);
-    // float gyroY = calcGyro(gy);
-    // float gyroZ = calcGyro(gz);
-    // float magX = calcMag(mx);
-    // float magY = calcMag(my);
-    // float magZ = calcMag(mz);
+    float accelX = calcAccel(ax);
+    float accelY = calcAccel(ay);
+    float accelZ = calcAccel(az);
+    float gyroX = calcGyro(gx);
+    float gyroY = calcGyro(gy);
+    float gyroZ = calcGyro(gz);
+    float magX = calcMag(mx);
+    float magY = calcMag(my);
+    float magZ = calcMag(mz);
 
-    imu_accel_raw[0] = ax;
-    imu_accel_raw[1] = ay;
-    imu_accel_raw[2] = az;
+    imu_accel_raw[0] = accelX/2048;
+    imu_accel_raw[1] = accelY/2048;
+    imu_accel_raw[2] = accelZ/2048;
 
-    imu_gyro_raw[0] = gx;
-    imu_gyro_raw[1] = gy;
-    imu_gyro_raw[2] = gz;
+    imu_gyro_raw[0] = gyroX/2048;
+    imu_gyro_raw[1] = gyroY/2048;
+    imu_gyro_raw[2] = gyroZ/2048;
+
+    imu_mag_raw[0] = magX/2048;
+    imu_mag_raw[1] = magY/2048;
+    imu_mag_raw[2] = magZ/2048;
 
     //printk("aX: %d aY: %d aZ; %d", ax, ay, az);
     // printk("gX: %f gY: %f gZ; %f", gyroX, gyroY, gyroZ);
