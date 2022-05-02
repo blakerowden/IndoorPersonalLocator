@@ -25,17 +25,18 @@
 #include "static_ble.h"
 #include "shell_base.h"
 #include "ultrasonic_static.h"
+#include "hal_imu.h"
 
 // Define Thread Settings ======================================================
-#define BLE_CONNECT_THREAD_STACK    8192
-#define BLE_DISCOVER_THREAD_STACK   8192
-#define BLE_SCAN_THREAD_STACK       8192
-#define IMU_THREAD_STACK            8192
+#define BLE_CONNECT_THREAD_STACK    4096
+#define BLE_DISCOVER_THREAD_STACK   4096
+#define BLE_SCAN_THREAD_STACK       4096
+#define IMU_THREAD_STACK            4096
 
 #define BLE_CONNECT_THREAD_PRIORITY     2
 #define BLE_DISCOVER_THREAD_PRIORITY    2
 #define BLE_SCAN_THREAD_PRIORITY        2
-#define IMU_THREAD_PRIORITY        2
+#define IMU_THREAD_PRIORITY             2
 
 #define MODE_MOBILE  0
 #define MODE_STATIC  1
