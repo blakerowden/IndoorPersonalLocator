@@ -123,7 +123,16 @@ static void start_scan(void) {
 }
 
 void thread_ble_mobile_scan(void) {
-    default_conn = NULL;
+    /*default_conn = NULL;
+    int err;
+
+    err = bt_enable(NULL);
+    if (err)
+    {
+        printk("Bluetooth init failed (err %d)\n", err);
+        return;
+    }*/
+
 
     start_scan();
 }

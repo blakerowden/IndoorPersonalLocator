@@ -76,7 +76,7 @@ class MobileNodeTrackingData:
         self.fileList = ["datapoints" + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
-        self.testxy = [0.5, 0.5]
+        self.testxy = [0, 0]
         self.node_transmit_power = [
             -48.16766467,
             -46.46307385,
@@ -148,11 +148,11 @@ class MobileNodeTrackingData:
 
         else:
             # Change testxy for ML:
-            self.testxy = [0.5, 0.5]
+            self.testxy = [1, 3.5]
             pos_x = self.testxy[0]
             pos_y = self.testxy[1]
-
-            if self.currentTestpoint == 501:
+            self.currentFile = 48
+            if self.currentTestpoint == 201:
                 return
             else:
                 self.currentTestpoint += 1
