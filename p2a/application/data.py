@@ -18,6 +18,7 @@ from queue import *
 from mqtt import *
 import logging
 import random
+from pathlib import Path
 
 # Data Collection Trigger =====================================================
 DATA_COLLECTION = False
@@ -75,7 +76,9 @@ class MobileNodeTrackingData:
             (0, GRID_TWO_THIRD),
             (0, GRID_THIRD),
         ]
-        self.fileList = ["/home/boston/csse4011/Shared_repo/CSSE4011/p2a/application/Datapoints/datapoints" + str(i) + ".csv" for i in range(49)]
+        path = Path(__file__).parent / "Datapoints/datapoints"
+        print(str(path))
+        self.fileList = [str(path) + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
         self.testxy = [0, 0]
@@ -210,21 +213,20 @@ class MobileNodeTrackingData:
                         rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
                     writer.writerow(rowDictionary)
                     print("wrote: " + str(self.currentTestpoint))
-    
+
     def random_RSSI(self, x, y):
-        fileNum = (int)((x/0.5) * (y/0.5) - 1)
+        fileNum = (int)((x / 0.5) * (y / 0.5) - 1)
         fileName = self.fileList[fileNum]
 
-        rowNum = random.randint(1,200)
+        rowNum = random.randint(1, 200)
         with open(fileName) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
+            csv_reader = csv.reader(csv_file, delimiter=",")
             lineCount = 0
             for row in csv_reader:
                 if lineCount == rowNum:
                     for i in range(12):
-                        self.node_rssi[i] = (int) (row[i+2])
-                lineCount+=1
-
+                        self.node_rssi[i] = (int)(row[i + 2])
+                lineCount += 1
 
     def rssi_to_distance(self):
         """
@@ -434,8 +436,8 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
-            live_data.random_RSSI(0.5,0.5)
-    
+            live_data.random_RSSI(0.5, 0.5)
+
         live_data.rssi_to_distance()
         live_data.multilateration()
         live_data.print_data()
