@@ -9,7 +9,21 @@
  */
 
 #include <zephyr.h>
+#include <device.h>
+#include <devicetree.h>
 #include <drivers/gpio.h>
+#include <usb/usb_device.h>
+#include <drivers/uart.h>   
+#include <sys_clock.h>
+#include <timing/timing.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/hci.h>
+#include <bluetooth/conn.h>
+#include <bluetooth/uuid.h>
+#include <bluetooth/gatt.h>
+#include <zephyr/types.h>
+#include <irq.h>
+#include <stddef.h>
 #include <logging/log.h>
 #include <sys/printk.h>
 
@@ -19,60 +33,66 @@
 
 #define LED0_NODE DT_ALIAS(led0)
 
-uint8_t trig = 10;
-uint8_t echo = 8;
+uint8_t trig = 10; //D5
+uint8_t echo = 8; //D4
 
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
-K_MSGQ_DEFINE(ultra_msgq, sizeof(uint16_t), 10, 4);
+K_MSGQ_DEFINE(ultra_msgq, sizeof(uint32_t), 10, 4);
 
-void thread_ultra_read(void)
+void thread_ultra_read(void) 
 {
-	const struct device *ultra = device_get_binding("GPIO_1");
-	if (ultra == NULL)
+	uint32_t cm;
+	uint64_t cycles;
+	uint64_t ns;
+	timing_t pulse, return_echo;
+	uint8_t echo_read = 0;
+	//struct data_ultra_t send_distance;
+
+	const struct device *dev = dev = device_get_binding("GPIO_1");
+
+	gpio_pin_configure(dev, trig, GPIO_OUTPUT);
+	gpio_pin_configure(dev, echo, GPIO_INPUT | GPIO_ACTIVE_HIGH | GPIO_INT_EDGE | GPIO_INT_DEBOUNCE);
+
+	timing_init();
+
+	uint64_t lock;
+
+	while(1)
 	{
-		return;
-	}
+		timing_start();
+		lock = irq_lock();
+		gpio_pin_set(dev, trig, 1);
+		k_sleep(K_USEC(10));
+		gpio_pin_set(dev, trig, 0);
 
-	gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure(ultra, trig, GPIO_OUTPUT_INACTIVE);
-	gpio_pin_configure(ultra, echo, GPIO_INPUT);
 
-	printk("configured\n");
-
-	while (1) {
-		gpio_pin_toggle_dt(&led);
-
-		gpio_pin_set_raw(ultra, (gpio_pin_t) trig, 1);
-		//printk("trig on\n");
-		k_usleep(10);
-		gpio_pin_set_raw(ultra, trig, 0);
-		//printk("trig off\n");
-
-		while (!gpio_pin_get_raw(ultra, echo))
+		while (echo_read == 0)
 		{
-			//printk("no echo\n");
-			//do nothing
+			echo_read = gpio_pin_get(dev, echo); 
+		}
+		pulse = timing_counter_get();
+
+		while (echo_read == 1)
+		{
+			echo_read = gpio_pin_get(dev, echo); 
+		}
+		return_echo = timing_counter_get();
+		irq_unlock(lock);
+
+
+		cycles = timing_cycles_get(&pulse, &return_echo);
+		ns = timing_cycles_to_ns(cycles);
+		timing_stop();
+		cm = 0.0000174816*ns; // + 2.7493855422; somehow the +c is bad, wild
+		//printk("time: %lld,     dist: %d\n", ns, cm);
+		
+		if (k_msgq_put(&ultra_msgq, &cm, K_NO_WAIT) != 0)
+		{
+			k_msgq_purge(&ultra_msgq);
 		}
 
-		int64_t now = k_uptime_get();
-
-		while (gpio_pin_get_raw(ultra, echo))
-		{
-			//printk("echo echo\n");
-			//do nothing
-		}
-
-		printk("return pulse: %lld\n", k_uptime_delta(&now));
-		uint16_t dist = (uint16_t) (0.5 * 34 * k_uptime_delta(&now));
-		//printk("dist: %d\n", dist);
-
-		if (k_msgq_put(&ultra_msgq, &dist, K_NO_WAIT) != 0)
-		{
-			k_msgq_purge(&ultra_msgq);	
-		}
-
-		k_msleep(SLEEP_TIME_MS);
+		k_sleep(K_MSEC(50));
 
 	}
 }

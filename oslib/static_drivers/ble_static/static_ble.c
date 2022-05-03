@@ -87,10 +87,11 @@ void thread_ble_adv(void)
 
     while (1) {
 
-        uint16_t read;
+        uint32_t read;
 
         if (k_msgq_get(&ultra_msgq, &read, K_FOREVER) == 0)
         {
+            printk("got an ultra %d\n", read);
             struct bt_data ad[] = {
                 BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
                 BT_DATA_BYTES(BT_DATA_UUID128_ALL,

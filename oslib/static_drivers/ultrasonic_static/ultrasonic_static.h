@@ -11,6 +11,10 @@
 #ifndef ULTRASONIC_STATIC_H
 #define ULTRASONIC_STATIC_H
 
+#include <zephyr.h>
+
+extern struct k_msgq ultra_msgq;
+
 void thread_ultra_read(void);
 
 #endif /* ULTRASONIC_STATIC_H */

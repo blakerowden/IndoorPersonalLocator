@@ -12,7 +12,7 @@
 #include "main.h"
 
 //#define MODE MODE_MOBILE  // MODE_MOBILE or MODE_STATIC
-#define MODE MODE_MOBILE
+#define MODE MODE_STATIC
 
 LOG_MODULE_REGISTER(log_main);  // Logging Module
 
@@ -32,5 +32,5 @@ K_THREAD_DEFINE(rssi_monitor, BLE_SCAN_THREAD_STACK, rssi_monitor_thread,
 #elif MODE == MODE_STATIC
     // INSERT STATIC MODULE SPECIFIC THREADS HERE
     K_THREAD_DEFINE(ultra_read, 1024, thread_ultra_read, NULL, NULL, NULL, 20, 0, 0);
-    K_THREAD_DEFINE(ble_static, 512, thread_ble_adv, NULL, NULL, NULL, 20, 0, 0);
+    K_THREAD_DEFINE(ble_static, 4096, thread_ble_adv, NULL, NULL, NULL, 20, 0, 0);
 #endif
