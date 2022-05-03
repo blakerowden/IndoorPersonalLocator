@@ -21,8 +21,8 @@ import random
 from pathlib import Path
 
 # Data Collection Trigger =====================================================
-DATA_COLLECTION = False
-TESTING = True
+DATA_COLLECTION = True
+TESTING = False
 
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
@@ -128,7 +128,7 @@ class MobileNodeTrackingData:
                 "4011K": 10,
                 "4011L": 11,
             }
-            if self.currentTestpoint == 501:
+            if self.currentTestpoint == 51:
                 return
             else:
                 self.currentTestpoint += 1
@@ -236,9 +236,10 @@ class MobileNodeTrackingData:
         N = 4
         for idx, rssi in enumerate(self.node_rssi):
             if rssi != 0:
-                self.node_distance[idx] = 10 ** (
-                    (self.node_transmit_power[idx] - rssi) / (10 * N)
-                )
+                self.node_distance[idx] = (
+                    10 ** ((self.node_transmit_power[idx] - rssi) / (10 * N))
+                ) * 100
+                print(self.node_distance[idx])
             else:
                 self.node_distance[idx] = 0
 
