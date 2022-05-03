@@ -25,7 +25,7 @@
 #include "static_ble.h"
 #include "shell_base.h"
 #include "ultrasonic_static.h"
-#include "hal_imu.h"
+//#include "hal_imu.h"
 
 // Define Thread Settings ======================================================
 #define BLE_CONNECT_THREAD_STACK    4096
