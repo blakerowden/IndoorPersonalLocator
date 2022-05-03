@@ -36,7 +36,7 @@
 uint8_t trig = 10; //D5
 uint8_t echo = 8; //D4
 
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+//static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
 K_MSGQ_DEFINE(ultra_msgq, sizeof(uint32_t), 10, 4);
 
@@ -49,7 +49,7 @@ void thread_ultra_read(void)
 	uint8_t echo_read = 0;
 	//struct data_ultra_t send_distance;
 
-	const struct device *dev = dev = device_get_binding("GPIO_1");
+	const struct device *dev = device_get_binding("GPIO_1");
 
 	gpio_pin_configure(dev, trig, GPIO_OUTPUT);
 	gpio_pin_configure(dev, echo, GPIO_INPUT | GPIO_ACTIVE_HIGH | GPIO_INT_EDGE | GPIO_INT_DEBOUNCE);
@@ -64,7 +64,9 @@ void thread_ultra_read(void)
 		lock = irq_lock();
 		gpio_pin_set(dev, trig, 1);
 		k_sleep(K_USEC(10));
+		//printk("one: %d\n", gpio_pin_get(dev, trig));
 		gpio_pin_set(dev, trig, 0);
+		//printk("two: %d\n", gpio_pin_get(dev, trig));
 
 
 		while (echo_read == 0)

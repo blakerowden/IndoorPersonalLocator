@@ -88,16 +88,20 @@ void thread_ble_adv(void)
     while (1) {
 
         uint32_t read;
+        uint8_t ultra_id = 3;
 
         if (k_msgq_get(&ultra_msgq, &read, K_FOREVER) == 0)
         {
+            
             printk("got an ultra %d\n", read);
+            uint8_t read_low = read & 0xFF;
+            uint8_t read_high = read >> 8;
             struct bt_data ad[] = {
                 BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
                 BT_DATA_BYTES(BT_DATA_UUID128_ALL,
                     0xd8, 0x92, 0x67, 0x35, 0x78, 0x16, 0x21, 0x91,
                     0x26, 0x49, 0x60, 0xeb, 0x06, 0xa7, 0xca, 0xcb), 
-                BT_DATA_BYTES(read)
+                BT_DATA_BYTES(BT_DATA_UUID128_ALL, read_high, read_low, ultra_id)
             };
 
             bt_le_adv_update_data(ad, ARRAY_SIZE(ad), NULL, 0);
