@@ -24,9 +24,9 @@ def MQTT_Packer(live_data):
 
         publish_data.append(
             {
-                'variable': 'node_distance_' + str(i+1),
-                'unit': 'cm',
-                'value': math.ceil(live_data.node_distance[i]*100/225),
+                "variable": "node_distance_" + str(i + 1),
+                "unit": "cm",
+                "value": math.ceil(live_data.node_distance[i] * 100 / 225),
             }
         )
 
@@ -34,9 +34,9 @@ def MQTT_Packer(live_data):
 
         publish_data.append(
             {
-                'variable': 'rssi_' + str(idx + 1),
-                'unit': 'dB',
-                'value': rssi,
+                "variable": "rssi_" + str(idx + 1),
+                "unit": "dB",
+                "value": rssi,
             }
         )
 
@@ -44,23 +44,26 @@ def MQTT_Packer(live_data):
 
         publish_data.append(
             {
-                'variable': 'ultra_' + str(idx + 1),
-                'unit': 'cm',
-                'value': ultra,
+                "variable": "ultra_" + str(idx + 1),
+                "unit": "cm",
+                "value": ultra,
             }
         )
 
     estimated_position = {
         "variable": "position",
         "value": 10,
-        "metadata": {"x": live_data.kalman_pos[0]/900.0, "y": live_data.kalman_pos[1]/900.0},
+        "metadata": {
+            "x": live_data.kalman_pos[0] / 900.0,
+            "y": live_data.kalman_pos[1] / 900.0,
+        },
     }
 
     publish_data.append(estimated_position)
 
     delay_time = {
         "variable": "delay",
-        'unit': 'ms',
+        "unit": "ms",
         "value": live_data.delay,
     }
 
@@ -72,7 +75,7 @@ def MQTT_Packer(live_data):
 def MQTT_Publisher(pub_q, stop):
 
     my_device = tago.Device(MQTT_DEVICE_TOKEN)
-    while(True):
+    while True:
         try:
             publish_data = pub_q.get(block=True, timeout=2)
         except Empty:
@@ -83,12 +86,10 @@ def MQTT_Publisher(pub_q, stop):
 
         result = my_device.insert(publish_data)
 
-        if result['status']:
-            logging.info(
-                f"Successfully published with result: {result['result']}")
+        if result["status"]:
+            logging.info(f"Successfully published with result: {result['result']}")
         else:
-            logging.info(
-                f"Fail to publish data with error:  {result['message']}")
+            logging.info(f"Fail to publish data with error:  {result['message']}")
 
         if stop():
             logging.info("Stoping MQTT Thread")

@@ -22,12 +22,12 @@ def serial_interface_thread(out_q, stop):
     if not stop():
         try:
             ser = serial.Serial(
-                port='/dev/ttyACM0',
+                port="/dev/ttyACM0",
                 baudrate=115200,
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
                 bytesize=serial.EIGHTBITS,
-                timeout=1
+                timeout=1,
             )
             ser.is_open = True
             logging.info(f"Connected to Serial Port {ser.name}")
@@ -38,10 +38,10 @@ def serial_interface_thread(out_q, stop):
             logging.info("Attempting to reconnect to serial port")
             serial_interface_thread(out_q, stop)
 
-    if 'ser' in locals():
-        while(ser.is_open):
+    if "ser" in locals():
+        while ser.is_open:
             try:
-                line = ser.readline().decode('utf-8').strip()
+                line = ser.readline().decode("utf-8").strip()
             except:
                 ser.close()
                 logging.warning("Could not read line from serial port")

@@ -38,17 +38,52 @@ class MobileNodeTrackingData:
         self.delay = 0
         self.timestamp = 0
         self.node_rssi = [0] * 12
-        self.node_distance = [450, 450, 450, 900, 950,
-                              1000, 900, 1000, 900, 900, 600, 300]
-        self.node_locations = [(0, 0), (300, 0), (600, 0), (900, 0),
-                               (900, 300), (900, 600), (900, 900), (600, 900),
-                               (300, 900), (0, 900), (0, 600), (0, 300)]
+        self.node_distance = [
+            450,
+            450,
+            450,
+            900,
+            950,
+            1000,
+            900,
+            1000,
+            900,
+            900,
+            600,
+            300,
+        ]
+        self.node_locations = [
+            (0, 0),
+            (300, 0),
+            (600, 0),
+            (900, 0),
+            (900, 300),
+            (900, 600),
+            (900, 900),
+            (600, 900),
+            (300, 900),
+            (0, 900),
+            (0, 600),
+            (0, 300),
+        ]
         self.fileList = ["datapoints" + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
         self.testxy = [0.5, 0.5]
-        self.node_transmit_power = [-35.5, -43.5, -39, -48.75, -51.75, -54.25,
-                                    -48.5, -59, -52.25, -47.5, -44.5, -45.5]
+        self.node_transmit_power = [
+            -35.5,
+            -43.5,
+            -39,
+            -48.75,
+            -51.75,
+            -54.25,
+            -48.5,
+            -59,
+            -52.25,
+            -47.5,
+            -44.5,
+            -45.5,
+        ]
         self.multilat_pos = (450, 450)
         self.kalman_pos = (450, 450)
         self.rssi_error = 0
@@ -61,32 +96,46 @@ class MobileNodeTrackingData:
         :param file_name: The name of the file to write to.
         :return: None
         """
-        if(is_meter_meas == 1):
+        if is_meter_meas == 1:
             # Change nodeName for ML:
-            nodeName = '4011B'
-            rowDictionary = {'Node': nodeName, 'RSSI': 0}
-            fieldnames = ['Node', 'RSSI']
-            file_name = 'datapoints' + nodeName + '.csv'
-            nodeDictionary = {'4011A': 0, '4011B': 1, '4011C': 2, '4011D': 3, '4011E': 4,
-                              '4011F': 5, '4011G': 6, '4011H': 7, '4011I': 8, '4011J': 9, '4011K': 10, '4011L': 11}
+            nodeName = "4011B"
+            rowDictionary = {"Node": nodeName, "RSSI": 0}
+            fieldnames = ["Node", "RSSI"]
+            file_name = "datapoints" + nodeName + ".csv"
+            nodeDictionary = {
+                "4011A": 0,
+                "4011B": 1,
+                "4011C": 2,
+                "4011D": 3,
+                "4011E": 4,
+                "4011F": 5,
+                "4011G": 6,
+                "4011H": 7,
+                "4011I": 8,
+                "4011J": 9,
+                "4011K": 10,
+                "4011L": 11,
+            }
             if self.currentTestpoint == 501:
                 return
             else:
                 self.currentTestpoint += 1
 
             if self.currentTestpoint == 1:
-                with open(file_name, 'w') as file:
+                with open(file_name, "w") as file:
                     writer = csv.DictWriter(file, fieldnames=fieldnames)
                     writer.writeheader()
-                    rowDictionary[fieldnames[1]
-                                  ] = self.node_rssi[nodeDictionary[nodeName]]
+                    rowDictionary[fieldnames[1]] = self.node_rssi[
+                        nodeDictionary[nodeName]
+                    ]
                     writer.writerow(rowDictionary)
                     print("wrote")
             else:
-                with open(file_name, 'a') as file:
+                with open(file_name, "a") as file:
                     writer = csv.DictWriter(file, fieldnames=fieldnames)
-                    rowDictionary[fieldnames[1]
-                                  ] = self.node_rssi[nodeDictionary[nodeName]]
+                    rowDictionary[fieldnames[1]] = self.node_rssi[
+                        nodeDictionary[nodeName]
+                    ]
                     writer.writerow(rowDictionary)
                     print("wrote: " + str(self.currentTestpoint))
 
@@ -103,14 +152,42 @@ class MobileNodeTrackingData:
 
             file_name = self.fileList[self.currentFile]
 
-            rowDictionary = {'Pos_X': pos_x, 'Pos_Y': pos_y, 'Node_A': 0, 'Node_B': 0, 'Node_C': 0, 'Node_D': 0,
-                             'Node_E': 0, 'Node_F': 0, 'Node_G': 0, 'Node_H': 0, 'Node_I': 0, 'Node_J': 0, 'Node_K': 0, 'Node_L': 0}
+            rowDictionary = {
+                "Pos_X": pos_x,
+                "Pos_Y": pos_y,
+                "Node_A": 0,
+                "Node_B": 0,
+                "Node_C": 0,
+                "Node_D": 0,
+                "Node_E": 0,
+                "Node_F": 0,
+                "Node_G": 0,
+                "Node_H": 0,
+                "Node_I": 0,
+                "Node_J": 0,
+                "Node_K": 0,
+                "Node_L": 0,
+            }
 
-            fieldnames = ['Pos_X', 'Pos_Y', 'Node_A', 'Node_B', 'Node_C', 'Node_D', 'Node_E',
-                          'Node_F', 'Node_G', 'Node_H', 'Node_I', 'Node_J', 'Node_K', 'Node_L']
+            fieldnames = [
+                "Pos_X",
+                "Pos_Y",
+                "Node_A",
+                "Node_B",
+                "Node_C",
+                "Node_D",
+                "Node_E",
+                "Node_F",
+                "Node_G",
+                "Node_H",
+                "Node_I",
+                "Node_J",
+                "Node_K",
+                "Node_L",
+            ]
 
             if self.currentTestpoint == 1:
-                with open(file_name, 'w') as file:
+                with open(file_name, "w") as file:
                     writer = csv.DictWriter(file, fieldnames=fieldnames)
                     writer.writeheader()
                     for i in range(12):
@@ -118,7 +195,7 @@ class MobileNodeTrackingData:
                     writer.writerow(rowDictionary)
                     print("wrote")
             else:
-                with open(file_name, 'a') as file:
+                with open(file_name, "a") as file:
                     writer = csv.DictWriter(file, fieldnames=fieldnames)
                     for i in range(12):
                         rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
@@ -134,7 +211,8 @@ class MobileNodeTrackingData:
         for idx, rssi in enumerate(self.node_rssi):
             if rssi != 0:
                 self.node_distance[idx] = 10 ** (
-                    (self.node_transmit_power[idx]-rssi) / (10*N))
+                    (self.node_transmit_power[idx] - rssi) / (10 * N)
+                )
             else:
                 self.node_distance[idx] = 0
 
@@ -211,11 +289,29 @@ class MobileNodeTrackingData:
         y_fixed_array = np.array(fixed_node_y)
         radius_array = np.array(fixed_node_distance)
 
-        BMat = np.array([(radius_array[i]**2 - radius_array[num_live_nodes - 1]**2-x_fixed_array[i]**2-y_fixed_array[i]
-                         ** 2+x_fixed_array[num_live_nodes-1]**2 + y_fixed_array[num_live_nodes-1]**2) for i in range(num_live_nodes)])
+        BMat = np.array(
+            [
+                (
+                    radius_array[i] ** 2
+                    - radius_array[num_live_nodes - 1] ** 2
+                    - x_fixed_array[i] ** 2
+                    - y_fixed_array[i] ** 2
+                    + x_fixed_array[num_live_nodes - 1] ** 2
+                    + y_fixed_array[num_live_nodes - 1] ** 2
+                )
+                for i in range(num_live_nodes)
+            ]
+        )
 
-        AMat = np.array([((2*(x_fixed_array[num_live_nodes - 1] - x_fixed_array[i])),
-                         (2*(y_fixed_array[num_live_nodes - 1] - y_fixed_array[i]))) for i in range(num_live_nodes)])
+        AMat = np.array(
+            [
+                (
+                    (2 * (x_fixed_array[num_live_nodes - 1] - x_fixed_array[i])),
+                    (2 * (y_fixed_array[num_live_nodes - 1] - y_fixed_array[i])),
+                )
+                for i in range(num_live_nodes)
+            ]
+        )
 
         # Check case where an array is empty
         if len(AMat) == 0 or len(BMat) == 0:
@@ -238,33 +334,35 @@ class MobileNodeTrackingData:
 class Kalman:
     def __init__(self, x_init, cov_init, meas_err, proc_err):
         self.ndim = len(x_init)
-        self.A = np.array([(1, 0, 1, 0), (0, 1, 0, 1),
-                          (0, 0, 1, 0), (0, 0, 0, 1)])
+        self.A = np.array([(1, 0, 1, 0), (0, 1, 0, 1), (0, 0, 1, 0), (0, 0, 0, 1)])
         self.H = np.array([(1, 0, 0, 0), (0, 1, 0, 0)])
         self.x_hat = x_init
         self.cov = cov_init
-        self.Q_k = np.eye(self.ndim)*proc_err
-        self.R = np.eye(len(self.H))*meas_err
+        self.Q_k = np.eye(self.ndim) * proc_err
+        self.R = np.eye(len(self.H)) * meas_err
 
     def update(self, obs):
 
         # Make prediction
         self.x_hat_est = np.dot(self.A, self.x_hat)
-        self.cov_est = np.dot(self.A, np.dot(
-            self.cov, np.transpose(self.A))) + self.Q_k
+        self.cov_est = np.dot(self.A, np.dot(self.cov, np.transpose(self.A))) + self.Q_k
 
         # Update estimate
         self.error_x = obs - np.dot(self.H, self.x_hat_est)
-        self.error_cov = np.dot(self.H, np.dot(
-            self.cov_est, np.transpose(self.H))) + self.R
-        self.K = np.dot(np.dot(self.cov_est, np.transpose(
-            self.H)), np.linalg.inv(self.error_cov))
+        self.error_cov = (
+            np.dot(self.H, np.dot(self.cov_est, np.transpose(self.H))) + self.R
+        )
+        self.K = np.dot(
+            np.dot(self.cov_est, np.transpose(self.H)), np.linalg.inv(self.error_cov)
+        )
         self.x_hat = self.x_hat_est + np.dot(self.K, self.error_x)
         if self.ndim > 1:
             self.cov = np.dot(
-                (np.eye(self.ndim) - np.dot(self.K, self.H)), self.cov_est)
+                (np.eye(self.ndim) - np.dot(self.K, self.H)), self.cov_est
+            )
         else:
-            self.cov = (1-self.K)*self.cov_est
+            self.cov = (1 - self.K) * self.cov_est
+
 
 # Entry Point =================================================================
 
@@ -286,14 +384,14 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
     # generate ground truth
     x_true = np.array([xcoord, ycoord, vx, vy])
     obs_err = np.array([meas_error, meas_error])
-    obs = x_true[0:1] + np.random.randn(ndim_obs)*obs_err
+    obs = x_true[0:1] + np.random.randn(ndim_obs) * obs_err
 
     # init filter
     proc_error = 0.01
     init_error = 150.0
     # introduced initial xcoord error of 2m
-    x_init = np.array([xcoord+init_error, ycoord+init_error, vx, vy])
-    cov_init = init_error*np.eye(ndim)
+    x_init = np.array([xcoord + init_error, ycoord + init_error, vx, vy])
+    cov_init = init_error * np.eye(ndim)
     x_hat = np.zeros((ndim))
     k_filter = Kalman(x_init, cov_init, meas_error, proc_error)
 

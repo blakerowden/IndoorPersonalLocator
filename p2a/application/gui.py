@@ -17,11 +17,11 @@ from queue import *
 
 # GUI Defines =================================================================
 
-BACKGROUND = '#18191A'
-CARD = '#242526'
-HOVER = '#3A3B3C'
-PRIMARY_TEXT = '#E4E6EB'
-SECONDARY_TEXT = '#B0B3B8'
+BACKGROUND = "#18191A"
+CARD = "#242526"
+HOVER = "#3A3B3C"
+PRIMARY_TEXT = "#E4E6EB"
+SECONDARY_TEXT = "#B0B3B8"
 
 WINDOW_HEIGHT = 1080
 WINDOW_WIDTH = 1920
@@ -46,8 +46,14 @@ class MainApplication(tk.Frame):
         self._master.configure(bg=BACKGROUND)
         self.pack()
 
-        title = tk.Label(self._master, text="CSSE4011 GUI", borderwidth=0,
-                         font="Montserrat, 25", bg=BACKGROUND, fg=PRIMARY_TEXT)
+        title = tk.Label(
+            self._master,
+            text="CSSE4011 GUI",
+            borderwidth=0,
+            font="Montserrat, 25",
+            bg=BACKGROUND,
+            fg=PRIMARY_TEXT,
+        )
         title.pack(side=tk.TOP, padx=10, pady=10)
 
         # Create the grid
@@ -120,120 +126,233 @@ class Grid(tk.Canvas):
         self.create_line(0, 900, 0, 0, fill=SECONDARY_TEXT, width=4)
 
         self.create_static_node_graphic(30, 30, 25)
-        self.create_static_node_graphic(600-30, 30, 25)
-        self.create_static_node_graphic(300-30, 30, 25)
-        self.create_static_node_graphic(900-30, 30, 25)
-        self.create_static_node_graphic(900-30, 600-30, 25)
-        self.create_static_node_graphic(900-30, 300-30, 25)
-        self.create_static_node_graphic(900-30, 900-30, 25)
-        self.create_static_node_graphic(600-30, 900-30, 25)
-        self.create_static_node_graphic(300-30, 900-30, 25)
-        self.create_static_node_graphic(30, 900-30, 25)
-        self.create_static_node_graphic(30, 600-30, 25)
-        self.create_static_node_graphic(30, 300-30, 25)
+        self.create_static_node_graphic(600 - 30, 30, 25)
+        self.create_static_node_graphic(300 - 30, 30, 25)
+        self.create_static_node_graphic(900 - 30, 30, 25)
+        self.create_static_node_graphic(900 - 30, 600 - 30, 25)
+        self.create_static_node_graphic(900 - 30, 300 - 30, 25)
+        self.create_static_node_graphic(900 - 30, 900 - 30, 25)
+        self.create_static_node_graphic(600 - 30, 900 - 30, 25)
+        self.create_static_node_graphic(300 - 30, 900 - 30, 25)
+        self.create_static_node_graphic(30, 900 - 30, 25)
+        self.create_static_node_graphic(30, 600 - 30, 25)
+        self.create_static_node_graphic(30, 300 - 30, 25)
 
     def create_static_node_graphic(self, pos_x, pos_y, size):
         """
         Create the graphic for the static node.
         """
         self.create_polygon(
-            pos_x + size, pos_y,  # Vertex A
-            pos_x + (size/2), pos_y + math.sqrt(3)*size/2,  # Vertex B
-            pos_x - (size/2), pos_y + math.sqrt(3)*size/2,  # Vertex B
-            pos_x - size, pos_y,  # Vertex D
-            pos_x - (size/2), pos_y - math.sqrt(3)*size/2,  # Vertex E
-            pos_x + (size/2), pos_y - math.sqrt(3)*size/2,  # Vertex F
-
-            fill=SECONDARY_TEXT)
+            pos_x + size,
+            pos_y,  # Vertex A
+            pos_x + (size / 2),
+            pos_y + math.sqrt(3) * size / 2,  # Vertex B
+            pos_x - (size / 2),
+            pos_y + math.sqrt(3) * size / 2,  # Vertex B
+            pos_x - size,
+            pos_y,  # Vertex D
+            pos_x - (size / 2),
+            pos_y - math.sqrt(3) * size / 2,  # Vertex E
+            pos_x + (size / 2),
+            pos_y - math.sqrt(3) * size / 2,  # Vertex F
+            fill=SECONDARY_TEXT,
+        )
 
 
 class DataDisplayContainer(tk.Canvas):
-
     def __init__(self, master):
         super().__init__(master, bg=CARD, height=900, width=450, highlightthickness=0)
         self._master = master
 
 
 class DataDisplay(object):
-
     def __init__(self, canvas, master=None):
         self.canvas = canvas
         # Create Labels
         self.canvas.create_text(
-            200, 30, text="Multilateration Position:", font="Montserrat, 12", fill="#E2703A", anchor="e")
+            200,
+            30,
+            text="Multilateration Position:",
+            font="Montserrat, 12",
+            fill="#E2703A",
+            anchor="e",
+        )
         self.canvas.create_text(
-            200, 50, text="Kalman Position:", font="Montserrat, 12", fill="#9C3D54", anchor="e")
+            200,
+            50,
+            text="Kalman Position:",
+            font="Montserrat, 12",
+            fill="#9C3D54",
+            anchor="e",
+        )
         for idx in range(0, 12):
             self.canvas.create_text(
-                200, 80 + idx*20, text="RSSI Node {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+                200,
+                80 + idx * 20,
+                text="RSSI Node {}:".format(idx),
+                font="Montserrat, 12",
+                fill=PRIMARY_TEXT,
+                anchor="e",
+            )
         for idx in range(0, 12):
             self.canvas.create_text(
-                200, 350 + idx*20, text="Distance Node {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+                200,
+                350 + idx * 20,
+                text="Distance Node {}:".format(idx),
+                font="Montserrat, 12",
+                fill=PRIMARY_TEXT,
+                anchor="e",
+            )
         for idx in range(0, 4):
             self.canvas.create_text(
-                200, 610 + idx*20, text="Ultrasonic Distance {}:".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+                200,
+                610 + idx * 20,
+                text="Ultrasonic Distance {}:".format(idx),
+                font="Montserrat, 12",
+                fill=PRIMARY_TEXT,
+                anchor="e",
+            )
         self.canvas.create_text(
-            200, 710, text="Accelerometer:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200,
+            710,
+            text="Accelerometer:",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="e",
+        )
         self.canvas.create_text(
-            200, 740, text="Gyro:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200, 740, text="Gyro:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e"
+        )
         self.canvas.create_text(
-            200, 770, text="Magnetometer:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200,
+            770,
+            text="Magnetometer:",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="e",
+        )
         self.canvas.create_text(
-            200, 800, text="Timestamp:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200,
+            800,
+            text="Timestamp:",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="e",
+        )
         self.canvas.create_text(
-            200, 830, text="Delay Time:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e")
+            200,
+            830,
+            text="Delay Time:",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="e",
+        )
 
         # Create values
         self.multilat_pos = self.canvas.create_text(
-            250, 30, text="NO DATA", font="Montserrat, 12", fill="#E2703A", anchor="w")
+            250, 30, text="NO DATA", font="Montserrat, 12", fill="#E2703A", anchor="w"
+        )
         self.kalman_pos = self.canvas.create_text(
-            250, 50, text="NO DATA", font="Montserrat, 12", fill="#9C3D54", anchor="w")
+            250, 50, text="NO DATA", font="Montserrat, 12", fill="#9C3D54", anchor="w"
+        )
         self.rssi = [0] * 12
         for idx in range(0, 12):
             self.rssi[idx] = self.canvas.create_text(
-                250, 80 + idx*20, text="NO DATA".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+                250,
+                80 + idx * 20,
+                text="NO DATA".format(idx),
+                font="Montserrat, 12",
+                fill=PRIMARY_TEXT,
+                anchor="w",
+            )
         self.distance = [0] * 12
         for idx in range(0, 12):
             self.distance[idx] = self.canvas.create_text(
-                250, 350 + idx*20, text="NO DATA".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+                250,
+                350 + idx * 20,
+                text="NO DATA".format(idx),
+                font="Montserrat, 12",
+                fill=PRIMARY_TEXT,
+                anchor="w",
+            )
         self.ultra = [0] * 4
         for idx in range(0, 4):
             self.ultra[idx] = self.canvas.create_text(
-                250, 610 + idx*20, text="NO DATA".format(idx), font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+                250,
+                610 + idx * 20,
+                text="NO DATA".format(idx),
+                font="Montserrat, 12",
+                fill=PRIMARY_TEXT,
+                anchor="w",
+            )
         self.accel = self.canvas.create_text(
-            250, 710, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250,
+            710,
+            text="NO DATA",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="w",
+        )
         self.gyro = self.canvas.create_text(
-            250, 740, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250,
+            740,
+            text="NO DATA",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="w",
+        )
         self.mag = self.canvas.create_text(
-            250, 770, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250,
+            770,
+            text="NO DATA",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="w",
+        )
         self.time = self.canvas.create_text(
-            250, 800, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250,
+            800,
+            text="NO DATA",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="w",
+        )
         self.delay = self.canvas.create_text(
-            250, 830, text="NO DATA", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="w")
+            250,
+            830,
+            text="NO DATA",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="w",
+        )
 
     def update_data(self, data):
         """
         Redraw the position of the mobile node.
         """
         self.canvas.itemconfig(
-            self.multilat_pos, text=f"({data.multilat_pos[0]}, {data.multilat_pos[1]})")
+            self.multilat_pos, text=f"({data.multilat_pos[0]}, {data.multilat_pos[1]})"
+        )
         self.canvas.itemconfig(
-            self.kalman_pos, text=f"({data.kalman_pos[0]}, {data.kalman_pos[1]})")
+            self.kalman_pos, text=f"({data.kalman_pos[0]}, {data.kalman_pos[1]})"
+        )
+        for idx in range(0, 12):
+            self.canvas.itemconfig(self.rssi[idx], text=f"{data.node_rssi[idx]}")
         for idx in range(0, 12):
             self.canvas.itemconfig(
-                self.rssi[idx], text=f"{data.node_rssi[idx]}")
-        for idx in range(0, 12):
-            self.canvas.itemconfig(
-                self.distance[idx], text=f"{data.node_distance[idx]}")
+                self.distance[idx], text=f"{data.node_distance[idx]}"
+            )
         for idx in range(0, 4):
-            self.canvas.itemconfig(
-                self.ultra[idx], text=f"{data.node_ultra[idx]}")
+            self.canvas.itemconfig(self.ultra[idx], text=f"{data.node_ultra[idx]}")
         self.canvas.itemconfig(
-            self.accel, text=f"({data.accel[0]}, {data.accel[1]}, {data.accel[2]})")
+            self.accel, text=f"({data.accel[0]}, {data.accel[1]}, {data.accel[2]})"
+        )
         self.canvas.itemconfig(
-            self.gyro, text=f"({data.gyro[0]}, {data.gyro[1]}, {data.gyro[2]})")
+            self.gyro, text=f"({data.gyro[0]}, {data.gyro[1]}, {data.gyro[2]})"
+        )
         self.canvas.itemconfig(
-            self.mag, text=f"({data.mag[0]}, {data.mag[1]}, {data.mag[2]})")
+            self.mag, text=f"({data.mag[0]}, {data.mag[1]}, {data.mag[2]})"
+        )
         self.canvas.itemconfig(self.time, text=f"{data.timestamp}")
         self.canvas.itemconfig(self.delay, text=f"{data.delay}")
 
@@ -255,9 +374,11 @@ class MobileNode(object):
             self.node_colour = "#9C3D54"
 
         self.graphic = self.canvas.create_oval(
-            425, 425, 475, 475, fill=self.node_colour)
+            425, 425, 475, 475, fill=self.node_colour
+        )
         self.text_position = self.canvas.create_text(
-            450, 500, text="(500,500)", fill=PRIMARY_TEXT)
+            450, 500, text="(500,500)", fill=PRIMARY_TEXT
+        )
 
     def redraw_position(self):
         """
@@ -280,8 +401,10 @@ class MobileNode(object):
             self.current_y -= 1
             self.canvas.move(self.graphic, 0, -1)
             self.canvas.move(self.text_position, 0, -1)
-        self.canvas.itemconfig(self.text_position,
-                               text="({},{})".format(self.current_x, self.current_y))
+        self.canvas.itemconfig(
+            self.text_position, text="({},{})".format(self.current_x, self.current_y)
+        )
+
 
 # GUI Interface ===============================================================
 

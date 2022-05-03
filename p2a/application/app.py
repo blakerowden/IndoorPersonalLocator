@@ -36,22 +36,25 @@ def main():
     thread_gui = None
     thread_mqtt = None
 
-    j_data = Queue()    # Queue for Raw JSON data
-    k_data = Queue()    # Queue for (k)lean data
-    m_data = Queue()    # Queue for MQTT data
+    j_data = Queue()  # Queue for Raw JSON data
+    k_data = Queue()  # Queue for (k)lean data
+    m_data = Queue()  # Queue for MQTT data
 
     if comms_active:
         # Create thread to read from the serial port
         logging.debug("Starting Serial Thread")
-        thread_serial = Thread(target=serial_interface_thread,
-                               args=(j_data, lambda: stop_flag))
+        thread_serial = Thread(
+            target=serial_interface_thread, args=(j_data, lambda: stop_flag)
+        )
         thread_serial.start()
 
     if data_active:
         # Create thread to process the data
         logging.debug("Starting Data Thread")
-        thread_data = Thread(target=data_processing_thread, args=(
-            j_data, k_data, m_data, lambda: stop_flag))
+        thread_data = Thread(
+            target=data_processing_thread,
+            args=(j_data, k_data, m_data, lambda: stop_flag),
+        )
         thread_data.start()
 
     if gui_active:
@@ -63,14 +66,16 @@ def main():
     if mqtt_active:
         # Create thread to run the MQTT interface
         logging.debug("Starting MQTT Thread")
-        thread_mqtt = Thread(target=MQTT_Publisher,
-                             args=(m_data, lambda: stop_flag))
+        thread_mqtt = Thread(target=MQTT_Publisher, args=(m_data, lambda: stop_flag))
         thread_mqtt.start()
 
     while not stop_flag:
-        if (gui_active and not thread_gui.is_alive()) or (data_active and not thread_data.is_alive()) or (comms_active and not thread_serial.is_alive()):
-            logging.warning(
-                "One of the threads has stopped. Stopping the program...")
+        if (
+            (gui_active and not thread_gui.is_alive())
+            or (data_active and not thread_data.is_alive())
+            or (comms_active and not thread_serial.is_alive())
+        ):
+            logging.warning("One of the threads has stopped. Stopping the program...")
             stop_flag = True
         time.sleep(SHORT_SLEEP)
 
