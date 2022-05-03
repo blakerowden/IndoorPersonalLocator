@@ -21,6 +21,8 @@ import logging
 # Data Collection Trigger =====================================================
 DATA_COLLECTION = True
 
+TESTING = True
+
 # Classes =====================================================================
 
 
@@ -409,6 +411,9 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         now = datetime.now()  # Timestamp incomming data
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
+        if TESTING:
+            live_data.random_RSSI(x,y)
+    
         live_data.rssi_to_distance()
         live_data.multilateration()
         live_data.print_data()
