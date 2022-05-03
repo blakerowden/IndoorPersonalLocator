@@ -21,6 +21,13 @@ import logging
 # Data Collection Trigger =====================================================
 DATA_COLLECTION = True
 
+# Defines =====================================================================
+GRID_LENGTH_CM = 4_00  # 4m x 4m grid
+GRID_LENGTH = GRID_LENGTH_CM
+GRID_THIRD = GRID_LENGTH_CM / 3
+GRID_HALF = GRID_LENGTH_CM / 2
+GRID_TWO_THIRD = GRID_THIRD * 2
+
 # Classes =====================================================================
 
 
@@ -39,53 +46,53 @@ class MobileNodeTrackingData:
         self.timestamp = 0
         self.node_rssi = [0] * 12
         self.node_distance = [
-            450,
-            450,
-            450,
-            900,
-            950,
-            1000,
-            900,
-            1000,
-            900,
-            900,
-            600,
-            300,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
         ]
         self.node_locations = [
             (0, 0),
-            (300, 0),
-            (600, 0),
-            (900, 0),
-            (900, 300),
-            (900, 600),
-            (900, 900),
-            (600, 900),
-            (300, 900),
-            (0, 900),
-            (0, 600),
-            (0, 300),
+            (GRID_THIRD, 0),
+            (GRID_TWO_THIRD, 0),
+            (GRID_LENGTH, 0),
+            (GRID_LENGTH, GRID_THIRD),
+            (GRID_LENGTH, GRID_TWO_THIRD),
+            (GRID_LENGTH, GRID_LENGTH),
+            (GRID_TWO_THIRD, GRID_LENGTH),
+            (GRID_THIRD, GRID_LENGTH),
+            (0, GRID_LENGTH),
+            (0, GRID_TWO_THIRD),
+            (0, GRID_THIRD),
         ]
         self.fileList = ["datapoints" + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
         self.testxy = [0.5, 0.5]
         self.node_transmit_power = [
-            -35.5,
-            -43.5,
-            -39,
-            -48.75,
-            -51.75,
-            -54.25,
-            -48.5,
-            -59,
-            -52.25,
-            -47.5,
-            -44.5,
-            -45.5,
+            -48.16766467,
+            -46.46307385,
+            -52.40718563,
+            -55.14570858,
+            -55.77844311,
+            -58.72055888,
+            -62.70259481,
+            -73.94211577,
+            -65.09381238,
+            -54.42714571,
+            -58.44710579,
+            -66.71057884,
         ]
-        self.multilat_pos = (450, 450)
-        self.kalman_pos = (450, 450)
+        self.multilat_pos = (GRID_HALF, GRID_HALF)
+        self.kalman_pos = (GRID_HALF, GRID_HALF)
         self.rssi_error = 0
         self.us_error = 0
         self.current_time = ""
@@ -98,8 +105,8 @@ class MobileNodeTrackingData:
         """
         if is_meter_meas == 1:
             # Change nodeName for ML:
-            nodeName = "4011B"
-            rowDictionary = {"Node": nodeName, "RSSI": 0}
+            nodeName = "4011L"
+            rowDictionary = {"Node": nodeName, "RSSI": 11}
             fieldnames = ["Node", "RSSI"]
             file_name = "datapoints" + nodeName + ".csv"
             nodeDictionary = {
@@ -374,10 +381,10 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
     live_data = MobileNodeTrackingData()
     ndim = 4
     ndim_obs = 2
-    xcoord = 5.0
-    ycoord = 2.0
+    xcoord = GRID_HALF
+    ycoord = GRID_HALF
     vx = 0.5  # m.s
-    vy = 1.0  # m/s
+    vy = 0.5  # m/s
     dt = 1.0  # sec
     meas_error = 10.0  # m
 

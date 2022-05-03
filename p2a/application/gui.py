@@ -25,8 +25,11 @@ SECONDARY_TEXT = "#B0B3B8"
 
 WINDOW_HEIGHT = 1080
 WINDOW_WIDTH = 1920
-GRID_HEIGHT = 900
-GRID_WIDTH = 900
+GRID_LENGTH_PX = 900
+CM_TO_PX = 900 / 400
+PX_TO_CM = 400 / 900
+
+TITLE = "Prac 2 - Find my Thingy:52"
 
 # GUI =========================================================================
 
@@ -46,15 +49,17 @@ class MainApplication(tk.Frame):
         self._master.configure(bg=BACKGROUND)
         self.pack()
 
-        title = tk.Label(
-            self._master,
-            text="CSSE4011 GUI",
-            borderwidth=0,
-            font="Montserrat, 25",
-            bg=BACKGROUND,
-            fg=PRIMARY_TEXT,
-        )
-        title.pack(side=tk.TOP, padx=10, pady=10)
+        title_active = False
+        if title_active:
+            title = tk.Label(
+                self._master,
+                text=TITLE,
+                borderwidth=0,
+                font="Montserrat, 25",
+                bg=BACKGROUND,
+                fg=PRIMARY_TEXT,
+            )
+            title.pack(side=tk.TOP, padx=10, pady=10)
 
         # Create the grid
         self._grid = Grid(self._master)
@@ -63,7 +68,7 @@ class MainApplication(tk.Frame):
         self._kalman_node = MobileNode(self._grid, "kalman")
 
         self._data_container = DataDisplayContainer(self._master)
-        self._data_container.place(relx=0.3, rely=0.5, anchor=tk.E)
+        self._data_container.place(relx=0.35, rely=0.5, anchor=tk.E)
         self._data = DataDisplay(self._data_container)
 
         self._master.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -89,11 +94,11 @@ class MainApplication(tk.Frame):
                 data = None
             if data is not None:
 
-                self._multilateration_node.target_x = data.multilat_pos[0]
-                self._multilateration_node.target_y = data.multilat_pos[1]
+                self._multilateration_node.target_x = data.multilat_pos[0] * CM_TO_PX
+                self._multilateration_node.target_y = data.multilat_pos[1] * CM_TO_PX
 
-                self._kalman_node.target_x = data.kalman_pos[0]
-                self._kalman_node.target_y = data.kalman_pos[1]
+                self._kalman_node.target_x = data.kalman_pos[0] * CM_TO_PX
+                self._kalman_node.target_y = data.kalman_pos[1] * CM_TO_PX
 
                 self._data.update_data(data)
 
@@ -172,7 +177,7 @@ class DataDisplay(object):
         self.canvas.create_text(
             200,
             30,
-            text="Multilateration Position:",
+            text="Multilateration Position (m):",
             font="Montserrat, 12",
             fill="#E2703A",
             anchor="e",
@@ -180,7 +185,7 @@ class DataDisplay(object):
         self.canvas.create_text(
             200,
             50,
-            text="Kalman Position:",
+            text="Kalman Position (m):",
             font="Montserrat, 12",
             fill="#9C3D54",
             anchor="e",
@@ -189,7 +194,7 @@ class DataDisplay(object):
             self.canvas.create_text(
                 200,
                 80 + idx * 20,
-                text="RSSI Node {}:".format(idx),
+                text="Node {} RSSI (dB):".format(chr(65 + idx)),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
                 anchor="e",
@@ -198,7 +203,7 @@ class DataDisplay(object):
             self.canvas.create_text(
                 200,
                 350 + idx * 20,
-                text="Distance Node {}:".format(idx),
+                text="Node {} Distance (m):".format(chr(65 + idx)),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
                 anchor="e",
@@ -207,7 +212,7 @@ class DataDisplay(object):
             self.canvas.create_text(
                 200,
                 610 + idx * 20,
-                text="Ultrasonic Distance {}:".format(idx),
+                text="Ultra {} Distance (m):".format(idx),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
                 anchor="e",
@@ -215,13 +220,18 @@ class DataDisplay(object):
         self.canvas.create_text(
             200,
             710,
-            text="Accelerometer:",
+            text="Accelerometer (m/s):",
             font="Montserrat, 12",
             fill=PRIMARY_TEXT,
             anchor="e",
         )
         self.canvas.create_text(
-            200, 740, text="Gyro:", font="Montserrat, 12", fill=PRIMARY_TEXT, anchor="e"
+            200,
+            740,
+            text="Gyro (rad):",
+            font="Montserrat, 12",
+            fill=PRIMARY_TEXT,
+            anchor="e",
         )
         self.canvas.create_text(
             200,
@@ -242,7 +252,7 @@ class DataDisplay(object):
         self.canvas.create_text(
             200,
             830,
-            text="Delay Time:",
+            text="Delay Time (ms):",
             font="Montserrat, 12",
             fill=PRIMARY_TEXT,
             anchor="e",
@@ -330,11 +340,16 @@ class DataDisplay(object):
         """
         Redraw the position of the mobile node.
         """
+        try:
+            self.canvas.itemconfig(
+                self.multilat_pos,
+                text=f"({math.ceil(data.multilat_pos[0])/100.0}, {math.ceil(data.multilat_pos[1])/100.0})",
+            )
+        except:
+            return
         self.canvas.itemconfig(
-            self.multilat_pos, text=f"({data.multilat_pos[0]}, {data.multilat_pos[1]})"
-        )
-        self.canvas.itemconfig(
-            self.kalman_pos, text=f"({data.kalman_pos[0]}, {data.kalman_pos[1]})"
+            self.kalman_pos,
+            text=f"({math.ceil(data.kalman_pos[0])/100.0}, {math.ceil(data.kalman_pos[1])/100.0})",
         )
         for idx in range(0, 12):
             self.canvas.itemconfig(self.rssi[idx], text=f"{data.node_rssi[idx]}")
@@ -402,7 +417,11 @@ class MobileNode(object):
             self.canvas.move(self.graphic, 0, -1)
             self.canvas.move(self.text_position, 0, -1)
         self.canvas.itemconfig(
-            self.text_position, text="({},{})".format(self.current_x, self.current_y)
+            self.text_position,
+            text="({},{})".format(
+                math.ceil(self.current_x * PX_TO_CM) / 100.0,  # Convert to m
+                math.ceil(self.current_y * PX_TO_CM) / 100.0,
+            ),
         )
 
 

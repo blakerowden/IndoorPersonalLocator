@@ -77,6 +77,7 @@ def main():
         ):
             logging.warning("One of the threads has stopped. Stopping the program...")
             stop_flag = True
+
         time.sleep(SHORT_SLEEP)
 
     if gui_active:
@@ -89,6 +90,7 @@ def main():
     if comms_active:
         thread_serial.join()
         logging.info("Serial Thread Closed")
+
     logging.info("program complete")
 
 
