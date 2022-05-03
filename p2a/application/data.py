@@ -18,6 +18,7 @@ from queue import *
 from mqtt import *
 import logging
 import random
+from pathlib import Path
 
 # Data Collection Trigger =====================================================
 DATA_COLLECTION = False
@@ -75,7 +76,9 @@ class MobileNodeTrackingData:
             (0, GRID_TWO_THIRD),
             (0, GRID_THIRD),
         ]
-        self.fileList = ["/home/boston/csse4011/Shared_repo/CSSE4011/p2a/application/Datapoints/datapoints" + str(i) + ".csv" for i in range(49)]
+        path = Path(__file__).parent / "Datapoints/datapoints"
+        print(str(path))
+        self.fileList = [str(path) + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
         self.testxy = [0, 0]
@@ -125,7 +128,7 @@ class MobileNodeTrackingData:
                 "4011K": 10,
                 "4011L": 11,
             }
-            if self.currentTestpoint == 501:
+            if self.currentTestpoint == 51:
                 return
             else:
                 self.currentTestpoint += 1
@@ -210,21 +213,20 @@ class MobileNodeTrackingData:
                         rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
                     writer.writerow(rowDictionary)
                     print("wrote: " + str(self.currentTestpoint))
-    
-    def random_RSSI(self, x, y):
-        fileNum = (int)((x/0.5) * (y/0.5) - 1)
-        fileName = self.fileList[fileNum]
 
-        rowNum = random.randint(1,200)
+    def random_RSSI(self, x, y):
+        fileNum = (int)((x / 0.5) * (y / 0.5) - 1)
+        fileName = self.fileList[fileNum]
+        print(fileName)
+        rowNum = random.randint(1, 200)
         with open(fileName) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
+            csv_reader = csv.reader(csv_file, delimiter=",")
             lineCount = 0
             for row in csv_reader:
                 if lineCount == rowNum:
                     for i in range(12):
-                        self.node_rssi[i] = (int) (row[i+2])
-                lineCount+=1
-
+                        self.node_rssi[i] = (int)(row[i + 2])
+                lineCount += 1
 
     def rssi_to_distance(self):
         """
@@ -234,9 +236,9 @@ class MobileNodeTrackingData:
         N = 4
         for idx, rssi in enumerate(self.node_rssi):
             if rssi != 0:
-                self.node_distance[idx] = 10 ** (
-                    (self.node_transmit_power[idx] - rssi) / (10 * N)
-                )
+                self.node_distance[idx] = (
+                    10 ** ((self.node_transmit_power[idx] - rssi) / (10 * N))
+                ) * 100
             else:
                 self.node_distance[idx] = 0
 
@@ -307,11 +309,22 @@ class MobileNodeTrackingData:
                 fixed_node_y.append(self.node_locations[idx][1])
                 fixed_node_distance.append(dist)
 
-        num_live_nodes = len(fixed_node_distance)
+        # Apply a weighting to the RSSI data
+        distance, x_pos, y_pos = zip(
+            *sorted(zip(fixed_node_distance, fixed_node_x, fixed_node_y))
+        )
+        distance = distance[: len(distance) - 9]
+        x_pos = x_pos[: len(y_pos) - 9]
+        y_pos = y_pos[: len(y_pos) - 9]
 
-        x_fixed_array = np.array(fixed_node_x)
-        y_fixed_array = np.array(fixed_node_y)
-        radius_array = np.array(fixed_node_distance)
+        num_live_nodes = len(distance)
+
+        x_fixed_array = np.array(x_pos)
+        y_fixed_array = np.array(y_pos)
+        radius_array = np.array(distance)
+        print(radius_array)
+        print(x_fixed_array)
+        print(y_fixed_array)
 
         BMat = np.array(
             [   
@@ -439,8 +452,13 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
+<<<<<<< HEAD
             live_data.random_RSSI(2.5,2.5)
     
+=======
+            live_data.random_RSSI(3.5, 3.5)
+
+>>>>>>> cbf27095188a1544a7764aa69cbacc1c8b408e16
         live_data.rssi_to_distance()
         live_data.multilateration()
         live_data.print_data()
