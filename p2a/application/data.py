@@ -24,6 +24,8 @@ from pathlib import Path
 DATA_COLLECTION = False
 TESTING = True
 
+DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
+
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
 GRID_LENGTH = GRID_LENGTH_CM
@@ -76,9 +78,8 @@ class MobileNodeTrackingData:
             (0, GRID_TWO_THIRD),
             (0, GRID_THIRD),
         ]
-        path = Path(__file__).parent / "Datapoints/datapoints"
-        print(str(path))
-        self.fileList = [str(path) + str(i) + ".csv" for i in range(49)]
+
+        self.fileList = [DATAPATH + str(i) + ".csv" for i in range(49)]
         self.currentFile = 0
         self.currentTestpoint = 0
         self.testxy = [0, 0]
@@ -219,7 +220,7 @@ class MobileNodeTrackingData:
         for i in range(49):
             fileName = self.fileList[i]
             rowNum = random.randint(1, 200)
-            
+
             with open(fileName) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=",")
                 lineCount = 0
@@ -232,7 +233,7 @@ class MobileNodeTrackingData:
 
     def rssi_to_distance(self):
         """
-        Converts the received power (RSSI) data from dB to distance in m.
+        Converts the received power (RSSI) data from dB to distance in cm.
         :return: None
         """
         N = 4
@@ -324,12 +325,9 @@ class MobileNodeTrackingData:
         x_fixed_array = np.array(x_pos)
         y_fixed_array = np.array(y_pos)
         radius_array = np.array(distance)
-        print(radius_array)
-        print(x_fixed_array)
-        print(y_fixed_array)
 
         BMat = np.array(
-            [   
+            [
                 (
                     radius_array[i] ** 2
                     - radius_array[num_live_nodes - 1] ** 2
@@ -351,28 +349,28 @@ class MobileNodeTrackingData:
             ]
         )
 
-        print()
-
-
         # Check case where an array is empty
         if len(AMat) == 0 or len(BMat) == 0:
             return
 
         FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
 
-        print(BMat)
-        print(AMat)
-
         self.multilat_pos = FinalProd.tolist()
+        return_pos_x = math.ceil(self.multilat_pos[0])
+        return_pos_y = math.ceil(self.multilat_pos[1])
+
+        # Check bounds of the position
+        if return_pos_x < 0:
+            return_pos_x = 0 + random.randint(0, 10)
+        elif return_pos_x > GRID_LENGTH_CM:
+            return_pos_x = GRID_LENGTH_CM - random.randint(0, 10)
+        if return_pos_y < 0:
+            return_pos_y = 0 + random.randint(0, 10)
+        elif return_pos_y > GRID_LENGTH_CM:
+            return_pos_y = GRID_LENGTH_CM - random.randint(0, 10)
 
         self.multilat_pos[0] = math.ceil(self.multilat_pos[0])
         self.multilat_pos[1] = math.ceil(self.multilat_pos[1])
-
-    def kalman_filter(self):
-        """
-        Use a Kalman filter to fuse the RF distance and US data to estimate the location of the object.
-        :return tuple: position (x,y)
-        """
 
 
 class Kalman:
@@ -454,7 +452,7 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
-            live_data.random_RSSI(0.5, 3.5)
+            live_data.random_RSSI(2, 2)
 
         live_data.rssi_to_distance()
         live_data.multilateration()

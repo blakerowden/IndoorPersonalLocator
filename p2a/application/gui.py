@@ -26,8 +26,14 @@ SECONDARY_TEXT = "#B0B3B8"
 WINDOW_HEIGHT = 1080
 WINDOW_WIDTH = 1920
 GRID_LENGTH_PX = 900
-CM_TO_PX = 900 / 400
-PX_TO_CM = 400 / 900
+HALF_GRID_PX = GRID_LENGTH_PX / 2
+THIRD_GRID_PX = GRID_LENGTH_PX / 3
+TWO_THIRD_GRID_PX = THIRD_GRID_PX * 2
+PX_OFFSET = 30
+CM_TO_PX = GRID_LENGTH_PX / 400
+PX_TO_CM = 400 / GRID_LENGTH_PX
+TOTAL_GRID_LINES = 6
+LINE_SPACE = int(GRID_LENGTH_PX / TOTAL_GRID_LINES)
 
 TITLE = "Prac 2 - Find my Thingy:52"
 
@@ -117,33 +123,67 @@ class Grid(tk.Canvas):
     """
 
     def __init__(self, master):
-        super().__init__(master, bg=CARD, height=900, width=900, highlightthickness=0)
+        super().__init__(
+            master,
+            bg=CARD,
+            height=GRID_LENGTH_PX,
+            width=GRID_LENGTH_PX,
+            highlightthickness=0,
+        )
         self._master = master
 
         # create a grid
-        for i in range(0, 900, 150):
-            self.create_line(i, 0, i, 900, fill=SECONDARY_TEXT, width=2)
-        for i in range(0, 900, 150):
-            self.create_line(0, i, 900, i, fill=SECONDARY_TEXT, width=2)
-        self.create_line(0, 0, 900, 0, fill=SECONDARY_TEXT, width=4)
-        self.create_line(900, 0, 900, 900, fill=SECONDARY_TEXT, width=4)
-        self.create_line(900, 900, 0, 900, fill=SECONDARY_TEXT, width=4)
-        self.create_line(0, 900, 0, 0, fill=SECONDARY_TEXT, width=4)
+        for i in range(0, GRID_LENGTH_PX, LINE_SPACE):
+            self.create_line(i, 0, i, GRID_LENGTH_PX, fill=SECONDARY_TEXT, width=2)
+        for i in range(0, GRID_LENGTH_PX, LINE_SPACE):
+            self.create_line(0, i, GRID_LENGTH_PX, i, fill=SECONDARY_TEXT, width=2)
+        self.create_line(0, 0, GRID_LENGTH_PX, 0, fill=SECONDARY_TEXT, width=6)
+        self.create_line(
+            GRID_LENGTH_PX,
+            0,
+            GRID_LENGTH_PX,
+            GRID_LENGTH_PX,
+            fill=SECONDARY_TEXT,
+            width=6,
+        )
+        self.create_line(
+            GRID_LENGTH_PX,
+            GRID_LENGTH_PX,
+            0,
+            GRID_LENGTH_PX,
+            fill=SECONDARY_TEXT,
+            width=6,
+        )
+        self.create_line(0, GRID_LENGTH_PX, 0, 0, fill=SECONDARY_TEXT, width=6)
 
-        self.create_static_node_graphic(30, 30, 25)
-        self.create_static_node_graphic(600 - 30, 30, 25)
-        self.create_static_node_graphic(300 - 30, 30, 25)
-        self.create_static_node_graphic(900 - 30, 30, 25)
-        self.create_static_node_graphic(900 - 30, 600 - 30, 25)
-        self.create_static_node_graphic(900 - 30, 300 - 30, 25)
-        self.create_static_node_graphic(900 - 30, 900 - 30, 25)
-        self.create_static_node_graphic(600 - 30, 900 - 30, 25)
-        self.create_static_node_graphic(300 - 30, 900 - 30, 25)
-        self.create_static_node_graphic(30, 900 - 30, 25)
-        self.create_static_node_graphic(30, 600 - 30, 25)
-        self.create_static_node_graphic(30, 300 - 30, 25)
+        self.create_static_node_graphic(PX_OFFSET, PX_OFFSET, 25, "A")
+        self.create_static_node_graphic(THIRD_GRID_PX - PX_OFFSET, PX_OFFSET, 25, "B*")
+        self.create_static_node_graphic(
+            TWO_THIRD_GRID_PX - PX_OFFSET, PX_OFFSET, 25, "C"
+        )
+        self.create_static_node_graphic(GRID_LENGTH_PX - PX_OFFSET, PX_OFFSET, 25, "D")
+        self.create_static_node_graphic(
+            GRID_LENGTH_PX - PX_OFFSET, THIRD_GRID_PX - PX_OFFSET, 25, "E*"
+        )
+        self.create_static_node_graphic(
+            GRID_LENGTH_PX - PX_OFFSET, TWO_THIRD_GRID_PX - PX_OFFSET, 25, "F"
+        )
+        self.create_static_node_graphic(
+            GRID_LENGTH_PX - PX_OFFSET, GRID_LENGTH_PX - PX_OFFSET, 25, "G"
+        )
+        self.create_static_node_graphic(
+            TWO_THIRD_GRID_PX - PX_OFFSET, GRID_LENGTH_PX - PX_OFFSET, 25, "H*"
+        )
+        self.create_static_node_graphic(
+            THIRD_GRID_PX - PX_OFFSET, GRID_LENGTH_PX - PX_OFFSET, 25, "I"
+        )
+        self.create_static_node_graphic(PX_OFFSET, GRID_LENGTH_PX - PX_OFFSET, 25, "J")
+        self.create_static_node_graphic(
+            PX_OFFSET, TWO_THIRD_GRID_PX - PX_OFFSET, 25, "K*"
+        )
+        self.create_static_node_graphic(PX_OFFSET, THIRD_GRID_PX - PX_OFFSET, 25, "L")
 
-    def create_static_node_graphic(self, pos_x, pos_y, size):
+    def create_static_node_graphic(self, pos_x, pos_y, size, letter):
         """
         Create the graphic for the static node.
         """
@@ -162,11 +202,20 @@ class Grid(tk.Canvas):
             pos_y - math.sqrt(3) * size / 2,  # Vertex F
             fill=SECONDARY_TEXT,
         )
+        self.create_text(
+            pos_x, pos_y, text=letter, fill=BACKGROUND, font="Montserrat, 17"
+        )
 
 
 class DataDisplayContainer(tk.Canvas):
     def __init__(self, master):
-        super().__init__(master, bg=CARD, height=900, width=450, highlightthickness=0)
+        super().__init__(
+            master,
+            bg=CARD,
+            height=GRID_LENGTH_PX,
+            width=HALF_GRID_PX,
+            highlightthickness=0,
+        )
         self._master = master
 
 
@@ -174,25 +223,26 @@ class DataDisplay(object):
     def __init__(self, canvas, master=None):
         self.canvas = canvas
         # Create Labels
+        data_label_offset = 220
         self.canvas.create_text(
-            200,
-            30,
-            text="Multilateration Position (m):",
+            data_label_offset,
+            PX_OFFSET,
+            text="Multilat Co-ords (m):",
             font="Montserrat, 12",
             fill="#E2703A",
             anchor="e",
         )
         self.canvas.create_text(
-            200,
+            data_label_offset,
             50,
-            text="Kalman Position (m):",
+            text="Kalman Co-ords (m):",
             font="Montserrat, 12",
             fill="#9C3D54",
             anchor="e",
         )
         for idx in range(0, 12):
             self.canvas.create_text(
-                200,
+                data_label_offset,
                 80 + idx * 20,
                 text="Node {} RSSI (dB):".format(chr(65 + idx)),
                 font="Montserrat, 12",
@@ -201,24 +251,24 @@ class DataDisplay(object):
             )
         for idx in range(0, 12):
             self.canvas.create_text(
-                200,
+                data_label_offset,
                 350 + idx * 20,
-                text="Node {} Distance (m):".format(chr(65 + idx)),
+                text="Node {} Distance (cm):".format(chr(65 + idx)),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
                 anchor="e",
             )
         for idx in range(0, 4):
             self.canvas.create_text(
-                200,
+                data_label_offset,
                 610 + idx * 20,
-                text="Ultra {} Distance (m):".format(idx),
+                text="Ultra {} Distance (cm):".format(idx),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
                 anchor="e",
             )
         self.canvas.create_text(
-            200,
+            data_label_offset,
             710,
             text="Accelerometer (m/s):",
             font="Montserrat, 12",
@@ -226,7 +276,7 @@ class DataDisplay(object):
             anchor="e",
         )
         self.canvas.create_text(
-            200,
+            data_label_offset,
             740,
             text="Gyro (rad):",
             font="Montserrat, 12",
@@ -234,7 +284,7 @@ class DataDisplay(object):
             anchor="e",
         )
         self.canvas.create_text(
-            200,
+            data_label_offset,
             770,
             text="Magnetometer:",
             font="Montserrat, 12",
@@ -242,7 +292,7 @@ class DataDisplay(object):
             anchor="e",
         )
         self.canvas.create_text(
-            200,
+            data_label_offset,
             800,
             text="Timestamp:",
             font="Montserrat, 12",
@@ -250,7 +300,7 @@ class DataDisplay(object):
             anchor="e",
         )
         self.canvas.create_text(
-            200,
+            data_label_offset,
             830,
             text="Delay Time (ms):",
             font="Montserrat, 12",
@@ -260,7 +310,12 @@ class DataDisplay(object):
 
         # Create values
         self.multilat_pos = self.canvas.create_text(
-            250, 30, text="NO DATA", font="Montserrat, 12", fill="#E2703A", anchor="w"
+            250,
+            PX_OFFSET,
+            text="NO DATA",
+            font="Montserrat, 12",
+            fill="#E2703A",
+            anchor="w",
         )
         self.kalman_pos = self.canvas.create_text(
             250, 50, text="NO DATA", font="Montserrat, 12", fill="#9C3D54", anchor="w"
@@ -355,7 +410,7 @@ class DataDisplay(object):
             self.canvas.itemconfig(self.rssi[idx], text=f"{data.node_rssi[idx]}")
         for idx in range(0, 12):
             self.canvas.itemconfig(
-                self.distance[idx], text=f"{data.node_distance[idx]}"
+                self.distance[idx], text=f"{math.ceil(data.node_distance[idx])}"
             )
         for idx in range(0, 4):
             self.canvas.itemconfig(self.ultra[idx], text=f"{data.node_ultra[idx]}")
@@ -385,14 +440,16 @@ class MobileNode(object):
         self.canvas = canvas
         if type == "multilateration":
             self.node_colour = "#E2703A"
+            self.speed = 1.2
         elif type == "kalman":
+            self.speed = 0.2
             self.node_colour = "#9C3D54"
 
         self.graphic = self.canvas.create_oval(
             425, 425, 475, 475, fill=self.node_colour
         )
-        self.text_position = self.canvas.create_text(
-            450, 500, text="(500,500)", fill=PRIMARY_TEXT
+        self.text_coords = self.canvas.create_text(
+            HALF_GRID_PX, 500, text="(500,500)", fill=PRIMARY_TEXT
         )
 
     def redraw_position(self):
@@ -401,23 +458,23 @@ class MobileNode(object):
         """
 
         if self.current_x < self.target_x:
-            self.current_x += 1
-            self.canvas.move(self.graphic, 1, 0)
-            self.canvas.move(self.text_position, 1, 0)
+            self.current_x += self.speed
+            self.canvas.move(self.graphic, self.speed, 0)
+            self.canvas.move(self.text_coords, self.speed, 0)
         elif self.current_x > self.target_x:
-            self.current_x -= 1
-            self.canvas.move(self.graphic, -1, 0)
-            self.canvas.move(self.text_position, -1, 0)
+            self.current_x -= self.speed
+            self.canvas.move(self.graphic, -self.speed, 0)
+            self.canvas.move(self.text_coords, -self.speed, 0)
         if self.current_y < self.target_y:
-            self.current_y += 1
-            self.canvas.move(self.graphic, 0, 1)
-            self.canvas.move(self.text_position, 0, 1)
+            self.current_y += self.speed
+            self.canvas.move(self.graphic, 0, self.speed)
+            self.canvas.move(self.text_coords, 0, self.speed)
         elif self.current_y > self.target_y:
-            self.current_y -= 1
-            self.canvas.move(self.graphic, 0, -1)
-            self.canvas.move(self.text_position, 0, -1)
+            self.current_y -= self.speed
+            self.canvas.move(self.graphic, 0, -self.speed)
+            self.canvas.move(self.text_coords, 0, -self.speed)
         self.canvas.itemconfig(
-            self.text_position,
+            self.text_coords,
             text="({},{})".format(
                 math.ceil(self.current_x * PX_TO_CM) / 100.0,  # Convert to m
                 math.ceil(self.current_y * PX_TO_CM) / 100.0,
