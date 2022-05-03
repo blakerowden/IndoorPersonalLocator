@@ -314,7 +314,7 @@ class MobileNodeTrackingData:
         radius_array = np.array(fixed_node_distance)
 
         BMat = np.array(
-            [
+            [   
                 (
                     radius_array[i] ** 2
                     - radius_array[num_live_nodes - 1] ** 2
@@ -326,7 +326,6 @@ class MobileNodeTrackingData:
                 for i in range(num_live_nodes)
             ]
         )
-
         AMat = np.array(
             [
                 (
@@ -337,11 +336,17 @@ class MobileNodeTrackingData:
             ]
         )
 
+        print()
+
+
         # Check case where an array is empty
         if len(AMat) == 0 or len(BMat) == 0:
             return
 
         FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
+
+        print(BMat)
+        print(AMat)
 
         self.multilat_pos = FinalProd.tolist()
 
@@ -434,7 +439,7 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
-            live_data.random_RSSI(0.5,0.5)
+            live_data.random_RSSI(2.5,2.5)
     
         live_data.rssi_to_distance()
         live_data.multilateration()
