@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
+
 #include "ble_base.h"
 
 #include <bluetooth/bluetooth.h>
@@ -25,8 +26,8 @@
 #include <zephyr.h>
 #include <zephyr/types.h>
 
-#include "log_driver.h"
 #include "led_driver.h"
+#include "log_driver.h"
 
 static void start_scan(void);
 
@@ -64,7 +65,7 @@ static struct bt_uuid_128 imu_mag_uuid =
 
 // RSSI RX BUFFER
 int rx_rssi[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                     0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 // ULTRA RX BUFFER
 int rx_ultra[] = {0x00, 0x00, 0x00, 0x00};
 // IMT Data Array
@@ -367,7 +368,6 @@ void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
 
     while (1) {
         if (ble_connected) {
-            
             timeStamp = k_cyc_to_ms_floor64(k_cycle_get_32());
             // Read Node RSSI data from mobile
             bt_gatt_read(default_conn, &read_params_rssi);
@@ -379,7 +379,7 @@ void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
             bt_gatt_read(default_conn, &read_param_accel);
             bt_gatt_read(default_conn, &read_param_gyro);
             bt_gatt_read(default_conn, &read_param_mag);
-            led0_toggle();        
+            led0_toggle();
             printk(
                 "{ "
                 "\"Ultrasonic-1\": %d, "
@@ -424,11 +424,9 @@ void thread_ble_terminal_print(void *p1, void *p2, void *p3) {
                 rx_rssi[5], rx_rssi[6], rx_rssi[7], rx_rssi[8], rx_rssi[9],
                 rx_rssi[10], rx_rssi[11],
                 (int)k_cyc_to_ms_floor64(k_cycle_get_32()));
-                
         }
 
         k_usleep(200);
-        
     }
 }
 
@@ -443,15 +441,20 @@ void thread_ble_led(void *p1, void *p2, void *p3) {
     init_leds();
 
     while (1) {
-
         if (ble_connected) {
-            if (red_led_is_on) { led1_off(); }
+            if (red_led_is_on) {
+                led1_off();
+            }
             red_led_is_on = false;
-            if (!green_led_is_on) { led2_on(); }
+            if (!green_led_is_on) {
+                led2_on();
+            }
             green_led_is_on = true;
             k_msleep(BLE_CONN_SLEEP_MS);
         } else {
-            if (green_led_is_on) { led2_off(); }
+            if (green_led_is_on) {
+                led2_off();
+            }
             green_led_is_on = false;
             red_led_is_on ? led1_off() : led1_on();
             k_msleep(BLE_DISC_SLEEP_MS);
