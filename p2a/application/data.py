@@ -83,18 +83,18 @@ class MobileNodeTrackingData:
         self.currentTestpoint = 0
         self.testxy = [0, 0]
         self.node_transmit_power = [
-            -48.16766467,
-            -46.46307385,
-            -52.40718563,
-            -55.14570858,
-            -55.77844311,
-            -58.72055888,
-            -62.70259481,
-            -73.94211577,
-            -65.09381238,
-            -54.42714571,
-            -58.44710579,
-            -66.71057884,
+            -35.17,
+            -38.68,
+            -40.50,
+            -38.04,
+            -35.84,
+            -37.12,
+            -42.88,
+            -38.49,
+            -37.12,
+            -43.37,
+            -39.25,
+            -36.47,
         ]
         self.multilat_pos = (GRID_HALF, GRID_HALF)
         self.kalman_pos = (GRID_HALF, GRID_HALF)
@@ -215,18 +215,20 @@ class MobileNodeTrackingData:
                     print("wrote: " + str(self.currentTestpoint))
 
     def random_RSSI(self, x, y):
-        fileNum = (int)((x / 0.5) * (y / 0.5) - 1)
-        fileName = self.fileList[fileNum]
-        print(fileName)
-        rowNum = random.randint(1, 200)
-        with open(fileName) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=",")
-            lineCount = 0
-            for row in csv_reader:
-                if lineCount == rowNum:
-                    for i in range(12):
-                        self.node_rssi[i] = (int)(row[i + 2])
-                lineCount += 1
+
+        for i in range(49):
+            fileName = self.fileList[i]
+            rowNum = random.randint(1, 200)
+            
+            with open(fileName) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=",")
+                lineCount = 0
+                for row in csv_reader:
+                    if lineCount == rowNum and row[0] == str(x) and row[1] == str(y):
+                        print(fileName)
+                        for i in range(12):
+                            self.node_rssi[i] = (int)(row[i + 2])
+                    lineCount += 1
 
     def rssi_to_distance(self):
         """
@@ -327,7 +329,7 @@ class MobileNodeTrackingData:
         print(y_fixed_array)
 
         BMat = np.array(
-            [
+            [   
                 (
                     radius_array[i] ** 2
                     - radius_array[num_live_nodes - 1] ** 2
@@ -339,7 +341,6 @@ class MobileNodeTrackingData:
                 for i in range(num_live_nodes)
             ]
         )
-
         AMat = np.array(
             [
                 (
@@ -350,11 +351,17 @@ class MobileNodeTrackingData:
             ]
         )
 
+        print()
+
+
         # Check case where an array is empty
         if len(AMat) == 0 or len(BMat) == 0:
             return
 
         FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
+
+        print(BMat)
+        print(AMat)
 
         self.multilat_pos = FinalProd.tolist()
 
@@ -447,7 +454,7 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
-            live_data.random_RSSI(3.5, 3.5)
+            live_data.random_RSSI(0.5, 3.5)
 
         live_data.rssi_to_distance()
         live_data.multilateration()
