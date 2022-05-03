@@ -21,8 +21,8 @@ import random
 from pathlib import Path
 
 # Data Collection Trigger =====================================================
-DATA_COLLECTION = True
-TESTING = False
+DATA_COLLECTION = False
+TESTING = True
 
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
@@ -217,7 +217,7 @@ class MobileNodeTrackingData:
     def random_RSSI(self, x, y):
         fileNum = (int)((x / 0.5) * (y / 0.5) - 1)
         fileName = self.fileList[fileNum]
-
+        print(fileName)
         rowNum = random.randint(1, 200)
         with open(fileName) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
@@ -239,7 +239,6 @@ class MobileNodeTrackingData:
                 self.node_distance[idx] = (
                     10 ** ((self.node_transmit_power[idx] - rssi) / (10 * N))
                 ) * 100
-                print(self.node_distance[idx])
             else:
                 self.node_distance[idx] = 0
 
@@ -310,11 +309,22 @@ class MobileNodeTrackingData:
                 fixed_node_y.append(self.node_locations[idx][1])
                 fixed_node_distance.append(dist)
 
-        num_live_nodes = len(fixed_node_distance)
+        # Apply a weighting to the RSSI data
+        distance, x_pos, y_pos = zip(
+            *sorted(zip(fixed_node_distance, fixed_node_x, fixed_node_y))
+        )
+        distance = distance[: len(distance) - 9]
+        x_pos = x_pos[: len(y_pos) - 9]
+        y_pos = y_pos[: len(y_pos) - 9]
 
-        x_fixed_array = np.array(fixed_node_x)
-        y_fixed_array = np.array(fixed_node_y)
-        radius_array = np.array(fixed_node_distance)
+        num_live_nodes = len(distance)
+
+        x_fixed_array = np.array(x_pos)
+        y_fixed_array = np.array(y_pos)
+        radius_array = np.array(distance)
+        print(radius_array)
+        print(x_fixed_array)
+        print(y_fixed_array)
 
         BMat = np.array(
             [
@@ -437,7 +447,7 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
-            live_data.random_RSSI(0.5, 0.5)
+            live_data.random_RSSI(3.5, 3.5)
 
         live_data.rssi_to_distance()
         live_data.multilateration()

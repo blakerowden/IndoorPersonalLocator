@@ -29,7 +29,7 @@ def main():
     comms_active = True
     data_active = True
     mqtt_active = True
-    gui_active = False
+    gui_active = True
 
     thread_serial = None
     thread_data = None
