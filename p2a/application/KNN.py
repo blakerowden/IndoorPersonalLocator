@@ -92,6 +92,6 @@ def predict_pos(rssi_list):
 
     knn.fit(X_train, Y_train)
     predictions = knn.predict([rssi_list])
-    print(predictions)
+    return predictions
 
 
