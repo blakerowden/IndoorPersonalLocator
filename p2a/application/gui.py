@@ -424,7 +424,7 @@ class DataDisplay(object):
             self.mag, text=f"({data.mag[0]}, {data.mag[1]}, {data.mag[2]})"
         )
         self.canvas.itemconfig(self.time, text=f"{data.timestamp}")
-        self.canvas.itemconfig(self.delay, text=f"{data.delay}")
+        self.canvas.itemconfig(self.delay, text=f"{data.rssi_delay}")
 
 
 class MobileNode(object):

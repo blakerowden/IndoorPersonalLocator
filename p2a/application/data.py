@@ -1,16 +1,15 @@
 """
 Prac 2a - Desktop Application
-.py file 3/6
+.py file 3/6 - Data Processing
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana can Teijlingen"
+__author__ = "B.Rowden and B.O'Neill"
 
 import csv
 import math
 from global_ import *
-from dataclasses import dataclass
 import numpy as np
 from datetime import datetime
 import time
@@ -20,11 +19,17 @@ import logging
 import random
 from pathlib import Path
 
-# Data Collection Trigger =====================================================
-DATA_COLLECTION = False
-TESTING = True
+# Data Management Defines =====================================================
+TEST_POINT_X = 0.5
+TEST_POINT_Y = 0.5
+DATA_NODE_NAME = "4011A"
+DATA_COLLECTION_ACTIVE = False
 
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
+TOTAL_TEST_POINTS = 51
+ONE_METER_POWER_MODE = True  # True = 1 Node/1m, False = All Nodes/ML Readings
+
+DATA_SIMULATE = True  # Feeds simulation data to the data processing thread
 
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
@@ -36,7 +41,6 @@ GRID_TWO_THIRD = GRID_THIRD * 2
 # Classes =====================================================================
 
 
-@dataclass
 class MobileNodeTrackingData:
     """
     Class to hold the tracking data.
@@ -44,11 +48,10 @@ class MobileNodeTrackingData:
 
     def __init__(self):
         self.node_ultra = [0] * 4
-        self.accel = [0] * 3
+        self.accel = [5] * 3
         self.gyro = [0] * 3
         self.mag = [0] * 3
-        self.delay = 0
-        self.timestamp = 0
+
         self.node_rssi = [0] * 12
         self.node_distance = [
             0,
@@ -79,10 +82,6 @@ class MobileNodeTrackingData:
             (0, GRID_THIRD),
         ]
 
-        self.fileList = [DATAPATH + str(i) + ".csv" for i in range(49)]
-        self.currentFile = 0
-        self.currentTestpoint = 0
-        self.testxy = [0, 0]
         self.node_transmit_power = [
             -35.17,
             -38.68,
@@ -97,25 +96,53 @@ class MobileNodeTrackingData:
             -39.25,
             -36.47,
         ]
+
+        self.timestamp = 0
+        self.last_timestamp = 0
+        self.rssi_delay = 0
+        self.packet_timelog = "0"
+        self.epoch = 0
+        self.packet_time_delta = 0
+
+        # Calculated positions
         self.multilat_pos = (GRID_HALF, GRID_HALF)
         self.kalman_pos = (GRID_HALF, GRID_HALF)
-        self.rssi_error = 0
-        self.us_error = 0
-        self.current_time = ""
+        self.ultrasonic_pos = (GRID_HALF, GRID_HALF)
 
-    def write_rssi_csv(self, is_meter_meas):
+        self.rssi_error = 500  # RSSI error in cm
+        self.us_error = 5  # Ultrasonic error in cm
+
+        self.training_data = [DATAPATH + str(i) + ".csv" for i in range(49)]
+        self.training_data_selected = 0
+        self.data_points_collected = 0
+
+        self.initial_state_mean = np.array(
+            [
+                self.multilat_pos[0] + self.rssi_error,
+                self.multilat_pos[1] + self.rssi_error,
+                self.accel[0],
+                self.accel[1],
+            ]
+        )
+        self.initial_state_covariance = self.rssi_error * np.eye(
+            len(self.initial_state_mean)
+        )
+        self.k_filter = Kalman(
+            self.initial_state_mean, self.initial_state_covariance, self.rssi_error
+        )
+
+    def write_rssi_csv(self):
         """
         Writes the rssi data to a csv file.
         :param file_name: The name of the file to write to.
         :return: None
         """
-        if is_meter_meas == 1:
+        if ONE_METER_POWER_MODE:
             # Change nodeName for ML:
-            nodeName = "4011L"
-            rowDictionary = {"Node": nodeName, "RSSI": 11}
-            fieldnames = ["Node", "RSSI"]
-            file_name = "datapoints" + nodeName + ".csv"
-            nodeDictionary = {
+
+            csv_field_names = ["Node", "RSSI"]
+            csv_file_name = "datapoints" + DATA_NODE_NAME + ".csv"
+            node_dictionary = {
                 "4011A": 0,
                 "4011B": 1,
                 "4011C": 2,
@@ -129,43 +156,42 @@ class MobileNodeTrackingData:
                 "4011K": 10,
                 "4011L": 11,
             }
-            if self.currentTestpoint == 51:
+            csv_row = {"Node": DATA_NODE_NAME, "RSSI": node_dictionary[DATA_NODE_NAME]}
+            if self.data_points_collected == TOTAL_TEST_POINTS:
                 return
             else:
-                self.currentTestpoint += 1
+                self.data_points_collected += 1
 
-            if self.currentTestpoint == 1:
-                with open(file_name, "w") as file:
-                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+            if self.data_points_collected == 1:
+                with open(csv_file_name, "w") as file:
+                    writer = csv.DictWriter(file, fieldnames=csv_field_names)
                     writer.writeheader()
-                    rowDictionary[fieldnames[1]] = self.node_rssi[
-                        nodeDictionary[nodeName]
+                    csv_row[csv_field_names[1]] = self.node_rssi[
+                        node_dictionary[DATA_NODE_NAME]
                     ]
-                    writer.writerow(rowDictionary)
+                    writer.writerow(csv_row)
                     print("wrote")
             else:
-                with open(file_name, "a") as file:
-                    writer = csv.DictWriter(file, fieldnames=fieldnames)
-                    rowDictionary[fieldnames[1]] = self.node_rssi[
-                        nodeDictionary[nodeName]
+                with open(csv_file_name, "a") as file:
+                    writer = csv.DictWriter(file, fieldnames=csv_field_names)
+                    csv_row[csv_field_names[1]] = self.node_rssi[
+                        node_dictionary[DATA_NODE_NAME]
                     ]
-                    writer.writerow(rowDictionary)
-                    print("wrote: " + str(self.currentTestpoint))
+                    writer.writerow(csv_row)
+                    print("wrote: " + str(self.data_points_collected))
 
         else:
-            # Change testxy for ML:
-            self.testxy = [1, 3.5]
-            pos_x = self.testxy[0]
-            pos_y = self.testxy[1]
-            self.currentFile = 48
-            if self.currentTestpoint == 201:
+            pos_x = TEST_POINT_X
+            pos_y = TEST_POINT_Y
+            self.training_data_selected = 48
+            if self.data_points_collected == 201:
                 return
             else:
-                self.currentTestpoint += 1
+                self.data_points_collected += 1
 
-            file_name = self.fileList[self.currentFile]
+            csv_file_name = self.training_data[self.training_data_selected]
 
-            rowDictionary = {
+            csv_row = {
                 "Pos_X": pos_x,
                 "Pos_Y": pos_y,
                 "Node_A": 0,
@@ -182,7 +208,7 @@ class MobileNodeTrackingData:
                 "Node_L": 0,
             }
 
-            fieldnames = [
+            csv_field_names = [
                 "Pos_X",
                 "Pos_Y",
                 "Node_A",
@@ -199,26 +225,26 @@ class MobileNodeTrackingData:
                 "Node_L",
             ]
 
-            if self.currentTestpoint == 1:
-                with open(file_name, "w") as file:
-                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+            if self.data_points_collected == 1:
+                with open(csv_file_name, "w") as file:
+                    writer = csv.DictWriter(file, fieldnames=csv_field_names)
                     writer.writeheader()
                     for i in range(12):
-                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
-                    writer.writerow(rowDictionary)
+                        csv_row[csv_field_names[i + 2]] = self.node_rssi[i]
+                    writer.writerow(csv_row)
                     print("wrote")
             else:
-                with open(file_name, "a") as file:
-                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                with open(csv_file_name, "a") as file:
+                    writer = csv.DictWriter(file, fieldnames=csv_field_names)
                     for i in range(12):
-                        rowDictionary[fieldnames[i + 2]] = self.node_rssi[i]
-                    writer.writerow(rowDictionary)
-                    print("wrote: " + str(self.currentTestpoint))
+                        csv_row[csv_field_names[i + 2]] = self.node_rssi[i]
+                    writer.writerow(csv_row)
+                    print("wrote: " + str(self.data_points_collected))
 
     def random_RSSI(self, x, y):
 
         for i in range(49):
-            fileName = self.fileList[i]
+            fileName = self.training_data[i]
             rowNum = random.randint(1, 200)
 
             with open(fileName) as csv_file:
@@ -226,7 +252,6 @@ class MobileNodeTrackingData:
                 lineCount = 0
                 for row in csv_reader:
                     if lineCount == rowNum and row[0] == str(x) and row[1] == str(y):
-                        print(fileName)
                         for i in range(12):
                             self.node_rssi[i] = (int)(row[i + 2])
                     lineCount += 1
@@ -264,8 +289,8 @@ class MobileNodeTrackingData:
         self.mag[0] = raw_data["Mag-X"]
         self.mag[1] = raw_data["Mag-Y"]
         self.mag[2] = raw_data["Mag-Z"]
-        self.timestamp = raw_data["Time-Stamp"]
-        self.delay = raw_data["Delay-Time"]
+        self.timestamp = raw_data["Time-Stamp"] - self.epoch
+        self.rssi_delay = raw_data["Delay-Time"]
         self.node_rssi[0] = raw_data["4011-A"]
         self.node_rssi[1] = raw_data["4011-B"]
         self.node_rssi[2] = raw_data["4011-C"]
@@ -279,23 +304,32 @@ class MobileNodeTrackingData:
         self.node_rssi[10] = raw_data["4011-K"]
         self.node_rssi[11] = raw_data["4011-L"]
 
-    def print_data(self):
+    def __str__(self):
         """
         Prints the recieved raw data to the console.
         :return: None
         """
-        print(f"======== Data Packet Recieved {self.current_time} ========")
-        print("Ultrasonic: ", self.node_ultra)
-        print("Accelerometer: ", self.accel)
-        print("Gyro: ", self.gyro)
-        print("Magnetometer: ", self.mag)
-        print("Time: ", self.timestamp)
-        print("Delay: ", self.delay)
-        print("Node RSSI: ", self.node_rssi)
-        print("Node Distance: ", self.node_distance)
-        print("======================================================\n")
+        print_string = ""
+        print_string += (
+            f"======== Raw Data Recieved @ {self.packet_timelog} ======== \n"
+        )
+        print_string += f"Ultrasonic: {self.node_ultra} \n"
+        print_string += f"Accelerometer: {self.accel} \n"
+        print_string += f"Gyro: {self.gyro} \n"
+        print_string += f"Magnetometer: {self.mag} \n"
+        print_string += f"Time: {self.timestamp/100.00} s\n"
+        print_string += f"Packet Delay: {self.packet_time_delta} ms \n"
+        print_string += f"RSSI Delay: {self.rssi_delay} ms \n"
+        print_string += f"Node RSSI: {self.node_rssi} \n \n"
+        print_string += f"================= Calculated Data ===================== \n"
+        print_string += f"Node Distance: {self.node_distance} \n"
+        print_string += f""
+        print_string += f"Multilateration Co-ord: {self.multilat_pos} \n"
+        print_string += f"Kalman Co-ord: {self.kalman_pos} \n"
+        print_string += f"======================================================== \n"
+        return print_string
 
-    def multilateration(self):
+    def multilateration(self) -> None:
         """
         Use the least squares equation to estimate location of the object
         :return tuple: position (x,y)
@@ -305,7 +339,7 @@ class MobileNodeTrackingData:
         fixed_node_y = []
         fixed_node_distance = []
 
-        # Remove nodes that have not provided an RSSI
+        # Remove nodes that have not provided an RSSI due to error
         for idx, dist in enumerate(self.node_distance):
             if dist != 0:
                 fixed_node_x.append(self.node_locations[idx][0])
@@ -326,7 +360,12 @@ class MobileNodeTrackingData:
         y_fixed_array = np.array(y_pos)
         radius_array = np.array(distance)
 
-        BMat = np.array(
+        # Check case where an array is empty
+        if num_live_nodes == 0:
+            return
+
+        # Calculate the least squares equation
+        mat_b = np.array(
             [
                 (
                     radius_array[i] ** 2
@@ -339,7 +378,7 @@ class MobileNodeTrackingData:
                 for i in range(num_live_nodes)
             ]
         )
-        AMat = np.array(
+        mat_a = np.array(
             [
                 (
                     (2 * (x_fixed_array[num_live_nodes - 1] - x_fixed_array[i])),
@@ -349,13 +388,9 @@ class MobileNodeTrackingData:
             ]
         )
 
-        # Check case where an array is empty
-        if len(AMat) == 0 or len(BMat) == 0:
-            return
+        lst_sq_estimate = np.linalg.lstsq(mat_a, mat_b, rcond=-1)[0]
 
-        FinalProd = np.linalg.lstsq(AMat, BMat, rcond=-1)[0]
-
-        self.multilat_pos = FinalProd.tolist()
+        self.multilat_pos = lst_sq_estimate.tolist()
         return_pos_x = math.ceil(self.multilat_pos[0])
         return_pos_y = math.ceil(self.multilat_pos[1])
 
@@ -372,103 +407,122 @@ class MobileNodeTrackingData:
         self.multilat_pos[0] = math.ceil(self.multilat_pos[0])
         self.multilat_pos[1] = math.ceil(self.multilat_pos[1])
 
+    def kalman_filter(self) -> None:
+        """
+        Apply the Kalman filter to the data
+        :return: None
+        """
+        observation = np.array([self.multilat_pos[0], self.multilat_pos[1]])
+        self.k_filter.predict()
+        self.k_filter.update(observation)
+        self.kalman_pos = self.k_filter.get_state()
+
 
 class Kalman:
-    def __init__(self, x_init, cov_init, meas_err, proc_err):
-        self.ndim = len(x_init)
-        self.A = np.array([(1, 0, 1, 0), (0, 1, 0, 1), (0, 0, 1, 0), (0, 0, 0, 1)])
-        self.H = np.array([(1, 0, 0, 0), (0, 1, 0, 0)])
-        self.x_hat = x_init
-        self.cov = cov_init
-        self.Q_k = np.eye(self.ndim) * proc_err
-        self.R = np.eye(len(self.H)) * meas_err
+    def __init__(self, x_0, P_0, meas_err):
+        # Constants
+        self.process_noise = 0.01
+        self.ndim = len(x_0)
 
-    def update(self, obs):
+        # Model parameters
+        self.A = np.array(
+            [(1, 0, 1, 0), (0, 1, 0, 1), (0, 0, 1, 0), (0, 0, 0, 1)]
+        )  # State-transition model
+        self.H = np.array([(1, 0, 0, 0), (0, 1, 0, 0)])  # Observation model
+        self.Q = (
+            np.eye(self.ndim) * self.process_noise
+        )  # Covariance of the process noise
+        self.R = np.eye(len(self.H)) * meas_err  # Covariance of the observation noise
 
-        # Make prediction
-        self.x_hat_est = np.dot(self.A, self.x_hat)
-        self.cov_est = np.dot(self.A, np.dot(self.cov, np.transpose(self.A))) + self.Q_k
+        # Initial state
+        self._x = np.array(x_0)
+        self._P = np.array(P_0)
 
-        # Update estimate
-        self.error_x = obs - np.dot(self.H, self.x_hat_est)
-        self.error_cov = (
-            np.dot(self.H, np.dot(self.cov_est, np.transpose(self.H))) + self.R
-        )
-        self.K = np.dot(
-            np.dot(self.cov_est, np.transpose(self.H)), np.linalg.inv(self.error_cov)
-        )
-        self.x_hat = self.x_hat_est + np.dot(self.K, self.error_x)
-        if self.ndim > 1:
-            self.cov = np.dot(
-                (np.eye(self.ndim) - np.dot(self.K, self.H)), self.cov_est
-            )
-        else:
-            self.cov = (1 - self.K) * self.cov_est
+    def predict(self):
+        self._x = self.A @ self._x  # Predicted (a priori) state estimate
+        self._P = (
+            self.A @ self._P @ self.A.transpose() + self.Q
+        )  # Predicted (a priori) estimate covariance
+
+    def update(self, observation):
+
+        self.innovation_covariance = (
+            self.H @ self._P @ self.H.transpose() + self.R
+        )  # Innovation (or pre-fit residual) covariance
+        self.observation_noise = (
+            observation - self.H @ self._x
+        )  # Innovation or measurement pre-fit residual
+        self.kalman_gain = (
+            self._P @ self.H.transpose() @ np.linalg.inv(self.innovation_covariance)
+        )  # Optimal Kalman gain
+
+        self._x = (
+            self._x + self.kalman_gain @ self.observation_noise
+        )  # Updated (a posteriori) state estimate
+        self._P = (
+            self._P
+            - self.kalman_gain
+            @ self.innovation_covariance
+            @ self.kalman_gain.transpose()
+        )  # Updated (a posteriori) estimate covariance
+
+    def get_state(self):
+        return self._x.tolist()
 
 
-# Entry Point =================================================================
-
-
-def data_processing_thread(in_q, out_q, pub_q, stop):
+def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
     """
     Process the raw JSON data.
     """
     live_data = MobileNodeTrackingData()
-    ndim = 4
-    ndim_obs = 2
-    xcoord = GRID_HALF
-    ycoord = GRID_HALF
-    vx = 0.5  # m.s
-    vy = 0.5  # m/s
-    dt = 1.0  # sec
-    meas_error = 10.0  # m
-
-    # generate ground truth
-    x_true = np.array([xcoord, ycoord, vx, vy])
-    obs_err = np.array([meas_error, meas_error])
-    obs = x_true[0:1] + np.random.randn(ndim_obs) * obs_err
-
-    # init filter
-    proc_error = 0.01
-    init_error = 150.0
-    # introduced initial xcoord error of 2m
-    x_init = np.array([xcoord + init_error, ycoord + init_error, vx, vy])
-    cov_init = init_error * np.eye(ndim)
-    x_hat = np.zeros((ndim))
-    k_filter = Kalman(x_init, cov_init, meas_error, proc_error)
+    first_packet_received = False
 
     while True:
 
         # Get the next message from the queue
         try:
-            data_raw = in_q.get(block=False)
+            data_raw = raw_in_q.get(block=False)
         except Empty:
             if stop():
                 logging.info("Stoping Data Thread")
                 break
             time.sleep(SHORT_SLEEP)
             continue
+
         now = datetime.now()  # Timestamp incomming data
-        live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
-        if TESTING:
+
+        if not first_packet_received:
+            first_packet_received = True
+            logging.info("First packet received")
+            live_data.epoch = live_data.timestamp
+            live_data.timestamp = 0
+
+        live_data.packet_time_delta = live_data.timestamp - live_data.last_timestamp
+        live_data.last_timestamp = live_data.timestamp
+        live_data.packet_timelog = now.strftime("%H:%M:%S.%f")
+
+        if DATA_SIMULATE:
             live_data.random_RSSI(2, 2)
 
         live_data.rssi_to_distance()
         live_data.multilateration()
-        live_data.print_data()
-        if DATA_COLLECTION:
-            live_data.write_rssi_csv(1)
+        live_data.kalman_filter()
 
-        # Process the data through the Kalman Filter
-        k_filter.update([live_data.multilat_pos[0], live_data.multilat_pos[1]])
-        live_data.kalman_pos = k_filter.x_hat
+        if DATA_COLLECTION_ACTIVE:
+            live_data.write_rssi_csv()
 
         # Send the estimated position to the GUI
-        out_q.put(live_data)
+        gui_out_q.put(live_data)
+
+        # Send the estimated position to the MQTT server
         pub_data = MQTT_Packer(live_data)
-        pub_q.queue.clear()
-        pub_q.put(pub_data)
+        mqtt_pub_q.queue.clear()
+        mqtt_pub_q.put(pub_data)
+
+        # Print the data to the console
+        print(live_data)
+
         if stop():
             logging.info("Stoping Data Thread")
             break
