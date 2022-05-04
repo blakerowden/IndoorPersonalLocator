@@ -454,7 +454,7 @@ def data_processing_thread(in_q, out_q, pub_q, stop):
         live_data.current_time = now.strftime("%H:%M:%S.%f")
         live_data.populate_data(data_raw)
         if TESTING:
-            live_data.random_RSSI(0.5, 3.5)
+            live_data.random_RSSI(3.5, 0.5)
 
         live_data.rssi_to_distance()
         live_data.multilateration()

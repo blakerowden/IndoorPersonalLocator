@@ -9,6 +9,7 @@
         "zephyr.h": "c",
         "log_driver.h": "c",
         "log.h": "c",
-        "sensor.h": "c"
+        "sensor.h": "c",
+        "hal_imu.h": "c"
     }
 }
