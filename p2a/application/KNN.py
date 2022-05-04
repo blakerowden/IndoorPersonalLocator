@@ -80,12 +80,6 @@ def predict_pos(rssi_list):
         if len(row) > 1:
             class_list.append(str(row[0]) + ',' + str(row[1]))
 
-    print(class_list)
-
-    print(len(class_list))
-    print(len(loc_list))
-    print(len(rssi_list))
-
     X_train, X_test, Y_train, Y_test = train_test_split(rssi_list, class_list, test_size = .3, random_state = 4)
 
     knn = KNeighborsClassifier(n_neighbors = 10)
