@@ -5,7 +5,7 @@ CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "B.Rowden and B.O'Neill"
+__author__ = "B.Rowden, B.O'Neill and Liana van Teijlingen"
 
 import csv
 import math
@@ -21,8 +21,8 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 267  # position in m 134 267
-TEST_POINT_Y = 267  # position in m
+TEST_POINT_X = 2  # position in m 134 267
+TEST_POINT_Y = 2  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = True
@@ -31,7 +31,7 @@ DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 50
 ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
 
-DATA_SIMULATE = False  # Feeds simulation data to the data processing thread
+DATA_SIMULATE = True  # Feeds simulation data to the data processing thread
 
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
@@ -347,23 +347,23 @@ class MobileNodeTrackingData:
                 fixed_node_y.append(self.node_locations[idx][1])
                 fixed_node_distance.append(dist)
 
+        # Check case where an array is empty
+        if len(fixed_node_distance) < 6:
+            return
+
         # Apply a weighting to the RSSI data
         distance, x_pos, y_pos = zip(
             *sorted(zip(fixed_node_distance, fixed_node_x, fixed_node_y))
         )
-        distance = distance[: len(distance) - 9]
-        x_pos = x_pos[: len(y_pos) - 9]
-        y_pos = y_pos[: len(y_pos) - 9]
+        distance = distance[:3]
+        x_pos = x_pos[:3]
+        y_pos = y_pos[:3]
 
         num_live_nodes = len(distance)
 
         x_fixed_array = np.array(x_pos)
         y_fixed_array = np.array(y_pos)
         radius_array = np.array(distance)
-
-        # Check case where an array is empty
-        if num_live_nodes == 0:
-            return
 
         # Calculate the least squares equation
         mat_b = np.array(
@@ -427,28 +427,36 @@ class MobileNodeTrackingData:
         position_x = 0
         position_y = 0
 
-        if self.node_ultra[0] >= 20 and self.node_ultra[0] <= 350:
+        if self.node_ultra[0] <= 350 and self.node_ultra[0] != 0:
             position_estimates.append(
-                self.node_ultra_locations[0][0],
-                self.node_ultra_locations[0][1] + self.node_ultra[0],
+                (
+                    self.node_ultra_locations[0][0],
+                    self.node_ultra_locations[0][1] + self.node_ultra[0],
+                )
             )
 
-        if self.node_ultra[1] >= 20 and self.node_ultra[1] <= 350:
+        if self.node_ultra[1] <= 350 and self.node_ultra[1] != 0:
             position_estimates.append(
-                self.node_ultra_locations[1][0] - self.node_ultra[1],
-                self.node_ultra_locations[1][1],
+                (
+                    self.node_ultra_locations[1][0] - self.node_ultra[1],
+                    self.node_ultra_locations[1][1],
+                )
             )
 
-        if self.node_ultra[2] >= 20 and self.node_ultra[2] <= 350:
+        if self.node_ultra[2] <= 350 and self.node_ultra[2] != 0:
             position_estimates.append(
-                self.node_ultra_locations[2][0],
-                self.node_ultra_locations[2][1] - self.node_ultra[1],
+                (
+                    self.node_ultra_locations[2][0],
+                    self.node_ultra_locations[2][1] - self.node_ultra[2],
+                )
             )
 
-        if self.node_ultra[3] >= 20 and self.node_ultra[3] <= 350:
+        if self.node_ultra[3] <= 350 and self.node_ultra[3] != 0:
             position_estimates.append(
-                self.node_ultra_locations[3][0] + self.node_ultra[1],
-                self.node_ultra_locations[3][1],
+                (
+                    self.node_ultra_locations[3][0] + self.node_ultra[3],
+                    self.node_ultra_locations[3][1],
+                )
             )
 
         if len(position_estimates) == 0:
@@ -463,6 +471,7 @@ class MobileNodeTrackingData:
         position_y = position_y / len(position_estimates)
 
         self.ultrasonic_pos = (position_x, position_y)
+        print(self.ultrasonic_pos)
 
     def sensor_fusion(self) -> None:
         """
@@ -473,6 +482,7 @@ class MobileNodeTrackingData:
         y_position = 0
 
         p_weighting = 0.9  # Weighting of the position estimate for US
+        self.rssi_to_distance()
         self.rssi_multilateration()
         self.kalman_filter()
         self.ultrasonic_position()
@@ -483,11 +493,17 @@ class MobileNodeTrackingData:
             y_position += self.ultrasonic_pos[1] * p_weighting
 
         if self.k_multilat_pos[0] != 0:
-            x_position += self.k_multilat_pos[0] * (1 - p_weighting)
+            if self.ultrasonic_pos[0] == 0:
+                x_position += self.k_multilat_pos[0]
+            else:
+                x_position += self.k_multilat_pos[0] * (1 - p_weighting)
         if self.k_multilat_pos[1] != 0:
-            y_position += self.k_multilat_pos[1] * (1 - p_weighting)
+            if self.ultrasonic_pos[1] == 0:
+                y_position += self.k_multilat_pos[1]
+            else:
+                y_position += self.k_multilat_pos[1] * (1 - p_weighting)
 
-        self.fusion_pos = (x_position, y_position)
+        self.k_multilat_pos = (x_position, y_position)
 
 
 class MultilateralKalman:
@@ -584,9 +600,7 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         if DATA_SIMULATE:
             live_data.random_RSSI(TEST_POINT_X, TEST_POINT_Y)
 
-        live_data.rssi_to_distance()
-        live_data.rssi_multilateration()
-        live_data.kalman_filter()
+        live_data.sensor_fusion()
 
         if DATA_COLLECTION_ACTIVE:
             live_data.write_rssi_csv()
@@ -599,12 +613,12 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         gui_out_q.put(live_data)
 
         # Send the estimated position to the MQTT server
-        # mqtt_packet = MQTT_Packer(live_data)
-        # mqtt_pub_q.queue.clear()
-        #  mqtt_pub_q.put(mqtt_packet)
+        mqtt_packet = MQTT_Packer(live_data)
+        mqtt_pub_q.queue.clear()
+        mqtt_pub_q.put(mqtt_packet)
 
         # Print the data to the console
-        #   print(live_data)
+        print(live_data)
 
         if stop():
             logging.info("Stoping Data Thread")

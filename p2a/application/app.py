@@ -5,7 +5,7 @@ CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana can Teijlingen"
+__author__ = "Blake Rowden, Boston O'Neill and Liana van Teijlingen"
 
 import time
 from threading import Thread
@@ -28,8 +28,8 @@ def main():
     stop_flag = False
     comms_active = True
     data_active = True
-    mqtt_active = False
-    gui_active = False
+    mqtt_active = True
+    gui_active = True
 
     thread_serial = None
     thread_data = None
