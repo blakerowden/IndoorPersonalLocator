@@ -48,7 +48,7 @@ class MobileNodeTrackingData:
 
     def __init__(self):
         self.node_ultra = [0] * 4
-        self.accel = [5] * 3
+        self.accel = [0] * 3
         self.gyro = [0] * 3
         self.mag = [0] * 3
 
@@ -423,10 +423,17 @@ class Kalman:
         # Constants
         self.process_noise = 0.01
         self.ndim = len(x_0)
+        self._dt = 10
+        self._vx = 0.01
+        self._vy = 0.01
 
-        # Model parameters
         self.A = np.array(
-            [(1, 0, 1, 0), (0, 1, 0, 1), (0, 0, 1, 0), (0, 0, 0, 1)]
+            [
+                (1, 0, self._dt, 0),
+                (0, 1, 0, self._dt),
+                (0, 0, self._vx, 0),
+                (0, 0, 0, self._vy),
+            ]
         )  # State-transition model
         self.H = np.array([(1, 0, 0, 0), (0, 1, 0, 0)])  # Observation model
         self.Q = (
@@ -513,12 +520,13 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
             live_data.write_rssi_csv()
 
         # Send the estimated position to the GUI
+        gui_out_q.queue.clear()
         gui_out_q.put(live_data)
 
         # Send the estimated position to the MQTT server
-        pub_data = MQTT_Packer(live_data)
+        mqtt_packet = MQTT_Packer(live_data)
         mqtt_pub_q.queue.clear()
-        mqtt_pub_q.put(pub_data)
+        mqtt_pub_q.put(mqtt_packet)
 
         # Print the data to the console
         print(live_data)
