@@ -510,7 +510,7 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         live_data.packet_timelog = now.strftime("%H:%M:%S.%f")
 
         if DATA_SIMULATE:
-            live_data.random_RSSI(2, 2)
+            live_data.random_RSSI(1, 1)
 
         live_data.rssi_to_distance()
         live_data.multilateration()
