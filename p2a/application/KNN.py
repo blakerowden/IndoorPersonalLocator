@@ -58,13 +58,14 @@ def compile_data(locations, rssi_list, file_read):
             i += 1
 
 
-files = [DATAPATH + str(i) + ".csv" for i in range(49)]
+fileKNN = DATAPATH + 'KNN' + ".csv"
 
 loc_list = []
 rssi_list = []
 
-for i in range(49):
-    compile_data(loc_list, rssi_list, files[i])
+compile_data(loc_list, rssi_list, fileKNN)
+
+print(loc_list)
 
 
 
