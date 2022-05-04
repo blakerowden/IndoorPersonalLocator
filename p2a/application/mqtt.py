@@ -64,7 +64,7 @@ def MQTT_Packer(live_data):
     delay_time = {
         "variable": "delay",
         "unit": "ms",
-        "value": live_data.delay,
+        "value": live_data.rssi_delay,
     }
 
     publish_data.append(delay_time)
