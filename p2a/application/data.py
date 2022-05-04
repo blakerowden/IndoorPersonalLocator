@@ -593,6 +593,7 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         # Send the estimated position to the GUI
         if ML:
             live_data.k_multilat_pos = predict_pos(live_data.node_rssi)
+            print(live_data.k_multilat_pos)
 
         gui_out_q.queue.clear()
         gui_out_q.put(live_data)
