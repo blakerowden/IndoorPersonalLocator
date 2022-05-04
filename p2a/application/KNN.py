@@ -19,6 +19,7 @@ from sklearn.model_selection import cross_val_predict
 
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 
+
 def compile_data(loc_list, rssi_list, file_read):
     with open(file_read, "r") as file:
         csv_field_names = [
@@ -64,9 +65,10 @@ def compile_data(loc_list, rssi_list, file_read):
                     rssi_list.append(row[2:])
             i += 1
 
+
 def predict_pos(rssi_list):
 
-    fileKNN = DATAPATH + 'KNN' + ".csv"
+    fileKNN = DATAPATH + "KNN" + ".csv"
 
     rssi_list = []
     loc_list = []
@@ -78,20 +80,14 @@ def predict_pos(rssi_list):
 
     for row in loc_list:
         if len(row) > 1:
-            class_list.append(str(row[0]) + ',' + str(row[1]))
+            class_list.append(str(row[0]) + "," + str(row[1]))
 
-    print(class_list)
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        rssi_list, class_list, test_size=0.3, random_state=4
+    )
 
-    print(len(class_list))
-    print(len(loc_list))
-    print(len(rssi_list))
-
-    X_train, X_test, Y_train, Y_test = train_test_split(rssi_list, class_list, test_size = .3, random_state = 4)
-
-    knn = KNeighborsClassifier(n_neighbors = 10)
+    knn = KNeighborsClassifier(n_neighbors=10)
 
     knn.fit(X_train, Y_train)
     predictions = knn.predict([rssi_list])
-    return predictions
-
-
+    return predictions[0]

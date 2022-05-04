@@ -18,18 +18,20 @@ from mqtt import *
 import logging
 import random
 from pathlib import Path
+from KNN import predict_pos
 
 # Data Management Defines =====================================================
 TEST_POINT_X = 2  # position in m
 TEST_POINT_Y = 2  # position in m
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
+ML = True
 
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 51
 ONE_METER_POWER_MODE = True  # True = 1 Node/1m, False = All Nodes/ML Readings
 
-DATA_SIMULATE = True  # Feeds simulation data to the data processing thread
+DATA_SIMULATE = False  # Feeds simulation data to the data processing thread
 
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
@@ -589,6 +591,9 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
             live_data.write_rssi_csv()
 
         # Send the estimated position to the GUI
+        if ML:
+            live_data.k_multilat_pos = predict_pos(live_data.node_rssi)
+
         gui_out_q.queue.clear()
         gui_out_q.put(live_data)
 
