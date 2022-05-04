@@ -5,7 +5,7 @@ CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana can Teijlingen"
+__author__ = "B.Rowden"
 
 from global_ import *
 import tago
@@ -54,8 +54,8 @@ def MQTT_Packer(live_data):
         "variable": "position",
         "value": 10,
         "metadata": {
-            "x": live_data.kalman_pos[0] / 900.0,
-            "y": live_data.kalman_pos[1] / 900.0,
+            "x": live_data.k_multilat_pos[0] / 900.0,
+            "y": live_data.k_multilat_pos[1] / 900.0,
         },
     }
 

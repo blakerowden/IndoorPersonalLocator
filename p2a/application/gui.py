@@ -1,11 +1,11 @@
 """
 Prac 2a - Desktop Application
-.py file 4/6
+.py file 4/6 - GUI
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana can Teijlingen"
+__author__ = "B.Rowden"
 
 import tkinter as tk
 from tkinter import messagebox
@@ -103,8 +103,8 @@ class MainApplication(tk.Frame):
                 self._multilateration_node.target_x = data.multilat_pos[0] * CM_TO_PX
                 self._multilateration_node.target_y = data.multilat_pos[1] * CM_TO_PX
 
-                self._kalman_node.target_x = data.kalman_pos[0] * CM_TO_PX
-                self._kalman_node.target_y = data.kalman_pos[1] * CM_TO_PX
+                self._kalman_node.target_x = data.k_multilat_pos[0] * CM_TO_PX
+                self._kalman_node.target_y = data.k_multilat_pos[1] * CM_TO_PX
 
                 self._data.update_data(data)
 
@@ -317,7 +317,7 @@ class DataDisplay(object):
             fill="#E2703A",
             anchor="w",
         )
-        self.kalman_pos = self.canvas.create_text(
+        self.k_multilat_pos = self.canvas.create_text(
             250, 50, text="NO DATA", font="Montserrat, 12", fill="#9C3D54", anchor="w"
         )
         self.rssi = [0] * 12
@@ -403,8 +403,8 @@ class DataDisplay(object):
         except:
             return
         self.canvas.itemconfig(
-            self.kalman_pos,
-            text=f"({math.ceil(data.kalman_pos[0])/100.0}, {math.ceil(data.kalman_pos[1])/100.0})",
+            self.k_multilat_pos,
+            text=f"({math.ceil(data.k_multilat_pos[0])/100.0}, {math.ceil(data.k_multilat_pos[1])/100.0})",
         )
         for idx in range(0, 12):
             self.canvas.itemconfig(self.rssi[idx], text=f"{data.node_rssi[idx]}")
