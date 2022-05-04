@@ -184,17 +184,20 @@ void thread_imu_rw(void)
 
 float calcAccel(int raw_data){
     //raw data to m/s^2
-    return (float) raw_data;
+    float acc = raw_data / 208.980;
+    return acc;
 }
 
 float calcGyro(int raw_data){
-    //raw data to m/s^2
-    return (float) raw_data;
+    //raw data to rad/s
+    float gyr = raw_data / 938.731;
+    return gyr;
 }
 
 float calcMag(int raw_data){
-    //raw data to m/s^2
-    return (float) raw_data;
+    //raw data to rad/s
+    float mag = raw_data * (4192 / 32760);
+    return mag;
 }
 
 /**

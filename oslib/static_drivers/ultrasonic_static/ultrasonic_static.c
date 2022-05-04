@@ -68,7 +68,6 @@ void thread_ultra_read(void)
 		gpio_pin_set(dev, trig, 0);
 		//printk("two: %d\n", gpio_pin_get(dev, trig));
 
-
 		while (echo_read == 0)
 		{
 			echo_read = gpio_pin_get(dev, echo); 
