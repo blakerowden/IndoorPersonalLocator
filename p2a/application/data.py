@@ -1,11 +1,11 @@
 """
 Prac 2a - Desktop Application
-.py file 3/6 - Data Processing
+.py file 3/7 - Data Processing
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "B.Rowden, B.O'Neill and Liana van Teijlingen"
+__author__ = "B.Rowden, B.O'Neill and L.van Teijlingen"
 
 import csv
 import math
@@ -242,7 +242,11 @@ class MobileNodeTrackingData:
                     writer.writerow(csv_row)
                     print("wrote: " + str(self.data_points_collected))
 
-    def random_RSSI(self, x, y):
+    def random_RSSI(self, x: int, y: int) -> None:
+        """
+        Generates random RSSI values for a given position
+        :return: None
+        """
 
         for i in range(49):
             fileName = self.training_data[i]
@@ -257,7 +261,7 @@ class MobileNodeTrackingData:
                             self.node_rssi[i] = (int)(row[i + 2])
                     lineCount += 1
 
-    def rssi_to_distance(self):
+    def rssi_to_distance(self) -> None:
         """
         Converts the received power (RSSI) data from dB to distance in cm.
         :return: None
@@ -271,7 +275,7 @@ class MobileNodeTrackingData:
             else:
                 self.node_distance[idx] = 0
 
-    def populate_data(self, raw_data):
+    def populate_data(self, raw_data: dict):
         """
         Populates the tracking data with the raw data.
         :param raw_data: The raw data to populate the tracking data with.
@@ -305,7 +309,7 @@ class MobileNodeTrackingData:
         self.node_rssi[10] = raw_data["4011-K"]
         self.node_rssi[11] = raw_data["4011-L"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Prints the recieved raw data to the console.
         :return: None
@@ -534,12 +538,18 @@ class MultilateralKalman:
         self._P = np.array(P_0)
 
     def predict(self):
+        """Calculate the predicted state and covariance"""
         self._x = self.A @ self._x  # Predicted (a priori) state estimate
         self._P = (
             self.A @ self._P @ self.A.transpose() + self.Q
         )  # Predicted (a priori) estimate covariance
 
-    def update(self, observation):
+    def update(self, observation: np.array) -> None:
+        """Update the state estimate based on the observation.
+
+        Args:
+            observation (np.array): The observation vector.
+        """
 
         self.innovation_covariance = (
             self.H @ self._P @ self.H.transpose() + self.R
@@ -561,20 +571,32 @@ class MultilateralKalman:
             @ self.kalman_gain.transpose()
         )  # Updated (a posteriori) estimate covariance
 
-    def get_state(self):
+    def get_state(self) -> tuple:
+        """Returns the current state estimate.
+
+        Returns:
+            tuple: Current co-ordinate estimate.
+        """
         return self._x.tolist()
 
 
-def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
-    """
-    Process the raw JSON data.
+def data_processing_thread(
+    raw_in_q: Queue, gui_out_q: Queue, mqtt_pub_q: Queue, stop
+) -> None:
+    """Thread to process the data from the sensors
+
+    Args:
+        raw_in_q (Queue): Queue to get the raw data from the sensors
+        gui_out_q (Queue): Queue to send the processed data to the GUI
+        mqtt_pub_q (Queue): Queue to send the processed data to the MQTT server
+        stop (_type_): Stop flag
     """
     live_data = MobileNodeTrackingData()
     first_packet_received = False
 
     while True:
 
-        # Get the next message from the queue
+        # Get the next message from the queue_summary_
         try:
             data_raw = raw_in_q.get(block=False)
         except Empty:

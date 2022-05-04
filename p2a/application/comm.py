@@ -1,11 +1,11 @@
 """
 Prac 2a - Desktop Application
-.py file 2/6
+.py file 2/7 - Serial Communications
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana can Teijlingen"
+__author__ = "B.Rowden"
 
 import logging
 import serial

@@ -1,11 +1,11 @@
 """
 Prac 2a - Desktop Application
-.py file 1/6
+.py file 1/7 - Main File
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana van Teijlingen"
+__author__ = "B.Rowden, B.O'Neill and L.Van Teijlingen"
 
 import time
 from threading import Thread
@@ -18,7 +18,7 @@ from gui import *
 from global_ import *
 
 
-def main():
+def main() -> None:
     """
     Main function for the application.
     """

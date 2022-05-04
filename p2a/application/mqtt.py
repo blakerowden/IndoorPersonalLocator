@@ -1,6 +1,6 @@
 """
 Prac 2a - Desktop Application
-.py file 5/6
+.py file 5/7 - MQTT
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
@@ -14,7 +14,7 @@ from queue import *
 import logging
 
 
-def MQTT_Packer(live_data):
+def MQTT_Packer(live_data) -> dict:
     """
     Publish the data to the MQTT broker.
     """
@@ -72,7 +72,7 @@ def MQTT_Packer(live_data):
     return publish_data
 
 
-def MQTT_Publisher(pub_q, stop):
+def MQTT_Publisher(pub_q: Queue, stop) -> None:
 
     my_device = tago.Device(MQTT_DEVICE_TOKEN)
     while True:

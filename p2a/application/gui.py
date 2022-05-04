@@ -1,6 +1,6 @@
 """
 Prac 2a - Desktop Application
-.py file 4/6 - GUI
+.py file 4/7 - GUI
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
@@ -83,6 +83,7 @@ class MainApplication(tk.Frame):
         self.refresh_application()
 
     def on_closing(self):
+        """Handle the closing of the window."""
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             self._stop = True
             self._master.destroy()
