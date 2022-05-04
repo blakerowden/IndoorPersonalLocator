@@ -21,12 +21,12 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 2  # position in m 134 267
-TEST_POINT_Y = 2  # position in m
+TEST_POINT_X = 3.5  # position in m 134 267
+TEST_POINT_Y = 3.5  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
-DATA_COLLECTION_ACTIVE = True
-ML = False
+DATA_COLLECTION_ACTIVE = False
+
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 50
 ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
@@ -605,10 +605,9 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         if DATA_COLLECTION_ACTIVE:
             live_data.write_rssi_csv()
 
-        # Send the estimated position to the GUI
-        if ML:
-            live_data.ml_pos = predict_pos(live_data.node_rssi)
+        live_data.ml_pos = predict_pos(live_data.node_rssi)
 
+        # Send the estimated position to the GUI
         gui_out_q.queue.clear()
         gui_out_q.put(live_data)
 

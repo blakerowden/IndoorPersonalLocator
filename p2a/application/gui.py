@@ -71,7 +71,8 @@ class MainApplication(tk.Frame):
         self._grid = Grid(self._master)
         self._grid.place(relx=0.4, rely=0.5, anchor=tk.W)
         self._multilateration_node = MobileNode(self._grid, "multilateration")
-        self._kalman_node = MobileNode(self._grid, "kalman")
+        self._fusion_node = MobileNode(self._grid, "sensor_fusion")
+        self._ml_node = MobileNode(self._grid, "ml")
 
         self._data_container = DataDisplayContainer(self._master)
         self._data_container.place(relx=0.35, rely=0.5, anchor=tk.E)
@@ -103,8 +104,11 @@ class MainApplication(tk.Frame):
                 self._multilateration_node.target_x = data.multilat_pos[0] * CM_TO_PX
                 self._multilateration_node.target_y = data.multilat_pos[1] * CM_TO_PX
 
-                self._kalman_node.target_x = data.k_multilat_pos[0] * CM_TO_PX
-                self._kalman_node.target_y = data.k_multilat_pos[1] * CM_TO_PX
+                self._fusion_node.target_x = data.k_multilat_pos[0] * CM_TO_PX
+                self._fusion_node.target_y = data.k_multilat_pos[1] * CM_TO_PX
+
+                self._ml_node.target_x = data.ml_pos[0] * CM_TO_PX
+                self._ml_node.target_y = data.ml_pos[1] * CM_TO_PX
 
                 self._data.update_data(data)
 
@@ -113,7 +117,8 @@ class MainApplication(tk.Frame):
             # Update the GUI
 
             self._multilateration_node.redraw_position()
-            self._kalman_node.redraw_position()
+            self._fusion_node.redraw_position()
+            self._ml_node.redraw_position()
             self._master.update()
 
 
@@ -235,15 +240,23 @@ class DataDisplay(object):
         self.canvas.create_text(
             data_label_offset,
             50,
-            text="Kalman Co-ords (m):",
+            text="Data Fusion Co-ords (m):",
             font="Montserrat, 12",
-            fill="#9C3D54",
+            fill="#3E7CB1",
+            anchor="e",
+        )
+        self.canvas.create_text(
+            data_label_offset,
+            70,
+            text="ML Co-ords (m):",
+            font="Montserrat, 12",
+            fill="#B9FFB7",
             anchor="e",
         )
         for idx in range(0, 12):
             self.canvas.create_text(
                 data_label_offset,
-                80 + idx * 20,
+                100 + idx * 20,
                 text="Node {} RSSI (dB):".format(chr(65 + idx)),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
@@ -317,14 +330,17 @@ class DataDisplay(object):
             fill="#E2703A",
             anchor="w",
         )
-        self.k_multilat_pos = self.canvas.create_text(
-            250, 50, text="NO DATA", font="Montserrat, 12", fill="#9C3D54", anchor="w"
+        self.data_fusion_pos = self.canvas.create_text(
+            250, 50, text="NO DATA", font="Montserrat, 12", fill="#3E7CB1", anchor="w"
+        )
+        self.ml_pos = self.canvas.create_text(
+            250, 70, text="NO DATA", font="Montserrat, 12", fill="#B9FFB7", anchor="w"
         )
         self.rssi = [0] * 12
         for idx in range(0, 12):
             self.rssi[idx] = self.canvas.create_text(
                 250,
-                80 + idx * 20,
+                100 + idx * 20,
                 text="NO DATA".format(idx),
                 font="Montserrat, 12",
                 fill=PRIMARY_TEXT,
@@ -403,7 +419,11 @@ class DataDisplay(object):
         except:
             return
         self.canvas.itemconfig(
-            self.k_multilat_pos,
+            self.data_fusion_pos,
+            text=f"({math.ceil(data.k_multilat_pos[0])/100.0}, {math.ceil(data.k_multilat_pos[1])/100.0})",
+        )
+        self.canvas.itemconfig(
+            self.ml_pos,
             text=f"({math.ceil(data.ml_pos[0])/100.0}, {math.ceil(data.ml_pos[1])/100.0})",
         )
         for idx in range(0, 12):
@@ -441,15 +461,18 @@ class MobileNode(object):
         if type == "multilateration":
             self.node_colour = "#E2703A"
             self.speed = 1.2
-        elif type == "kalman":
+        elif type == "sensor_fusion":
             self.speed = 0.2
-            self.node_colour = "#9C3D54"
+            self.node_colour = "#3E7CB1"
+        elif type == "ml":
+            self.speed = 2
+            self.node_colour = "#B9FFB7"
 
         self.graphic = self.canvas.create_oval(
             425, 425, 475, 475, fill=self.node_colour
         )
         self.text_coords = self.canvas.create_text(
-            HALF_GRID_PX, 500, text="(500,500)", fill=PRIMARY_TEXT
+            HALF_GRID_PX, 500, text="(2.0,2.0)", fill=PRIMARY_TEXT
         )
 
     def redraw_position(self):
