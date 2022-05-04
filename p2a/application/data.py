@@ -20,8 +20,8 @@ import random
 from pathlib import Path
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 0.5
-TEST_POINT_Y = 0.5
+TEST_POINT_X = 2  # position in m
+TEST_POINT_Y = 2  # position in m
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
 
@@ -47,26 +47,23 @@ class MobileNodeTrackingData:
     """
 
     def __init__(self):
+
+        # Ultrasound
         self.node_ultra = [0] * 4
+        self.node_ultra_locations = [
+            (GRID_THIRD, 0),
+            (GRID_LENGTH, GRID_THIRD),
+            (GRID_TWO_THIRD, GRID_LENGTH),
+            (0, GRID_TWO_THIRD),
+        ]
+
+        # IMU
         self.accel = [0] * 3
         self.gyro = [0] * 3
         self.mag = [0] * 3
 
         self.node_rssi = [0] * 12
-        self.node_distance = [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        ]
+        self.node_distance = [0] * 12
         self.node_locations = [
             (0, 0),
             (GRID_THIRD, 0),
@@ -106,8 +103,9 @@ class MobileNodeTrackingData:
 
         # Calculated positions
         self.multilat_pos = (GRID_HALF, GRID_HALF)
-        self.kalman_pos = (GRID_HALF, GRID_HALF)
+        self.k_multilat_pos = (GRID_HALF, GRID_HALF)
         self.ultrasonic_pos = (GRID_HALF, GRID_HALF)
+        self.fusion_pos = (GRID_HALF, GRID_HALF)
 
         self.rssi_error = 500  # RSSI error in cm
         self.us_error = 5  # Ultrasonic error in cm
@@ -127,7 +125,7 @@ class MobileNodeTrackingData:
         self.initial_state_covariance = self.rssi_error * np.eye(
             len(self.initial_state_mean)
         )
-        self.k_filter = Kalman(
+        self.multilat_k_filter = MultilateralKalman(
             self.initial_state_mean, self.initial_state_covariance, self.rssi_error
         )
 
@@ -325,11 +323,11 @@ class MobileNodeTrackingData:
         print_string += f"Node Distance: {self.node_distance} \n"
         print_string += f""
         print_string += f"Multilateration Co-ord: {self.multilat_pos} \n"
-        print_string += f"Kalman Co-ord: {self.kalman_pos} \n"
+        print_string += f"Kalman Co-ord: {self.k_multilat_pos} \n"
         print_string += f"======================================================== \n"
         return print_string
 
-    def multilateration(self) -> None:
+    def rssi_multilateration(self) -> None:
         """
         Use the least squares equation to estimate location of the object
         :return tuple: position (x,y)
@@ -413,17 +411,88 @@ class MobileNodeTrackingData:
         :return: None
         """
         observation = np.array([self.multilat_pos[0], self.multilat_pos[1]])
-        self.k_filter.predict()
-        self.k_filter.update(observation)
-        self.kalman_pos = self.k_filter.get_state()
+        self.multilat_k_filter.predict()
+        self.multilat_k_filter.update(observation)
+        self.k_multilat_pos = self.multilat_k_filter.get_state()
+
+    def ultrasonic_position(self) -> None:
+        """
+        Calculate the estimated position from the ultrasonic sensors
+        :return: None
+        """
+        position_estimates = []
+        position_x = 0
+        position_y = 0
+
+        if self.node_ultra[0] >= 20 and self.node_ultra[0] <= 350:
+            position_estimates.append(
+                self.node_ultra_locations[0][0],
+                self.node_ultra_locations[0][1] + self.node_ultra[0],
+            )
+
+        if self.node_ultra[1] >= 20 and self.node_ultra[1] <= 350:
+            position_estimates.append(
+                self.node_ultra_locations[1][0] - self.node_ultra[1],
+                self.node_ultra_locations[1][1],
+            )
+
+        if self.node_ultra[2] >= 20 and self.node_ultra[2] <= 350:
+            position_estimates.append(
+                self.node_ultra_locations[2][0],
+                self.node_ultra_locations[2][1] - self.node_ultra[1],
+            )
+
+        if self.node_ultra[3] >= 20 and self.node_ultra[3] <= 350:
+            position_estimates.append(
+                self.node_ultra_locations[3][0] + self.node_ultra[1],
+                self.node_ultra_locations[3][1],
+            )
+
+        if len(position_estimates) == 0:
+            self.ultrasonic_pos = (0, 0)
+            return
+
+        for pos in position_estimates:
+            position_x += pos[0]
+            position_y += pos[1]
+
+        position_x = position_x / len(position_estimates)
+        position_y = position_y / len(position_estimates)
+
+        self.ultrasonic_pos = (position_x, position_y)
+
+    def sensor_fusion(self) -> None:
+        """
+        Combine the sensor data to estimate the position of the object
+        :return: None
+        """
+        x_position = 0
+        y_position = 0
+
+        p_weighting = 0.9  # Weighting of the position estimate for US
+        self.rssi_multilateration()
+        self.kalman_filter()
+        self.ultrasonic_position()
+
+        if self.ultrasonic_pos[0] != 0:
+            x_position += self.ultrasonic_pos[0] * p_weighting
+        if self.ultrasonic_pos[1] != 0:
+            y_position += self.ultrasonic_pos[1] * p_weighting
+
+        if self.k_multilat_pos[0] != 0:
+            x_position += self.k_multilat_pos[0] * (1 - p_weighting)
+        if self.k_multilat_pos[1] != 0:
+            y_position += self.k_multilat_pos[1] * (1 - p_weighting)
+
+        self.fusion_pos = (x_position, y_position)
 
 
-class Kalman:
+class MultilateralKalman:
     def __init__(self, x_0, P_0, meas_err):
         # Constants
-        self.process_noise = 0.01
+        self.process_noise = 0.05
         self.ndim = len(x_0)
-        self._dt = 10
+        self._dt = 143
         self._vx = 0.01
         self._vy = 0.01
 
@@ -510,10 +579,10 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         live_data.packet_timelog = now.strftime("%H:%M:%S.%f")
 
         if DATA_SIMULATE:
-            live_data.random_RSSI(2, 2)
+            live_data.random_RSSI(TEST_POINT_X, TEST_POINT_Y)
 
         live_data.rssi_to_distance()
-        live_data.multilateration()
+        live_data.rssi_multilateration()
         live_data.kalman_filter()
 
         if DATA_COLLECTION_ACTIVE:
