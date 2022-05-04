@@ -21,15 +21,15 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 2  # position in m
-TEST_POINT_Y = 2  # position in m
+TEST_POINT_X = 267  # position in m 134 267
+TEST_POINT_Y = 267  # position in m
+FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
-DATA_COLLECTION_ACTIVE = False
-ML = True
-
+DATA_COLLECTION_ACTIVE = True
+ML = False
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
-TOTAL_TEST_POINTS = 51
-ONE_METER_POWER_MODE = True  # True = 1 Node/1m, False = All Nodes/ML Readings
+TOTAL_TEST_POINTS = 50
+ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
 
 DATA_SIMULATE = False  # Feeds simulation data to the data processing thread
 
@@ -108,6 +108,7 @@ class MobileNodeTrackingData:
         self.k_multilat_pos = (GRID_HALF, GRID_HALF)
         self.ultrasonic_pos = (GRID_HALF, GRID_HALF)
         self.fusion_pos = (GRID_HALF, GRID_HALF)
+        self.ml_pos = (GRID_HALF, GRID_HALF)
 
         self.rssi_error = 500  # RSSI error in cm
         self.us_error = 5  # Ultrasonic error in cm
@@ -183,13 +184,13 @@ class MobileNodeTrackingData:
         else:
             pos_x = TEST_POINT_X
             pos_y = TEST_POINT_Y
-            self.training_data_selected = 48
+            self.training_data_selected = FILE_NO
             if self.data_points_collected == 201:
                 return
             else:
                 self.data_points_collected += 1
 
-            csv_file_name = self.training_data[self.training_data_selected]
+            csv_file_name = "datapoints" + self.training_data_selected + ".csv"
 
             csv_row = {
                 "Pos_X": pos_x,
@@ -592,18 +593,18 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
 
         # Send the estimated position to the GUI
         if ML:
-            live_data.multilat_pos = predict_pos(live_data.node_rssi)
+            live_data.ml_pos = predict_pos(live_data.node_rssi)
 
         gui_out_q.queue.clear()
         gui_out_q.put(live_data)
 
         # Send the estimated position to the MQTT server
-        mqtt_packet = MQTT_Packer(live_data)
-        mqtt_pub_q.queue.clear()
-        mqtt_pub_q.put(mqtt_packet)
+        # mqtt_packet = MQTT_Packer(live_data)
+        # mqtt_pub_q.queue.clear()
+        #  mqtt_pub_q.put(mqtt_packet)
 
         # Print the data to the console
-        print(live_data)
+        #   print(live_data)
 
         if stop():
             logging.info("Stoping Data Thread")

@@ -15,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import cross_val_predict
+import re
 
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 
@@ -65,7 +66,7 @@ def compile_data(loc_list, rssi_list, file_read):
             i += 1
 
 
-def predict_pos(rssi_list):
+def predict_pos(rssi_list_2):
 
     fileKNN = DATAPATH + "KNN" + ".csv"
 
@@ -85,13 +86,15 @@ def predict_pos(rssi_list):
         rssi_list, class_list, test_size=0.3, random_state=4
     )
 
-    knn = KNeighborsClassifier(n_neighbors=10)
+    knn = KNeighborsClassifier(n_neighbors=50)
 
     knn.fit(X_train, Y_train)
 
-    predictions = knn.predict(rssi_list)
+    predictions = knn.predict([rssi_list_2])
 
-    prediction_x = float(predictions[0][1:3])
-    prediction_y = float(predictions[0][5:8])
+    listy_mclist = predictions.tolist()
+
+    prediction_x = float(listy_mclist[0].split(",")[0]) * 100
+    prediction_y = float(listy_mclist[0].split(",")[1]) * 100
 
     return (prediction_x, prediction_y)

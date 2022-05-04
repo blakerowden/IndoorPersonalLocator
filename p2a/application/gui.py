@@ -404,7 +404,7 @@ class DataDisplay(object):
             return
         self.canvas.itemconfig(
             self.k_multilat_pos,
-            text=f"({math.ceil(data.k_multilat_pos[0])/100.0}, {math.ceil(data.k_multilat_pos[1])/100.0})",
+            text=f"({math.ceil(data.ml_pos[0])/100.0}, {math.ceil(data.ml_pos[1])/100.0})",
         )
         for idx in range(0, 12):
             self.canvas.itemconfig(self.rssi[idx], text=f"{data.node_rssi[idx]}")
