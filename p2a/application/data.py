@@ -21,21 +21,12 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-<<<<<<< HEAD
-TEST_POINT_X = 200  # position in m 134 267
-TEST_POINT_Y = 200  # position in m
-FILE_NO = "test14"
-DATA_NODE_NAME = "4011A"
-DATA_COLLECTION_ACTIVE = False
-ML = True
-=======
 TEST_POINT_X = 3.5  # position in m 134 267
 TEST_POINT_Y = 3.5  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
 
->>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 50
 ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
@@ -122,7 +113,7 @@ class MobileNodeTrackingData:
         self.rssi_error = 500  # RSSI error in cm
         self.us_error = 5  # Ultrasonic error in cm
 
-        self.training_data = [DATAPATH + 'test' + str(i) + ".csv" for i in range(49)]
+        self.training_data = [DATAPATH + "test" + str(i) + ".csv" for i in range(49)]
         self.training_data_selected = 0
         self.data_points_collected = 0
 
