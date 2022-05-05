@@ -28,11 +28,7 @@ def main() -> None:
     stop_flag = False
     comms_active = True
     data_active = True
-<<<<<<< HEAD
-    mqtt_active = True
-=======
     mqtt_active = False
->>>>>>> 6a226f7620e09a8388678b624cd797ca19818f76
     gui_active = True
 
     thread_serial = None
