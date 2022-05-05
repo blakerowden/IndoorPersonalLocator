@@ -466,7 +466,7 @@ class MobileNode(object):
             self.speed = 0.2
             self.node_colour = "#3E7CB1"
         elif type == "ml":
-            self.speed = 2
+            self.speed = 0.5
             self.node_colour = "#B9FFB7"
 
         self.graphic = self.canvas.create_oval(

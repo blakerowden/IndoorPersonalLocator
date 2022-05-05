@@ -115,11 +115,11 @@ def predict_pos(rssi_input_list: list) -> tuple:
 
     X_train, X_test, Y_train, Y_test = train_test_split(rssi_list, class_list)
 
-    knn = KNeighborsClassifier(n_neighbors=7)
+    knn = KNeighborsClassifier(n_neighbors=8)
 
     knn.fit(X_train, Y_train)
 
     predictions = knn.predict([rssi_input_list])
 
-    if(int(predictions.tolist()[0]) < 17):
+    if int(predictions.tolist()[0]) < 17:
         return indexToCoord[int(predictions.tolist()[0])]

@@ -21,9 +21,9 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 267  # position in m 134 267
-TEST_POINT_Y = 400  # position in m
-FILE_NO = "test14"
+TEST_POINT_X = 200  # position in cm
+TEST_POINT_Y = 200  # position in cm
+FILE_NO = "test0"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
 
@@ -658,7 +658,7 @@ def data_processing_thread(
             live_data.write_rssi_csv()
 
         prediction = predict_pos(live_data.node_rssi)
-        
+
         if prediction:
             live_data.ml_pos = prediction
         # Send the estimated position to the GUI
