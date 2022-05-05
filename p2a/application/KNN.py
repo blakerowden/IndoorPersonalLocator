@@ -81,22 +81,22 @@ def predict_pos(rssi_input_list: list) -> tuple:
 
     indexToCoord = [
         (0, 0),
-        (0, 100),
-        (0, 200),
-        (0, 300),
-        (100, 0),
-        (100, 100),
-        (100, 200),
-        (100, 300),
-        (200, 0),
-        (200, 100),
+        (0, 133),
+        (0, 266),
+        (0, 400),
+        (133, 0),
+        (133, 133),
+        (133, 266),
+        (133, 400),
+        (266, 0),
+        (266, 133),
+        (266, 266),
+        (266, 400),
+        (400, 0),
+        (400, 133),
+        (400, 266),
+        (400, 400),
         (200, 200),
-        (200, 300),
-        (300, 0),
-        (300, 100),
-        (300, 200),
-        (300, 300),
-        (150, 150),
     ]
 
     fileKNN = DATAPATH + ".csv"
@@ -123,4 +123,5 @@ def predict_pos(rssi_input_list: list) -> tuple:
 
     predictions = knn.predict([rssi_input_list])
 
-    return indexToCoord[int(predictions.tolist()[0])]
+    if(int(predictions.tolist()[0]) < 17):
+        return indexToCoord[int(predictions.tolist()[0])]

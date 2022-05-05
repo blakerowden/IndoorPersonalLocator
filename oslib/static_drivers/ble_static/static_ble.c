@@ -88,7 +88,7 @@ void thread_ble_adv(void)
     while (1) {
 
         uint32_t read;
-        uint8_t ultra_id = 3;
+        uint8_t ultra_id = 0;
 
         if (k_msgq_get(&ultra_msgq, &read, K_FOREVER) == 0)
         {

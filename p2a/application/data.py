@@ -31,7 +31,7 @@ DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 50
 ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
 
-DATA_SIMULATE = True  # Feeds simulation data to the data processing thread
+DATA_SIMULATE = False  # Feeds simulation data to the data processing thread
 
 # Defines =====================================================================
 GRID_LENGTH_CM = 4_00  # 4m x 4m grid
@@ -627,8 +627,9 @@ def data_processing_thread(
 
         if DATA_COLLECTION_ACTIVE:
             live_data.write_rssi_csv()
-
-        live_data.ml_pos = predict_pos(live_data.node_rssi)
+        
+        if(predict_pos(live_data.node_rssi)):
+            live_data.ml_pos = predict_pos(live_data.node_rssi)
 
         # Send the estimated position to the GUI
         gui_out_q.queue.clear()
