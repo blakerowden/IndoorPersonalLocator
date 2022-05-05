@@ -10,12 +10,12 @@
 
 #include <device.h>
 #include <devicetree.h>
+#include <drivers/uart.h>
 #include <stddef.h>
 #include <sys/printk.h>
+#include <usb/usb_device.h>
 #include <zephyr.h>
 #include <zephyr/types.h>
-#include <usb/usb_device.h>
-#include <drivers/uart.h>  
 
 #include "ble_base.h"
 #include "led_driver.h"
@@ -24,4 +24,4 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-#endif //__MAIN_H__
+#endif  //__MAIN_H__

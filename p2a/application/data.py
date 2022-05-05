@@ -1,11 +1,11 @@
 """
 Prac 2a - Desktop Application
-.py file 3/6 - Data Processing
+.py file 3/7 - Data Processing
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "B.Rowden and B.O'Neill"
+__author__ = "B.Rowden, B.O'Neill and L.van Teijlingen"
 
 import csv
 import math
@@ -21,12 +21,21 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
+<<<<<<< HEAD
 TEST_POINT_X = 200  # position in m 134 267
 TEST_POINT_Y = 200  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
 ML = True
+=======
+TEST_POINT_X = 3.5  # position in m 134 267
+TEST_POINT_Y = 3.5  # position in m
+FILE_NO = "test14"
+DATA_NODE_NAME = "4011A"
+DATA_COLLECTION_ACTIVE = False
+
+>>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 50
 ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
@@ -242,6 +251,7 @@ class MobileNodeTrackingData:
                     writer.writerow(csv_row)
                     print("wrote: " + str(self.data_points_collected))
 
+<<<<<<< HEAD
     def random_RSSI(self, x, y):
         fileName = self.training_data[13]
         rowNum = random.randint(3, 54)
@@ -253,8 +263,28 @@ class MobileNodeTrackingData:
                     for i in range(12):
                         self.node_rssi[i] = (int)(row[i + 2])
                 lineCount += 1
+=======
+    def random_RSSI(self, x: int, y: int) -> None:
+        """
+        Generates random RSSI values for a given position
+        :return: None
+        """
 
-    def rssi_to_distance(self):
+        for i in range(49):
+            fileName = self.training_data[i]
+            rowNum = random.randint(1, 200)
+
+            with open(fileName) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=",")
+                lineCount = 0
+                for row in csv_reader:
+                    if lineCount == rowNum and row[0] == str(x) and row[1] == str(y):
+                        for i in range(12):
+                            self.node_rssi[i] = (int)(row[i + 2])
+                    lineCount += 1
+>>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
+
+    def rssi_to_distance(self) -> None:
         """
         Converts the received power (RSSI) data from dB to distance in cm.
         :return: None
@@ -268,7 +298,7 @@ class MobileNodeTrackingData:
             else:
                 self.node_distance[idx] = 0
 
-    def populate_data(self, raw_data):
+    def populate_data(self, raw_data: dict):
         """
         Populates the tracking data with the raw data.
         :param raw_data: The raw data to populate the tracking data with.
@@ -302,7 +332,7 @@ class MobileNodeTrackingData:
         self.node_rssi[10] = raw_data["4011-K"]
         self.node_rssi[11] = raw_data["4011-L"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Prints the recieved raw data to the console.
         :return: None
@@ -344,23 +374,23 @@ class MobileNodeTrackingData:
                 fixed_node_y.append(self.node_locations[idx][1])
                 fixed_node_distance.append(dist)
 
+        # Check case where an array is empty
+        if len(fixed_node_distance) < 6:
+            return
+
         # Apply a weighting to the RSSI data
         distance, x_pos, y_pos = zip(
             *sorted(zip(fixed_node_distance, fixed_node_x, fixed_node_y))
         )
-        distance = distance[: len(distance) - 9]
-        x_pos = x_pos[: len(y_pos) - 9]
-        y_pos = y_pos[: len(y_pos) - 9]
+        distance = distance[:3]
+        x_pos = x_pos[:3]
+        y_pos = y_pos[:3]
 
         num_live_nodes = len(distance)
 
         x_fixed_array = np.array(x_pos)
         y_fixed_array = np.array(y_pos)
         radius_array = np.array(distance)
-
-        # Check case where an array is empty
-        if num_live_nodes == 0:
-            return
 
         # Calculate the least squares equation
         mat_b = np.array(
@@ -424,28 +454,36 @@ class MobileNodeTrackingData:
         position_x = 0
         position_y = 0
 
-        if self.node_ultra[0] >= 20 and self.node_ultra[0] <= 350:
+        if self.node_ultra[0] <= 350 and self.node_ultra[0] != 0:
             position_estimates.append(
-                self.node_ultra_locations[0][0],
-                self.node_ultra_locations[0][1] + self.node_ultra[0],
+                (
+                    self.node_ultra_locations[0][0],
+                    self.node_ultra_locations[0][1] + self.node_ultra[0],
+                )
             )
 
-        if self.node_ultra[1] >= 20 and self.node_ultra[1] <= 350:
+        if self.node_ultra[1] <= 350 and self.node_ultra[1] != 0:
             position_estimates.append(
-                self.node_ultra_locations[1][0] - self.node_ultra[1],
-                self.node_ultra_locations[1][1],
+                (
+                    self.node_ultra_locations[1][0] - self.node_ultra[1],
+                    self.node_ultra_locations[1][1],
+                )
             )
 
-        if self.node_ultra[2] >= 20 and self.node_ultra[2] <= 350:
+        if self.node_ultra[2] <= 350 and self.node_ultra[2] != 0:
             position_estimates.append(
-                self.node_ultra_locations[2][0],
-                self.node_ultra_locations[2][1] - self.node_ultra[1],
+                (
+                    self.node_ultra_locations[2][0],
+                    self.node_ultra_locations[2][1] - self.node_ultra[2],
+                )
             )
 
-        if self.node_ultra[3] >= 20 and self.node_ultra[3] <= 350:
+        if self.node_ultra[3] <= 350 and self.node_ultra[3] != 0:
             position_estimates.append(
-                self.node_ultra_locations[3][0] + self.node_ultra[1],
-                self.node_ultra_locations[3][1],
+                (
+                    self.node_ultra_locations[3][0] + self.node_ultra[3],
+                    self.node_ultra_locations[3][1],
+                )
             )
 
         if len(position_estimates) == 0:
@@ -460,6 +498,7 @@ class MobileNodeTrackingData:
         position_y = position_y / len(position_estimates)
 
         self.ultrasonic_pos = (position_x, position_y)
+        print(self.ultrasonic_pos)
 
     def sensor_fusion(self) -> None:
         """
@@ -470,6 +509,7 @@ class MobileNodeTrackingData:
         y_position = 0
 
         p_weighting = 0.9  # Weighting of the position estimate for US
+        self.rssi_to_distance()
         self.rssi_multilateration()
         self.kalman_filter()
         self.ultrasonic_position()
@@ -480,11 +520,17 @@ class MobileNodeTrackingData:
             y_position += self.ultrasonic_pos[1] * p_weighting
 
         if self.k_multilat_pos[0] != 0:
-            x_position += self.k_multilat_pos[0] * (1 - p_weighting)
+            if self.ultrasonic_pos[0] == 0:
+                x_position += self.k_multilat_pos[0]
+            else:
+                x_position += self.k_multilat_pos[0] * (1 - p_weighting)
         if self.k_multilat_pos[1] != 0:
-            y_position += self.k_multilat_pos[1] * (1 - p_weighting)
+            if self.ultrasonic_pos[1] == 0:
+                y_position += self.k_multilat_pos[1]
+            else:
+                y_position += self.k_multilat_pos[1] * (1 - p_weighting)
 
-        self.fusion_pos = (x_position, y_position)
+        self.k_multilat_pos = (x_position, y_position)
 
 
 class MultilateralKalman:
@@ -515,12 +561,18 @@ class MultilateralKalman:
         self._P = np.array(P_0)
 
     def predict(self):
+        """Calculate the predicted state and covariance"""
         self._x = self.A @ self._x  # Predicted (a priori) state estimate
         self._P = (
             self.A @ self._P @ self.A.transpose() + self.Q
         )  # Predicted (a priori) estimate covariance
 
-    def update(self, observation):
+    def update(self, observation: np.array) -> None:
+        """Update the state estimate based on the observation.
+
+        Args:
+            observation (np.array): The observation vector.
+        """
 
         self.innovation_covariance = (
             self.H @ self._P @ self.H.transpose() + self.R
@@ -542,20 +594,32 @@ class MultilateralKalman:
             @ self.kalman_gain.transpose()
         )  # Updated (a posteriori) estimate covariance
 
-    def get_state(self):
+    def get_state(self) -> tuple:
+        """Returns the current state estimate.
+
+        Returns:
+            tuple: Current co-ordinate estimate.
+        """
         return self._x.tolist()
 
 
-def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
-    """
-    Process the raw JSON data.
+def data_processing_thread(
+    raw_in_q: Queue, gui_out_q: Queue, mqtt_pub_q: Queue, stop
+) -> None:
+    """Thread to process the data from the sensors
+
+    Args:
+        raw_in_q (Queue): Queue to get the raw data from the sensors
+        gui_out_q (Queue): Queue to send the processed data to the GUI
+        mqtt_pub_q (Queue): Queue to send the processed data to the MQTT server
+        stop (_type_): Stop flag
     """
     live_data = MobileNodeTrackingData()
     first_packet_received = False
 
     while True:
 
-        # Get the next message from the queue
+        # Get the next message from the queue_summary_
         try:
             data_raw = raw_in_q.get(block=False)
         except Empty:
@@ -581,27 +645,24 @@ def data_processing_thread(raw_in_q, gui_out_q, mqtt_pub_q, stop):
         if DATA_SIMULATE:
             live_data.random_RSSI(TEST_POINT_X, TEST_POINT_Y)
 
-        live_data.rssi_to_distance()
-        live_data.rssi_multilateration()
-        live_data.kalman_filter()
+        live_data.sensor_fusion()
 
         if DATA_COLLECTION_ACTIVE:
             live_data.write_rssi_csv()
 
-        # Send the estimated position to the GUI
-        if ML:
-            live_data.ml_pos = predict_pos(live_data.node_rssi)
+        live_data.ml_pos = predict_pos(live_data.node_rssi)
 
+        # Send the estimated position to the GUI
         gui_out_q.queue.clear()
         gui_out_q.put(live_data)
 
         # Send the estimated position to the MQTT server
-        # mqtt_packet = MQTT_Packer(live_data)
-        # mqtt_pub_q.queue.clear()
-        #  mqtt_pub_q.put(mqtt_packet)
+        mqtt_packet = MQTT_Packer(live_data)
+        mqtt_pub_q.queue.clear()
+        mqtt_pub_q.put(mqtt_packet)
 
         # Print the data to the console
-        #   print(live_data)
+        print(live_data)
 
         if stop():
             logging.info("Stoping Data Thread")

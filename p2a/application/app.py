@@ -1,11 +1,11 @@
 """
 Prac 2a - Desktop Application
-.py file 1/6
+.py file 1/7 - Main File
 CSSE4011 - Advanced Embedded Systems
 Semester 1, 2022
 """
 
-__author__ = "Blake Rowden, Boston O'Neill and Liana can Teijlingen"
+__author__ = "B.Rowden, B.O'Neill and L.Van Teijlingen"
 
 import time
 from threading import Thread
@@ -18,7 +18,7 @@ from gui import *
 from global_ import *
 
 
-def main():
+def main() -> None:
     """
     Main function for the application.
     """
@@ -28,7 +28,11 @@ def main():
     stop_flag = False
     comms_active = True
     data_active = True
+<<<<<<< HEAD
     mqtt_active = False
+=======
+    mqtt_active = True
+>>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
     gui_active = True
 
     thread_serial = None

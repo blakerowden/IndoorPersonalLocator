@@ -1,26 +1,31 @@
+"""
+Prac 2a - Desktop Application
+.py file 6/7 - Machine Learning
+CSSE4011 - Advanced Embedded Systems
+Semester 1, 2022
+"""
+
+__author__ = "B.O'Neill"
+
 import csv
-import math
 from global_ import *
-import numpy as np
-from datetime import datetime
-import time
 from queue import *
 from mqtt import *
-import logging
-import random
 from pathlib import Path
-import collections
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.impute import SimpleImputer
-from sklearn.model_selection import cross_val_predict
-import re
 
 DATAPATH = str(Path(__file__).parent / "Datapoints/combined")
 
 
-def compile_data(loc_list, rssi_list, file_read):
+def compile_data(loc_list: list, rssi_list: list, file_read: str) -> None:
+    """Compile the data from the csv file into a list of lists
+
+    Args:
+        loc_list (list): List of lists to store the location data
+        rssi_list (list): List of lists to store the rssi data
+        file_read (str): The file to read from
+    """
     with open(file_read, "r") as file:
         csv_field_names = [
             "Pos_X",
@@ -66,12 +71,23 @@ def compile_data(loc_list, rssi_list, file_read):
             i += 1
 
 
-def predict_pos(rssi_list_2):
+def predict_pos(rssi_input_list: list) -> tuple:
+    """Predict the position of the device based on the rssi data
 
+    Args:
+        rssi_list_2 (list): List of lists to store the rssi data
+
+<<<<<<< HEAD
     indexToCoord = [(0, 0), (0, 100), (0, 200), (0, 300), (100, 0), (100, 100), (100, 200), (100, 300),
                     (200, 0), (200, 100), (200, 200), (200, 300), (300, 0), (300, 100), (300, 200), (300, 300), (150, 150)]
 
     fileKNN = DATAPATH + ".csv"
+=======
+    Returns:
+        tuple: Estimated position
+    """
+    fileKNN = DATAPATH + "KNN" + ".csv"
+>>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
 
     rssi_list = []
     loc_list = []
@@ -93,6 +109,6 @@ def predict_pos(rssi_list_2):
 
     knn.fit(X_train, Y_train)
 
-    predictions = knn.predict([rssi_list_2])
+    predictions = knn.predict([rssi_input_list])
 
     return (indexToCoord[int(predictions.tolist()[0])])
