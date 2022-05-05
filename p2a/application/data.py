@@ -21,21 +21,12 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-<<<<<<< HEAD
-TEST_POINT_X = 200  # position in m 134 267
-TEST_POINT_Y = 200  # position in m
-FILE_NO = "test14"
-DATA_NODE_NAME = "4011A"
-DATA_COLLECTION_ACTIVE = False
-ML = True
-=======
 TEST_POINT_X = 3.5  # position in m 134 267
 TEST_POINT_Y = 3.5  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
 
->>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
 DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
 TOTAL_TEST_POINTS = 50
 ONE_METER_POWER_MODE = False  # True = 1 Node/1m, False = All Nodes/ML Readings
@@ -122,7 +113,7 @@ class MobileNodeTrackingData:
         self.rssi_error = 500  # RSSI error in cm
         self.us_error = 5  # Ultrasonic error in cm
 
-        self.training_data = [DATAPATH + 'test' + str(i) + ".csv" for i in range(49)]
+        self.training_data = [DATAPATH + "test" + str(i) + ".csv" for i in range(49)]
         self.training_data_selected = 0
         self.data_points_collected = 0
 
@@ -251,19 +242,6 @@ class MobileNodeTrackingData:
                     writer.writerow(csv_row)
                     print("wrote: " + str(self.data_points_collected))
 
-<<<<<<< HEAD
-    def random_RSSI(self, x, y):
-        fileName = self.training_data[13]
-        rowNum = random.randint(3, 54)
-        with open(fileName) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=",")
-            lineCount = 0
-            for row in csv_reader:
-                if lineCount == rowNum and row[0] == str(x) and row[1] == str(y):
-                    for i in range(12):
-                        self.node_rssi[i] = (int)(row[i + 2])
-                lineCount += 1
-=======
     def random_RSSI(self, x: int, y: int) -> None:
         """
         Generates random RSSI values for a given position
@@ -282,7 +260,6 @@ class MobileNodeTrackingData:
                         for i in range(12):
                             self.node_rssi[i] = (int)(row[i + 2])
                     lineCount += 1
->>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
 
     def rssi_to_distance(self) -> None:
         """
