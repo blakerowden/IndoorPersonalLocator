@@ -113,11 +113,9 @@ def predict_pos(rssi_input_list: list) -> tuple:
         if len(row) > 0:
             class_list.append(str(row[0]))
 
-    X_train, X_test, Y_train, Y_test = train_test_split(
-        rssi_list, class_list, test_size=0.1, random_state=4
-    )
+    X_train, X_test, Y_train, Y_test = train_test_split(rssi_list, class_list)
 
-    knn = KNeighborsClassifier(n_neighbors=5)
+    knn = KNeighborsClassifier(n_neighbors=7)
 
     knn.fit(X_train, Y_train)
 
