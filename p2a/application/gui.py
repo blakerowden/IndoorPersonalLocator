@@ -108,8 +108,8 @@ class MainApplication(tk.Frame):
                 self._fusion_node.target_x = data.k_multilat_pos[0] * CM_TO_PX
                 self._fusion_node.target_y = data.k_multilat_pos[1] * CM_TO_PX
 
-                self._ml_node.target_x = data.ml_pos[0] * CM_TO_PX
-                self._ml_node.target_y = data.ml_pos[1] * CM_TO_PX
+                self._ml_node.target_x = data.k_ml_pos[0] * CM_TO_PX
+                self._ml_node.target_y = data.k_ml_pos[1] * CM_TO_PX
 
                 self._data.update_data(data)
 
@@ -425,7 +425,7 @@ class DataDisplay(object):
         )
         self.canvas.itemconfig(
             self.ml_pos,
-            text=f"({math.ceil(data.ml_pos[0])/100.0}, {math.ceil(data.ml_pos[1])/100.0})",
+            text=f"({math.ceil(data.k_ml_pos[0])/100.0}, {math.ceil(data.k_ml_pos[1])/100.0})",
         )
         for idx in range(0, 12):
             self.canvas.itemconfig(self.rssi[idx], text=f"{data.node_rssi[idx]}")

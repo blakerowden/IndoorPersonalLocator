@@ -21,8 +21,8 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 200  # position in m 134 267
-TEST_POINT_Y = 200  # position in m
+TEST_POINT_X = 267  # position in m 134 267
+TEST_POINT_Y = 400  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
@@ -113,8 +113,9 @@ class MobileNodeTrackingData:
 
         self.rssi_error = 500  # RSSI error in cm
         self.us_error = 5  # Ultrasonic error in cm
+        self.ml_error = 2  # ML error in cm
 
-        self.training_data = [DATAPATH + str(i) + ".csv" for i in range(49)]
+        self.training_data = [DATAPATH + "test" + str(i) + ".csv" for i in range(49)]
         self.training_data_selected = 0
         self.data_points_collected = 0
 
@@ -126,11 +127,29 @@ class MobileNodeTrackingData:
                 self.accel[1],
             ]
         )
+
+        self.initial_ml_state_mean = np.array(
+            [
+                self.multilat_pos[0] + self.ml_error,
+                self.multilat_pos[1] + self.ml_error,
+                0,
+                0,
+            ]
+        )
+
         self.initial_state_covariance = self.rssi_error * np.eye(
             len(self.initial_state_mean)
         )
+
+        self.initial_ml_state_covariance = self.ml_error * np.eye(
+            len(self.initial_ml_state_mean)
+        )
+
         self.multilat_k_filter = MultilateralKalman(
             self.initial_state_mean, self.initial_state_covariance, self.rssi_error
+        )
+        self.ml_k_filter = MultilateralKalman(
+            self.initial_state_mean, self.initial_ml_state_covariance, self.ml_error
         )
 
     def write_rssi_csv(self):
@@ -348,8 +367,8 @@ class MobileNodeTrackingData:
         # Remove nodes that have not provided an RSSI due to error
         for idx, dist in enumerate(self.node_distance):
             if dist != 0:
-                fixed_node_x.append(self.node_locations[idx][0])
-                fixed_node_y.append(self.node_locations[idx][1])
+                fixed_node_x.append(float(self.node_locations[idx][0]))
+                fixed_node_y.append(float(self.node_locations[idx][1]))
                 fixed_node_distance.append(dist)
 
         # Check case where an array is empty
@@ -369,10 +388,10 @@ class MobileNodeTrackingData:
         x_fixed_array = np.array(x_pos)
         y_fixed_array = np.array(y_pos)
         radius_array = np.array(distance)
-
+        mat_b = []
         # Calculate the least squares equation
-        mat_b = np.array(
-            [
+        for i in range(num_live_nodes):
+            mat_b.append(
                 (
                     radius_array[i] ** 2
                     - radius_array[num_live_nodes - 1] ** 2
@@ -381,47 +400,57 @@ class MobileNodeTrackingData:
                     + x_fixed_array[num_live_nodes - 1] ** 2
                     + y_fixed_array[num_live_nodes - 1] ** 2
                 )
-                for i in range(num_live_nodes)
-            ]
-        )
-        mat_a = np.array(
-            [
+            )
+
+        mat_b = np.array(mat_b)
+
+        mat_a = []
+
+        for i in range(num_live_nodes):
+            mat_a.append(
                 (
                     (2 * (x_fixed_array[num_live_nodes - 1] - x_fixed_array[i])),
                     (2 * (y_fixed_array[num_live_nodes - 1] - y_fixed_array[i])),
                 )
-                for i in range(num_live_nodes)
-            ]
-        )
+            )
+
+        mat_a = np.array(mat_a)
 
         lst_sq_estimate = np.linalg.lstsq(mat_a, mat_b, rcond=-1)[0]
 
-        self.multilat_pos = lst_sq_estimate.tolist()
-        return_pos_x = math.ceil(self.multilat_pos[0])
-        return_pos_y = math.ceil(self.multilat_pos[1])
+        return_pos_x, return_pos_y = lst_sq_estimate.tolist()
+
+        if return_pos_x == 0.0:
+            return_pos_x = x_pos[0]
+        if return_pos_y == 0.0:
+            return_pos_y = y_pos[0]
 
         # Check bounds of the position
-        if return_pos_x < 0:
-            return_pos_x = 0 + random.randint(0, 10)
-        elif return_pos_x > GRID_LENGTH_CM:
-            return_pos_x = GRID_LENGTH_CM - random.randint(0, 10)
-        if return_pos_y < 0:
-            return_pos_y = 0 + random.randint(0, 10)
-        elif return_pos_y > GRID_LENGTH_CM:
-            return_pos_y = GRID_LENGTH_CM - random.randint(0, 10)
+        if return_pos_x <= 0:
+            return_pos_x = 0 + random.randint(0, 50)
+        elif return_pos_x >= GRID_LENGTH_CM:
+            return_pos_x = GRID_LENGTH_CM - random.randint(0, 50)
+        if return_pos_y <= 0:
+            return_pos_y = 0 + random.randint(0, 50)
+        elif return_pos_y >= GRID_LENGTH_CM:
+            return_pos_y = GRID_LENGTH_CM - random.randint(0, 50)
 
-        self.multilat_pos[0] = math.ceil(self.multilat_pos[0])
-        self.multilat_pos[1] = math.ceil(self.multilat_pos[1])
+        self.multilat_pos = (math.ceil(return_pos_x), math.ceil(return_pos_y))
 
     def kalman_filter(self) -> None:
         """
         Apply the Kalman filter to the data
         :return: None
         """
-        observation = np.array([self.multilat_pos[0], self.multilat_pos[1]])
+        lat_observation = np.array([self.multilat_pos[0], self.multilat_pos[1]])
         self.multilat_k_filter.predict()
-        self.multilat_k_filter.update(observation)
+        self.multilat_k_filter.update(lat_observation)
         self.k_multilat_pos = self.multilat_k_filter.get_state()
+
+        ml_observation = np.array([self.ml_pos[0], self.ml_pos[1]])
+        self.ml_k_filter.predict()
+        self.ml_k_filter.update(ml_observation)
+        self.k_ml_pos = self.ml_k_filter.get_state()
 
     def ultrasonic_position(self) -> None:
         """
