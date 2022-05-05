@@ -77,12 +77,6 @@ def predict_pos(rssi_input_list: list) -> tuple:
     Args:
         rssi_list_2 (list): List of lists to store the rssi data
 
-<<<<<<< HEAD
-    Returns:
-        tuple: Estimated position
-    """
-    fileKNN = DATAPATH + "KNN" + ".csv"
-=======
     """
 
     indexToCoord = [
@@ -106,7 +100,6 @@ def predict_pos(rssi_input_list: list) -> tuple:
     ]
 
     fileKNN = DATAPATH + ".csv"
->>>>>>> 6a226f7620e09a8388678b624cd797ca19818f76
 
     rssi_list = []
     loc_list = []
@@ -121,10 +114,10 @@ def predict_pos(rssi_input_list: list) -> tuple:
             class_list.append(str(row[0]))
 
     X_train, X_test, Y_train, Y_test = train_test_split(
-        rssi_list, class_list, test_size=0.3, random_state=4
+        rssi_list, class_list, test_size=0.1, random_state=4
     )
 
-    knn = KNeighborsClassifier(n_neighbors=10)
+    knn = KNeighborsClassifier(n_neighbors=5)
 
     knn.fit(X_train, Y_train)
 
