@@ -17,7 +17,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.model_selection import cross_val_predict
 import re
 
-DATAPATH = str(Path(__file__).parent / "Datapoints/datapoints")
+DATAPATH = str(Path(__file__).parent / "Datapoints/combined")
 
 
 def compile_data(loc_list, rssi_list, file_read):
@@ -61,14 +61,17 @@ def compile_data(loc_list, rssi_list, file_read):
         for row in csv_reader:
             if i != 0:
                 if len(row) > 1:
-                    loc_list.append(row[:2])
-                    rssi_list.append(row[2:])
+                    loc_list.append(row[:1])
+                    rssi_list.append(row[1:])
             i += 1
 
 
 def predict_pos(rssi_list_2):
 
-    fileKNN = DATAPATH + "KNN" + ".csv"
+    indexToCoord = [(0, 0), (0, 100), (0, 200), (0, 300), (100, 0), (100, 100), (100, 200), (100, 300),
+                    (200, 0), (200, 100), (200, 200), (200, 300), (300, 0), (300, 100), (300, 200), (300, 300), (150, 150)]
+
+    fileKNN = DATAPATH + ".csv"
 
     rssi_list = []
     loc_list = []
@@ -79,22 +82,17 @@ def predict_pos(rssi_list_2):
     compile_data(loc_list, rssi_list, fileKNN)
 
     for row in loc_list:
-        if len(row) > 1:
-            class_list.append(str(row[0]) + "," + str(row[1]))
+        if len(row) > 0:
+            class_list.append(str(row[0]))
 
     X_train, X_test, Y_train, Y_test = train_test_split(
         rssi_list, class_list, test_size=0.3, random_state=4
     )
 
-    knn = KNeighborsClassifier(n_neighbors=50)
+    knn = KNeighborsClassifier(n_neighbors=10)
 
     knn.fit(X_train, Y_train)
 
     predictions = knn.predict([rssi_list_2])
 
-    listy_mclist = predictions.tolist()
-
-    prediction_x = float(listy_mclist[0].split(",")[0]) * 100
-    prediction_y = float(listy_mclist[0].split(",")[1]) * 100
-
-    return (prediction_x, prediction_y)
+    return (indexToCoord[int(predictions.tolist()[0])])
