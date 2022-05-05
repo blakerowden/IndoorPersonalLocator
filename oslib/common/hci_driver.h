@@ -33,6 +33,7 @@ typedef enum {
     LPS22_AP,
     CCS811_VOC,
     LIS2DH_X_ACC,
+    ULTRASONIC_STATIC,
     LIS2DH_Y_ACC,
     LIS2DH_Z_ACC,
     RGB_LED,

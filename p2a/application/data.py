@@ -388,10 +388,10 @@ class MobileNodeTrackingData:
         x_fixed_array = np.array(x_pos)
         y_fixed_array = np.array(y_pos)
         radius_array = np.array(distance)
-        mat_b = []
+        vec_b = []
         # Calculate the least squares equation
         for i in range(num_live_nodes):
-            mat_b.append(
+            vec_b.append(
                 (
                     radius_array[i] ** 2
                     - radius_array[num_live_nodes - 1] ** 2
@@ -402,7 +402,7 @@ class MobileNodeTrackingData:
                 )
             )
 
-        mat_b = np.array(mat_b)
+        vec_b = np.array(vec_b)
 
         mat_a = []
 
@@ -416,7 +416,7 @@ class MobileNodeTrackingData:
 
         mat_a = np.array(mat_a)
 
-        lst_sq_estimate = np.linalg.lstsq(mat_a, mat_b, rcond=-1)[0]
+        lst_sq_estimate = np.linalg.lstsq(mat_a, vec_b, rcond=-1)[0]
 
         return_pos_x, return_pos_y = lst_sq_estimate.tolist()
 
@@ -425,7 +425,7 @@ class MobileNodeTrackingData:
         if return_pos_y == 0.0:
             return_pos_y = y_pos[0]
 
-        # Check bounds of the position
+        # Check for edge cases where the estimate is outside the range
         if return_pos_x <= 0:
             return_pos_x = 0 + random.randint(0, 50)
         elif return_pos_x >= GRID_LENGTH_CM:
