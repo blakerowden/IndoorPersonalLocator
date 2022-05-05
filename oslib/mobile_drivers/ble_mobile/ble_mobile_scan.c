@@ -64,9 +64,15 @@ static bool parse_device(struct bt_data *data, void *user_data) {
             return true;
         } else {
             if (data->data_len == 3 && staticFound == 1) {
+<<<<<<< HEAD
                 uint8_t ultra_id = data->data[3];
                 node_ultra[ultra_id] = (data->data[0] << 8) + data->data[1];
                 printk("%d - US1 from %d and %d\n", node_ultra[ultra_id], ultra_id, data->data[0], data->data[1]);
+=======
+                uint8_t ultra_id = data->data[2];
+                node_ultra[ultra_id] = (data->data[0] << 8) + data->data[1];
+                printk("%d - US%d from %d and %d\n", node_ultra[ultra_id], ultra_id, data->data[0], data->data[1]);
+>>>>>>> df5de09c925ddb0f258bcaf45fd0fe4e2ecd9420
             }
             staticFound = 0;
 
