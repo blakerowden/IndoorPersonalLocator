@@ -21,8 +21,8 @@ from pathlib import Path
 from KNN import predict_pos
 
 # Data Management Defines =====================================================
-TEST_POINT_X = 2  # position in m 134 267
-TEST_POINT_Y = 2  # position in m
+TEST_POINT_X = 200  # position in m 134 267
+TEST_POINT_Y = 200  # position in m
 FILE_NO = "test14"
 DATA_NODE_NAME = "4011A"
 DATA_COLLECTION_ACTIVE = False
@@ -249,9 +249,9 @@ class MobileNodeTrackingData:
         :return: None
         """
 
-        for i in range(49):
+        for i in range(15):
             fileName = self.training_data[i]
-            rowNum = random.randint(1, 200)
+            rowNum = random.randint(1, 50)
 
             with open(fileName) as csv_file:
                 csv_reader = csv.reader(csv_file, delimiter=",")
