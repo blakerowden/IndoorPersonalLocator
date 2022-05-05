@@ -12,7 +12,7 @@
 #include "main.h"
 
 //#define MODE MODE_MOBILE  // MODE_MOBILE or MODE_STATIC
-#define MODE MODE_STATIC
+#define MODE MODE_MOBILE
 
 LOG_MODULE_REGISTER(log_main);  // Logging Module
 

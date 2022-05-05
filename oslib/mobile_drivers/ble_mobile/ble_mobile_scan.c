@@ -1,6 +1,6 @@
 /**
  * @file ble_base.c
- * @author Blake Rowden (b.rowden@uqconnect.edu.au)
+ * @author Boston O'Neill
  * @brief
  * @version 0.1
  * @date 2022-03-23
@@ -26,8 +26,8 @@
 #include <zephyr.h>
 #include <zephyr/types.h>
 
-#include "kernel.h"
 #include "hci_driver.h"
+#include "kernel.h"
 #include "mobile_ble.h"
 
 static void start_scan(void);
@@ -61,12 +61,14 @@ static bool parse_device(struct bt_data *data, void *user_data) {
 
         if (matchedCount == UUID_BUFFER_SIZE) {
             staticFound = 1;
+            printk("Found US");
             return true;
         } else {
             if (data->data_len == 3 && staticFound == 1) {
                 uint8_t ultra_id = data->data[2];
                 node_ultra[ultra_id] = (data->data[0] << 8) + data->data[1];
-                printk("%d - US%d from %d and %d\n", node_ultra[ultra_id], ultra_id, data->data[0], data->data[1]);
+                printk("%d - US%d from %d and %d\n", node_ultra[ultra_id],
+                       ultra_id, data->data[0], data->data[1]);
             }
             staticFound = 0;
 
@@ -134,20 +136,17 @@ void thread_ble_mobile_scan(void) {
         return;
     }*/
 
-
     start_scan();
 }
 
-void rssi_monitor_thread(void)
-{
-    for (int i = 0; i < 12; i++){
-        for (int j = 0; j < 12; j++){
-            if(node_timestamp[i] <= node_timestamp[j] - 500){
+void rssi_monitor_thread(void) {
+    for (int i = 0; i < 12; i++) {
+        for (int j = 0; j < 12; j++) {
+            if (node_timestamp[i] <= node_timestamp[j] - 500) {
                 node_rssi[i] = 0;
             }
         }
     }
 
     k_msleep(5);
-
 }

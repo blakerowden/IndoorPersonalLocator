@@ -1,6 +1,6 @@
 /**
  * @file mobile_ble.c
- * @author your name (you@domain.com)
+ * @author Boston O'Neill
  * @brief 
  * @version 0.1
  * @date 2022-04-28

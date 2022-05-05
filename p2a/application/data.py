@@ -656,10 +656,11 @@ def data_processing_thread(
 
         if DATA_COLLECTION_ACTIVE:
             live_data.write_rssi_csv()
-        
-        if(predict_pos(live_data.node_rssi)):
-            live_data.ml_pos = predict_pos(live_data.node_rssi)
 
+        prediction = predict_pos(live_data.node_rssi)
+        
+        if prediction:
+            live_data.ml_pos = prediction
         # Send the estimated position to the GUI
         gui_out_q.queue.clear()
         gui_out_q.put(live_data)

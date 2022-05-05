@@ -1,6 +1,6 @@
 /**
  * @file ble_base.h
- * @author Blake Rowden (b.rowden@uqconnect.edu.au)
+ * @author Boston O'Neill
  * @brief
  * @version 0.1
  * @date 2022-03-29
@@ -25,6 +25,7 @@
  * @brief Base thread to start the BLE stack
  *
  */
+
 void thread_ble_mobile_scan(void);
 
 void rssi_monitor_thread(void);
@@ -35,4 +36,4 @@ void rssi_monitor_thread(void);
  */
 void scu_write(void);
 
-#endif // BLE_MOBILE_SCAN_H
+#endif  // BLE_MOBILE_SCAN_H

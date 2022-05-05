@@ -88,7 +88,7 @@ void thread_ble_adv(void)
     while (1) {
 
         uint32_t read;
-        uint8_t ultra_id = 0;
+        uint8_t ultra_id = 3;
 
         if (k_msgq_get(&ultra_msgq, &read, K_FOREVER) == 0)
         {
@@ -105,6 +105,18 @@ void thread_ble_adv(void)
             };
 
             bt_le_adv_update_data(ad, ARRAY_SIZE(ad), NULL, 0);
+
+            /*k_msleep(500);
+
+            const struct bt_data updated1[] = {
+                BT_DATA_BYTES(BT_DATA_NAME_COMPLETE, 0x53, 0x34),
+                BT_DATA_BYTES(BT_DATA_UUID128_ALL,
+                    read_high, read_low),
+            };
+
+            bt_le_adv_update_data(updated1, ARRAY_SIZE(updated1), NULL, 0);
+
+            k_msleep(500); */
         }
 
     }
