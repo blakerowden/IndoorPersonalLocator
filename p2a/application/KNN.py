@@ -77,17 +77,10 @@ def predict_pos(rssi_input_list: list) -> tuple:
     Args:
         rssi_list_2 (list): List of lists to store the rssi data
 
-<<<<<<< HEAD
-    indexToCoord = [(0, 0), (0, 100), (0, 200), (0, 300), (100, 0), (100, 100), (100, 200), (100, 300),
-                    (200, 0), (200, 100), (200, 200), (200, 300), (300, 0), (300, 100), (300, 200), (300, 300), (150, 150)]
-
-    fileKNN = DATAPATH + ".csv"
-=======
     Returns:
         tuple: Estimated position
     """
     fileKNN = DATAPATH + "KNN" + ".csv"
->>>>>>> cd04f80d1c35267d7c8e1f266a801f57b72804f8
 
     rssi_list = []
     loc_list = []
